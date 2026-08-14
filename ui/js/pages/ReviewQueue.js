@@ -1,11 +1,11 @@
-import {BasePage} from './Base.js?v=0.10.0';
-import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.0';
-import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.0';
-import {SearchFilter} from '../parts/SearchFilter.js?v=0.10.0';
-import {RulesFilter} from '../parts/choices/RulesFilter.js?v=0.10.0';
-import {ReviewQueueActionButtons} from '../parts/button/ReviewQueueActionButtons.js?v=0.10.0';
-import {ReviewQueueGrid} from '../parts/grid/ReviewQueue.js?v=0.10.0';
-import {ReviewQueueChart} from '../parts/chart/ReviewQueue.js?v=0.10.0';
+import {BasePage} from './Base.js?v=0.10.1';
+import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.1';
+import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.1';
+import {SearchFilter} from '../parts/SearchFilter.js?v=0.10.1';
+import {RulesFilter} from '../parts/choices/RulesFilter.js?v=0.10.1';
+import {ReviewQueueActionButtons} from '../parts/button/ReviewQueueActionButtons.js?v=0.10.1';
+import {ReviewQueueGrid} from '../parts/grid/ReviewQueue.js?v=0.10.1';
+import {ReviewQueueChart} from '../parts/chart/ReviewQueue.js?v=0.10.1';
 
 export class ReviewQueuePage extends BasePage {
     constructor() {

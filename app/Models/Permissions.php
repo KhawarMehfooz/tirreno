@@ -51,7 +51,7 @@ class Permissions extends \Tirreno\Models\Base {
             FROM
                 dshb_permissions
             WHERE
-                dshb_permissions.id = :role_id'
+                dshb_permissions.id = :permission_id'
         );
 
         return $this->execQuery($query, $params)[0] ?? [];

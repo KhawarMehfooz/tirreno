@@ -19,8 +19,8 @@ namespace Tirreno\Crons;
 
 class LogbookRotation extends Base {
     public function process(): void {
-        $this->addLog('Start logbook rotation.');
-
+        $this->logInfo('Start logbook rotation.');
+        $timer = tirreno('request')->setTimer();
         $keys = tirreno('models')->apiKeys->getAllApiKeyIds();
         // rotate events for unauthorized requests
         $keys[] = ['id' => null];
@@ -30,6 +30,9 @@ class LogbookRotation extends Base {
             $cnt += tirreno('models')->logbook->rotateRequests($key['id']);
         }
 
-        $this->addLog(sprintf('Deleted %s events for %s keys in logbook.', $cnt, count($keys)));
+        $timer = tirreno('request')->getTimer($timer);
+
+        $this->logInfo('Deleted %s events for %s keys in logbook in %f.', $cnt, count($keys), $timer);
+        $this->summary = sprintf('Deleted %s events for %s keys in logbook in %f.', $cnt, count($keys), $timer);
     }
 }

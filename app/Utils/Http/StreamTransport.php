@@ -61,7 +61,12 @@ class StreamTransport {
     }
 
     protected static function safeFileGetContents(string $url, ?array $options): array {
-        set_error_handler([\Tirreno\Utils\ErrorHandler::class, 'exceptionErrorHandler']);
+        tirreno('utils')->errorHandler->setErrorToExceptionHandler();
+
+        $result = [
+            'content' => null,
+            'headers' => [],
+        ];
 
         try {
             $context = null;
@@ -70,21 +75,12 @@ class StreamTransport {
             }
 
             $content = file_get_contents($url, false, $context);
+            $result['content'] = $content !== false ? strval($content) : null;
+            $result['headers'] = $GLOBALS['http_response_header'] ?? [];
         } catch (\Throwable $e) {
-            restore_error_handler();
-
-            return [
-                'content' => null,
-                'headers' => [],
-            ];
         }
 
-        restore_error_handler();
-
-        $result = [
-            'content' => $content !== false ? strval($content) : null,
-            'headers' => $GLOBALS['http_response_header'] ?? [],
-        ];
+        tirreno('utils')->errorHandler->setBaseErrorHandler();
 
         return $result;
     }

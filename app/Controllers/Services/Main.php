@@ -20,10 +20,11 @@ namespace Tirreno\Controllers\Services;
 class Main extends \Tirreno\Controllers\Services\Base {
     public function getCurrentTime(\Tirreno\Entities\Operator $operator): array {
         $offset = tirreno('utils')->timezones->getOperatorOffset($operator);
-        $now = time() + $offset;
-        $day = tirreno('utils')->constants->SECONDS_IN_DAY;
-        $firstJan = mktime(0, 0, 0, 1, 1, intval(gmdate('Y')));
+        $nowUtc = time();
+        $now = $nowUtc + $offset;
 
+        $day = tirreno('constants')->SECONDS_IN_DAY;
+        $firstJan = mktime(0, 0, 0, 1, 1, intval(gmdate('Y')));
         $day = tirreno('utils')->conversion->intVal(ceil(($now - $firstJan) / $day), 0);
 
         return [
@@ -31,14 +32,15 @@ class Main extends \Tirreno\Controllers\Services\Base {
             'clock_day'         => ($day < 10 ? '00' : ($day < 100 ? '0' : '')) . strval($day),
             'clock_time_his'    => date('H:i:s', $now),
             'clock_timezone'    => 'UTC' . (($offset < 0) ? '-' . date('H:i', -$offset) : '+' . date('H:i', $offset)),
+            'clock_time_ts'     => date('Y-m-d\TH:i:s', $now),
+            'clock_time_ts_utc' => date('Y-m-d\TH:i:s', $nowUtc),
         ];
     }
 
     public function getConstants(): array {
         $constants = tirreno('assets')->uiConstants->getConstantsObj();
-        $constants = $constants::listConstants();
 
-        return $constants ? $constants : [];
+        return $constants ? ($constants::listConstants() ?: []) : [];
     }
 
     public function getSearchResults(?string $query, int $apiKey): array {
@@ -71,13 +73,13 @@ class Main extends \Tirreno\Controllers\Services\Base {
 
         for ($i = 0; $i < $iters; ++$i) {
             $result[$i]['data'] = [
-                'category'       => $result[$i]['groupName'],
-                'id'             => $result[$i]['id'],
-                'entityId'       => $result[$i]['entityId'],
-                'score'          => $result[$i]['score'] ?? null,
-                'fraud'          => $result[$i]['fraud'] ?? null,
-                'added_to_review'=> $result[$i]['added_to_review'] ?? null,
-                'country_iso'    => $result[$i]['country_iso'] ?? null,
+                'category'          => $result[$i]['groupName'],
+                'id'                => $result[$i]['id'],
+                'entityId'          => $result[$i]['entityId'],
+                'score'             => $result[$i]['score'] ?? null,
+                'fraud'             => $result[$i]['fraud'] ?? null,
+                'added_to_review'   => $result[$i]['added_to_review'] ?? null,
+                'country_iso'       => $result[$i]['country_iso'] ?? null,
             ];
         }
 

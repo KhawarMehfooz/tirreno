@@ -95,7 +95,7 @@ class RulesPresets {
                 continue;
             }
 
-            $weightInt = tirreno('utils')->constants->RULE_WEIGHT_MAP[$weight] ?? null;
+            $weightInt = tirreno('constants')->RULE_WEIGHT_MAP[$weight] ?? null;
             if (!$weightInt || !isset($uids[$uid])) {
                 continue;
             }

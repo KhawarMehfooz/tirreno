@@ -1,10 +1,10 @@
-import {BaseGridWithPanel} from './BaseWithPanel.js?v=0.10.0';
+import {BaseGridWithPanel} from './BaseWithPanel.js?v=0.10.1';
 import {
     renderBoolean,
     renderReputation,
     renderEmail,
     renderDefaultIfEmptyElement,
-} from '../DataRenderers.js?v=0.10.0';
+} from '../DataRenderers.js?v=0.10.1';
 
 export class EmailsGrid extends BaseGridWithPanel {
     get orderConfig() {

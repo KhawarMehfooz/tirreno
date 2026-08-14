@@ -4,7 +4,7 @@ namespace Tirreno\Rules\Core;
 
 class B18 extends \Tirreno\Assets\Rule {
     public const NAME = 'HEAD request';
-    public const DESCRIPTION = 'HTTP request HEAD method is oftenly used by bots.';
+    public const DESCRIPTION = 'HTTP request HEAD method is often used by bots.';
     public const ATTRIBUTES = [];
 
     protected function defineCondition(): \Ruler\Operator\LogicalOperator {

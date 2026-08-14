@@ -30,4 +30,6 @@ return [
     'Base_table_column_blacklist_value_tooltip' => 'A blacklisted identity.',
     'Base_table_column_blacklist_actions' => 'Action',
     'Base_table_column_blacklist_actions_tooltip' => 'Remove identity from a blacklist.',
+    'Base_table_column_blacklist_status_source' => 'Source',
+    'Base_table_column_blacklist_status_source_tooltip' => 'Blacklist status source, either manually blacklisted, or auto-blacklisted.',
 ];

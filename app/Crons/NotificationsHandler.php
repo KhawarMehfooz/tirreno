@@ -24,6 +24,8 @@ class NotificationsHandler extends Base {
         $cnt = 0;
         $failed = 0;
 
+        $timer = tirreno('request')->setTimer();
+
         foreach ($operators as $operator) {
             if (tirreno('utils')->cron->checkTimezone($operator['timezone'] ?? '')) {
                 try {
@@ -31,17 +33,20 @@ class NotificationsHandler extends Base {
                     $email  = $operator['email'] ?? '';
                     $review = $operator['review_queue_cnt'] ?? 0;
                     if (!tirreno('utils')->cron->sendUnreviewedItemsReminderEmail($name, $email, $review)) {
-                        $this->addLog(sprintf('Username `%s` is not email; review count is %s', $email, $review));
+                        $this->logInfo('Username `%s` is not email; review count is %s', $email, $review);
                     }
                     tirreno('models')->notification->updateUnreviewedReminder($operator['id']);
                     $cnt++;
                 } catch (\Throwable $e) {
-                    $this->addLog(sprintf('Notification handler error %s.', $e->getMessage()));
+                    $this->logWarning('Notification handler error %s.', $e->getMessage());
                     $failed++;
                 }
             }
         }
 
-        $this->addLog(sprintf('Sent %s unreviewed items reminder notifications, failed %s.', $cnt, $failed));
+        $timer = tirreno('request')->getTimer($timer);
+
+        $this->logInfo('Sent %s unreviewed items reminder notifications in %f, failed %s.', $cnt, $timer, $failed);
+        $this->summary = sprintf('Sent %s unreviewed items reminder notifications in %f, failed %s.', $cnt, $timer, $failed);
     }
 }

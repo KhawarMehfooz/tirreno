@@ -54,7 +54,7 @@ class User extends \Tirreno\Controllers\Services\Base {
 
     public function recalculateRiskScore(int $apiKey): array {
         $result = [];
-        set_error_handler([\Tirreno\Utils\ErrorHandler::class, 'exceptionErrorHandler']);
+        tirreno('utils')->errorHandler->setErrorToExceptionHandler();
 
         try {
             $userId = tirreno('utils')->conversion->getIntRequestParam('accountid');
@@ -69,7 +69,7 @@ class User extends \Tirreno\Controllers\Services\Base {
             $result = ['ERROR_CODE' => tirreno('utils')->errorCodes->RISK_SCORE_UPDATE_UNKNOWN_ERROR];
         }
 
-        restore_error_handler();
+        tirreno('utils')->errorHandler->setBaseErrorHandler();
 
         return $result;
     }
@@ -78,11 +78,16 @@ class User extends \Tirreno\Controllers\Services\Base {
         // TODO: check apiKey + account owning
         if ($apiKey) {
             $accountId = tirreno('utils')->conversion->getIntRequestParam('accountid');
+
+            if (!$this->checkIfOperatorHasAccess($accountId, $apiKey)) {
+                tirreno('response')->error(403);
+            }
+
             $code = tirreno('utils')->errorCodes->REST_API_USER_ALREADY_DELETING;
 
-            if (!tirreno('models')->queue->isInQueue($accountId, tirreno('utils')->constants->DELETE_USER_QUEUE_ACTION_TYPE, $apiKey)) {
+            if (!tirreno('models')->queue->isInQueue($accountId, tirreno('constants')->DELETE_USER_QUEUE_ACTION_TYPE, $apiKey)) {
                 $code = tirreno('utils')->errorCodes->REST_API_USER_ADDED_FOR_DELETION;
-                tirreno('models')->queue->add($accountId, tirreno('utils')->constants->DELETE_USER_QUEUE_ACTION_TYPE, $apiKey);
+                tirreno('models')->queue->add($accountId, tirreno('constants')->DELETE_USER_QUEUE_ACTION_TYPE, $apiKey);
             }
 
             tirreno('session')->set('extra_message_code', $code);
@@ -156,24 +161,26 @@ class User extends \Tirreno\Controllers\Services\Base {
 
     public function addToReviewQueue(int $accountId, int $apiKey): void {
         tirreno('models')->user->addToReviewQueue($accountId, $apiKey);
+        tirreno('models')->reviewQueue->addToReviewQueue($accountId, $apiKey);
         tirreno('controllers')->reviewQueue->setNotReviewedCount(false, $apiKey);
     }
 
     public function addToBlacklistQueue(int $accountId, bool $fraud, bool $cron, bool $cnt, int $apiKey): void {
-        $inQueue = tirreno('models')->queue->isInQueue($accountId, tirreno('utils')->constants->BLACKLIST_QUEUE_ACTION_TYPE, $apiKey);
+        $inQueue = tirreno('models')->queue->isInQueue($accountId, tirreno('constants')->BLACKLIST_QUEUE_ACTION_TYPE, $apiKey);
 
         if (!$fraud) {
             $this->setFraudFlag($accountId, false, $apiKey); // Directly remove blacklisted items
 
             if ($inQueue) {
-                tirreno('models')->queue->removeFromQueue($accountId, tirreno('utils')->constants->BLACKLIST_QUEUE_ACTION_TYPE, $apiKey); // Cancel queued operation
+                tirreno('models')->queue->removeFromQueue($accountId, tirreno('constants')->BLACKLIST_QUEUE_ACTION_TYPE, $apiKey); // Cancel queued operation
             }
         }
 
         if (!$inQueue && $fraud) {
-            tirreno('models')->queue->add($accountId, tirreno('utils')->constants->BLACKLIST_QUEUE_ACTION_TYPE, $apiKey);
+            tirreno('models')->queue->add($accountId, tirreno('constants')->BLACKLIST_QUEUE_ACTION_TYPE, $apiKey);
         }
 
+        tirreno('models')->reviewQueue->removeFromReviewQueue($accountId, $apiKey);
         tirreno('models')->user->updateFraudFlag([$accountId], $apiKey, $fraud);
 
         if ($cnt) {
@@ -192,7 +199,7 @@ class User extends \Tirreno\Controllers\Services\Base {
      * @param array{accountId: int, key: int}[] $accounts
      */
     public function addBatchToCalculateRiskScoreQueue(array $accounts): void {
-        tirreno('models')->queue->addBatch($accounts, tirreno('utils')->constants->RISK_SCORE_QUEUE_ACTION_TYPE);
+        tirreno('models')->queue->addBatch($accounts, tirreno('constants')->RISK_SCORE_QUEUE_ACTION_TYPE);
     }
 
     public function setReviewedFlag(int $accountId, bool $reviewed, int $apiKey): void {
@@ -216,15 +223,15 @@ class User extends \Tirreno\Controllers\Services\Base {
     }
 
     public function getScheduledForDeletion(int $userId, int $apiKey): array {
-        [$scheduled, $status] = tirreno('models')->queue->isInQueueStatus($userId, tirreno('utils')->constants->DELETE_USER_QUEUE_ACTION_TYPE, $apiKey);
+        [$scheduled, $status] = tirreno('models')->queue->isInQueueStatus($userId, tirreno('constants')->DELETE_USER_QUEUE_ACTION_TYPE, $apiKey);
 
-        return [$scheduled, ($status === tirreno('utils')->constants->FAILED_QUEUE_STATUS_TYPE) ? tirreno('utils')->errorCodes->USER_DELETION_FAILED : null];
+        return [$scheduled, ($status === tirreno('constants')->FAILED_QUEUE_STATUS_TYPE) ? tirreno('utils')->errorCodes->USER_DELETION_FAILED : null];
     }
 
     public function getScheduledForBlacklist(int $userId, int $apiKey): array {
-        [$scheduled, $status] = tirreno('models')->queue->isInQueueStatus($userId, tirreno('utils')->constants->BLACKLIST_QUEUE_ACTION_TYPE, $apiKey);
+        [$scheduled, $status] = tirreno('models')->queue->isInQueueStatus($userId, tirreno('constants')->BLACKLIST_QUEUE_ACTION_TYPE, $apiKey);
 
-        return [$scheduled, ($status === tirreno('utils')->constants->FAILED_QUEUE_STATUS_TYPE) ? tirreno('utils')->errorCodes->USER_BLACKLISTING_FAILED : null];
+        return [$scheduled, ($status === tirreno('constants')->FAILED_QUEUE_STATUS_TYPE) ? tirreno('utils')->errorCodes->USER_BLACKLISTING_FAILED : null];
     }
 
     public function setFraudFlag(int $accountId, bool $fraud, int $apiKey): array {
@@ -268,8 +275,12 @@ class User extends \Tirreno\Controllers\Services\Base {
 
         if ($score <= $key['blacklist_threshold']) {
             $this->addToBlacklistQueue($accountId, true, true, false, $apiKey); // automatic blacklist anyway, do not recalculate
-        } elseif (!$cron && $addToReview) {
-            tirreno('controllers')->reviewQueue->setNotReviewedCount(false, $apiKey);           // do not use cache
+        } elseif ($addToReview) {
+            tirreno('models')->reviewQueue->addToReviewQueue($accountId, $apiKey);
+
+            if (!$cron) {
+                tirreno('controllers')->reviewQueue->setNotReviewedCount(false, $apiKey);           // do not use cache
+            }
         }
 
         tirreno('utils')->routes->callExtra('UPDATE_USER_STATUS', $score, $details, $addToReview, $cron, $accountId, $apiKey);

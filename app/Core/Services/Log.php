@@ -18,69 +18,46 @@ declare(strict_types=1);
 namespace Tirreno\Core\Services;
 
 class Log {
-    private function logObj(string $logFileVar = 'LOG_FILE'): \Log {
-        return new \Log(tirreno('storage')->get($logFileVar));
-    }
-
-    public function log(?string $title, string|array $message): void {
-        $logger = $this->logObj();
-
-        if (is_array($message)) {
-            $message = var_export($message, true);
-        }
-
-        if ($title) {
-            $message = $this->logLine($title, $message);
-        }
-
-        $logger->write($message);
-    }
-
-    public function logSql(string $title, string $message): void {
-        $logger = $this->logObj('LOG_SQL_FILE');
-        $logDelim = tirreno('storage')->get('LOG_DELIMITER');
-        $logger->write($this->logLine($title, $message, $logDelim));
-    }
-
-    public function logSqlIfPossible(): void {
-        $printSqlToLog = tirreno('storage')->get('PRINT_SQL_LOG_AFTER_EACH_SCRIPT_CALL');
-        if ($printSqlToLog) {
-            $path = tirreno('request')->getPath();
-
-            $log = tirreno('utils')->database->getDb()->log();
-            if ($log) {
-                $this->logSql($path, $log);
-            }
-        }
-    }
-
     public function debug(string $msg, mixed ...$args): void {
         if (!tirreno('utils')->variables->getDebug()) {
             return;
         }
 
-        $msg = $this->logLine('DEBUG', sprintf($msg, ...$args));
-        $this->logObj()->write($msg);
+        $msg = tirreno('utils')->logger->writeLog('DEBUG', $msg, ...$args);
 
-        if (tirreno('utils')->variables->getLogToStderr()) {
-            error_log($msg);
+        if (tirreno('request')->isCli()) {
+            $msg = date('Y-m-d H:i:s') . ' ' . $msg;
+            tirreno('utils')->logger->fflush($msg, 'stdout');
+        } elseif (tirreno('utils')->variables->getLogToStdout()) {
+            tirreno('utils')->logger->fflush($msg, 'stdout');
         }
     }
 
     public function info(string $msg, mixed ...$args): void {
-        $msg = $this->logLine('INFO', sprintf($msg, ...$args));
-        $this->logObj()->write($msg);
+        $msg = tirreno('utils')->logger->writeLog('INFO', $msg, ...$args);
 
-        if (tirreno('utils')->variables->getLogToStderr()) {
-            error_log($msg);
+        if (tirreno('request')->isCli()) {
+            $msg = date('Y-m-d H:i:s') . ' ' . $msg;
+            tirreno('utils')->logger->fflush($msg, 'stdout');
+        } elseif (tirreno('utils')->variables->getLogToStdout()) {
+            tirreno('utils')->logger->fflush($msg, 'stdout');
         }
     }
 
-    public function error(string $msg, mixed ...$args): void {
-        $msg = $this->logLine('ERROR', sprintf($msg, ...$args));
-        $this->logObj()->write($msg);
+    public function warning(string $msg, mixed ...$args): void {
+        $msg = tirreno('utils')->logger->writeLog('WARN', $msg, ...$args);
 
-        error_log($msg);
+        $msg = (tirreno('request')->isCli() ? date('Y-m-d H:i:s') . ' ' : '') . $msg;
+
+        tirreno('utils')->logger->fflush($msg, 'stderr');
+    }
+
+    public function error(string $msg, mixed ...$args): void {
+        $msg = tirreno('utils')->logger->writeLog('ERROR', $msg, ...$args);
+
+        $msg = (tirreno('request')->isCli() ? date('Y-m-d H:i:s') . ' ' : '') . $msg;
+
+        tirreno('utils')->logger->fflush($msg, 'stderr');
     }
 
     public function logbookRequest(
@@ -95,9 +72,5 @@ class Log {
         ?string $ended = null,
     ): void {
         tirreno('entities')->logbook->addRecord($endpoint, $started, $ip, $eventId, $errorText, $raw, $apiKey, $errorType, $ended);
-    }
-
-    private function logLine(string $title, string $message, string $delim = ''): string {
-        return '[' . getmypid() . '] ' . $title . ': ' . $message . $delim;
     }
 }

@@ -44,7 +44,7 @@ class Rules extends \Tirreno\Controllers\Pages\Base {
             'HTML_FILE'             => 'rules.html',
             'JS'                    => 'rules.js',
             'RULES_PRESETS'         => tirreno('assets')->rulesPresets->getPresets(),
-            'BASE_PRESET_ID'        => tirreno('utils')->constants->BASE_RULE_PRESET_ID,
+            'BASE_PRESET_ID'        => tirreno('constants')->BASE_RULE_PRESET_ID,
             'IS_OWNER'              => $isOwner,
             'API_KEYS'              => $apiKeys,
             'INTERNAL_PAGE'         => true,
@@ -82,7 +82,7 @@ class Rules extends \Tirreno\Controllers\Pages\Base {
         $proportion = $this->controller->getRuleProportion($allUsersCnt, count($users));
 
         return [
-            'users'                 => array_slice($users, 0, tirreno('utils')->constants->RULE_CHECK_USERS_PASSED_TO_CLIENT),
+            'users'                 => array_slice($users, 0, tirreno('constants')->RULE_CHECK_USERS_PASSED_TO_CLIENT),
             'count'                 => count($users),
             'section'               => $allUsersCnt,
             'proportion'            => $proportion,

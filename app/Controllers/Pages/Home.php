@@ -20,10 +20,6 @@ namespace Tirreno\Controllers\Pages;
 class Home extends \Tirreno\Controllers\Pages\Base {
     public string $page = 'home';
 
-    protected function authPage(): void {
-        tirreno('response')->redirectNotLoggedIn('/login');
-    }
-
     protected function getPageParams(): array {
         $this->assertCanView();
 

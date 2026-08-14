@@ -23,7 +23,7 @@ class OperatorsRules extends \Tirreno\Models\Base {
     public function getAllValidRulesByOperator(int $apiKey): array {
         $params = [
             ':api_key'          => $apiKey,
-            ':primary_rule_set' => tirreno('utils')->constants->PRIMARY_RULES_SET_ID,
+            ':primary_rule_set' => tirreno('constants')->PRIMARY_RULES_SET_ID,
         ];
 
         $query = (
@@ -141,7 +141,7 @@ class OperatorsRules extends \Tirreno\Models\Base {
         $params = [
             ':api_key'  => $apiKey,
             ':uid'      => $ruleUid,
-            ':set_id'   => tirreno('utils')->constants->PRIMARY_RULES_SET_ID,
+            ':set_id'   => tirreno('constants')->PRIMARY_RULES_SET_ID,
         ];
 
         $query = (
@@ -263,7 +263,7 @@ class OperatorsRules extends \Tirreno\Models\Base {
 
         $result = array_column($this->execQuery($query, $params), 'set');
         // have at least one set
-        $primaryRulesSetId = tirreno('utils')->constants->PRIMARY_RULES_SET_ID;
+        $primaryRulesSetId = tirreno('constants')->PRIMARY_RULES_SET_ID;
         if (!in_array($primaryRulesSetId, $result, true)) {
             $result[] = $primaryRulesSetId;
         }

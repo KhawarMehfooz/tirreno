@@ -1,11 +1,11 @@
-import {BaseGrid} from './Base.js?v=0.10.0';
+import {BaseGrid} from './Base.js?v=0.10.1';
 import {
     renderClickableUserAgentId,
     renderDevice,
     renderOs,
     renderBrowser,
     renderBoolean,
-} from '../DataRenderers.js?v=0.10.0';
+} from '../DataRenderers.js?v=0.10.1';
 
 export class UserAgentsGrid extends BaseGrid {
     get orderConfig() {

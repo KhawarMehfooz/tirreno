@@ -9,7 +9,7 @@ class A02 extends \Tirreno\Assets\Rule {
 
     protected function prepareParams(array $params): array {
         $suspiciousLoginFailed = false;
-        $loginFail = tirreno('utils')->constants->ACCOUNT_LOGIN_FAIL_EVENT_TYPE_ID;
+        $loginFail = tirreno('constants')->ACCOUNT_LOGIN_FAIL_EVENT_TYPE_ID;
 
         foreach ($params['event_type'] as $idx => $event) {
             if ($event === $loginFail && tirreno('utils')->rules->eventDeviceIsNew($params, $idx)) {

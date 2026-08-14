@@ -1,8 +1,8 @@
-import {Loader} from '../Loader.js?v=0.10.0';
-import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.0';
-import {renderEnrichmentCalculation} from '../DataRenderers.js?v=0.10.0';
-import {BasePopUp} from './BasePopUp.js?v=0.10.0';
-import {replaceChildren} from '../utils/Functions.js?v=0.10.0';
+import {Loader} from '../Loader.js?v=0.10.1';
+import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.1';
+import {renderEnrichmentCalculation} from '../DataRenderers.js?v=0.10.1';
+import {BasePopUp} from './BasePopUp.js?v=0.10.1';
+import {replaceChildren} from '../utils/Functions.js?v=0.10.1';
 
 export class EnrichAllPopUp extends BasePopUp {
     constructor() {

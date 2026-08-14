@@ -32,20 +32,21 @@ class Cron extends \Tirreno\Controllers\Pages\Base {
     protected int $timer;
 
     protected string $page = 'cron';
+    protected array $summary = [];
 
     protected \Tirreno\Entities\Operator $operator;
 
     public function __construct() {
         $this->timer = tirreno('request')->setTimer();
 
-        tirreno('storage')->set('ONERROR', tirreno('utils')->errorHandler->getCronErrorHandler());
+        tirreno('utils')->errorHandler->setCronErrorHandler();
 
         if (!tirreno('utils')->database->initConnect(false)) {
             tirreno('response')->error(404);
         }
 
         if (tirreno('request')->isCli()) {
-            tirreno('session')->set('active_user_id', tirreno('utils')->constants->DAEMON_OPERATOR_ID);
+            tirreno('session')->set('active_user_id', tirreno('constants')->DAEMON_OPERATOR_ID);
         }
 
         tirreno('utils')->routes->setCurrentRequestOperator();
@@ -112,13 +113,21 @@ class Cron extends \Tirreno\Controllers\Pages\Base {
 
         $toRun = $this->getJobsToRun($time);
         if (!count($toRun)) {
-            echo sprintf('No jobs to run at %s%s', $time->format('Y-m-d H:i:s'), PHP_EOL);
+            tirreno('log')->info('No jobs to run at %s.', $time->format('Y-m-d H:i:s'));
             exit;
         }
 
         foreach ($toRun as $jobName) {
             $this->execute($jobName);
         }
+
+        tirreno('log')->info('Cron jobs completed:');
+
+        foreach ($this->summary as $name => $line) {
+            tirreno('log')->info('[%s] %s', $name, $line);
+        }
+
+        tirreno('log')->info(tirreno('storage')->get('LOG_DELIMITER'));
     }
 
     private function readArguments(): void {
@@ -129,7 +138,7 @@ class Cron extends \Tirreno\Controllers\Pages\Base {
                 if (array_key_exists($position + 1, $argv)) {
                     $this->forceRun[] = $argv[$position + 1];
                 } else {
-                    echo 'No job specified to force. Ignoring flag.' . PHP_EOL;
+                    tirreno('log')->info('No job specified to force. Ignoring flag.');
                 }
             } elseif ($argument === '--force-only') {
                 $this->runForcedOnly = true;
@@ -152,13 +161,13 @@ class Cron extends \Tirreno\Controllers\Pages\Base {
     private function validateForcedJobs(): void {
         $notFound = array_diff($this->forceRun, array_keys($this->jobs));
         foreach ($notFound as $flagArgument) {
-            echo sprintf('Job not found. Ignoring --force %s flag.%s', $flagArgument, PHP_EOL);
+            tirreno('log')->info('Job not found. Ignoring --force %s flag.', $flagArgument);
         }
 
         $this->forceRun = array_diff($this->forceRun, $notFound);
     }
 
-    public function execute(string $jobName): void {
+    protected function execute(string $jobName): void {
         if (!isset($this->jobs[$jobName])) {
             throw new \Exception('Job does not exist.');
         }
@@ -173,7 +182,7 @@ class Cron extends \Tirreno\Controllers\Pages\Base {
         }
 
         $instance->$method();
-        tirreno('utils')->cron->printLogs($instance->getLog());
+        $this->summary[$instance->getName()] = $instance->summary ?: 'unknown';
     }
 
     private function isDue(\DateTime $time, string $expression): bool {

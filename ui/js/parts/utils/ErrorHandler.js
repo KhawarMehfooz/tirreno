@@ -1,5 +1,5 @@
-import {notificationTime} from './Date.js?v=0.10.0';
-import {replaceChildren} from './Functions.js?v=0.10.0';
+import {notificationTime} from './Date.js?v=0.10.1';
+import {replaceChildren} from './Functions.js?v=0.10.1';
 
 const handleAjaxError = (xhr, status, error) => {
     // ignore abort, but not network issues

@@ -24,46 +24,24 @@ class Enrichment {
         for ($i = 0; $i < $iters; ++$i) {
             $record = $records[$i];
 
-            $type = null;
-
-            if ($record['fraud_detected']) {
-                $type = 'Blacklisted';
-            }
-            if ($record['blocklist'] && !$type) {
-                $type = 'Spam list';
-            }
-            if ($record['country_id'] === 0 && $record['checked'] && !$type) {
-                $type = 'Localhost';
-            }
-            if ($record['tor'] && !$type) {
-                $type = 'TOR';
-            }
-            if ($record['starlink'] && !$type) {
-                $type = 'Starlink';
-            }
-            if ($record['relay'] && !$type) {
-                $type = 'AppleRelay';
-            }
-            if ($record['vpn'] && !$type) {
-                $type = 'VPN';
-            }
-            if ($record['data_center'] && !$type) {
-                $type = 'Datacenter';
-            }
-            if (!$record['checked']) {
-                $type = 'Unknown';
-            }
-            if (!$type) {
-                $type = 'Residential';
-            }
+            $record['ip_type'] = match (true) {
+                $record['fraud_detected']                           => 'Blacklisted',
+                $record['blocklist']                                => 'Spam list',
+                $record['country_id'] === 0 && $record['checked']   => 'Localhost',
+                $record['tor']                                      => 'TOR',
+                $record['starlink']                                 => 'Starlink',
+                $record['relay']                                    => 'AppleRelay',
+                $record['vpn']                                      => 'VPN',
+                $record['data_center']                              => 'Datacenter',
+                !$record['checked']                                 => 'Unknown',
+                default                                             => 'Residential',
+            };
 
             unset($record['tor']);
             unset($record['starlink']);
             unset($record['relay']);
             unset($record['vpn']);
             unset($record['data_center']);
-
-            $record['ip_type'] = $type;
 
             $records[$i] = $record;
         }

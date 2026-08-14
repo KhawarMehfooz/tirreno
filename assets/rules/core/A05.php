@@ -9,7 +9,7 @@ class A05 extends \Tirreno\Assets\Rule {
 
     protected function prepareParams(array $params): array {
         $passwordChangeOnNewDevice = false;
-        $passwordChange = tirreno('utils')->constants->ACCOUNT_PASSWORD_CHANGE_EVENT_TYPE_ID;
+        $passwordChange = tirreno('constants')->ACCOUNT_PASSWORD_CHANGE_EVENT_TYPE_ID;
 
         if ($params['eup_device_count'] > 1) {
             foreach (array_keys($params['event_device']) as $idx) {

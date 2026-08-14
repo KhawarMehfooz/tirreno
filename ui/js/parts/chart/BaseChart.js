@@ -1,15 +1,16 @@
-import {Loader} from '../Loader.js?v=0.10.0';
-import {getQueryParams}  from '../utils/DataSource.js?v=0.10.0';
-import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.0';
-import {formatKiloValue} from '../utils/String.js?v=0.10.0';
-import {formatIntTimeUtc} from '../utils/Date.js?v=0.10.0';
-import {fireEvent} from '../utils/Event.js?v=0.10.0';
-import {renderChartTooltipPart} from '../DataRenderers.js?v=0.10.0';
-import {Constants} from '../utils/Constants.js?v=0.10.0';
+import {Loader} from '../Loader.js?v=0.10.1';
+import {getQueryParams}  from '../utils/DataSource.js?v=0.10.1';
+import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.1';
+import {formatKiloValue} from '../utils/String.js?v=0.10.1';
+import {formatIntTimeUtc} from '../utils/Date.js?v=0.10.1';
+import {fireEvent} from '../utils/Event.js?v=0.10.1';
+import {renderChartTooltipPart} from '../DataRenderers.js?v=0.10.1';
+import {Constants} from '../utils/Constants.js?v=0.10.1';
 import {
     replaceChildren,
     defined,
-} from '../utils/Functions.js?v=0.10.0';
+    hasOwn,
+} from '../utils/Functions.js?v=0.10.1';
 
 export class BaseChart {
     constructor(chartParams) {
@@ -79,7 +80,7 @@ export class BaseChart {
         const token  = document.head.querySelector('[name=\'csrf-token\'][content]').content;
         const url = this.config.url;
         //const params = this.config.getParams();
-        const data   = Object.hasOwn(this.config, 'getParams') ? getQueryParams(this.config.getParams()) : {};
+        const data   = hasOwn(this.config, 'getParams', true) ? getQueryParams(this.config.getParams()) : {};
 
         if (this.config.mode) {
             data['mode'] = this.config.mode;

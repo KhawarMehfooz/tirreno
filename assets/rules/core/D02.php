@@ -4,7 +4,7 @@ namespace Tirreno\Rules\Core;
 
 class D02 extends \Tirreno\Assets\Rule {
     public const NAME = 'Device is Linux';
-    public const DESCRIPTION = 'Linux OS is not used by avarage users, increased risk of crawler bot.';
+    public const DESCRIPTION = 'Linux OS is not used by average users, increased risk of crawler bot.';
     public const ATTRIBUTES = [];
 
     protected function prepareParams(array $params): array {

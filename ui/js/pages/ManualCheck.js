@@ -1,6 +1,6 @@
-import {BasePage} from './Base.js?v=0.10.0';
-import {ManualCheckItems} from '../parts/ManualCheckItems.js?v=0.10.0';
-import {closest} from '../parts/utils/Functions.js?v=0.10.0';
+import {BasePage} from './Base.js?v=0.10.1';
+import {ManualCheckItems} from '../parts/ManualCheckItems.js?v=0.10.1';
+import {closest} from '../parts/utils/Functions.js?v=0.10.1';
 
 export class ManualCheckPage extends BasePage {
     constructor() {

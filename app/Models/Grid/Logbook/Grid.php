@@ -33,7 +33,7 @@ class Grid extends \Tirreno\Models\Grid\Base\Grid {
                 continue;
             }
 
-            // substract server time
+            // subtract server time
             $result[$idx][$field] = tirreno('utils')->timezones->addOffset($row[$field], -$serverOffset, true);
         }
     }

@@ -1,25 +1,25 @@
-import {BasePage} from './Base.js?v=0.10.0';
-import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.0';
-import {Map} from '../parts/Map.js?v=0.10.0';
-import {EmailsGrid} from '../parts/grid/Emails.js?v=0.10.0';
-import {IpsGrid} from '../parts/grid/Ips.js?v=0.10.0';
-import {EventsGrid} from '../parts/grid/Events.js?v=0.10.0';
-import {DevicesGrid} from '../parts/grid/Devices.js?v=0.10.0';
-import {BaseBarChart} from '../parts/chart/BaseBar.js?v=0.10.0';
-import {BaseSparklineChart} from '../parts/chart/BaseSparkline.js?v=0.10.0';
-import {UserTiles} from '../parts/details/UserTiles.js?v=0.10.0';
-import {EventPanel} from '../parts/panel/EventPanel.js?v=0.10.0';
-import {FieldPanel} from '../parts/panel/FieldPanel.js?v=0.10.0';
-import {SingleReviewButton} from '../parts/button/SingleReviewButton.js?v=0.10.0';
-import {ScoreDetails} from '../parts/ScoreDetails.js?v=0.10.0';
-import {PhonesGrid} from '../parts/grid/Phones.js?v=0.10.0';
-import {FieldAuditTrailGrid} from '../parts/grid/FieldAuditTrail.js?v=0.10.0';
-import {IspsGrid} from '../parts/grid/Isps.js?v=0.10.0';
+import {BasePage} from './Base.js?v=0.10.1';
+import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.1';
+import {Map} from '../parts/Map.js?v=0.10.1';
+import {EmailsGrid} from '../parts/grid/Emails.js?v=0.10.1';
+import {IpsGrid} from '../parts/grid/Ips.js?v=0.10.1';
+import {EventsGrid} from '../parts/grid/Events.js?v=0.10.1';
+import {DevicesGrid} from '../parts/grid/Devices.js?v=0.10.1';
+import {BaseBarChart} from '../parts/chart/BaseBar.js?v=0.10.1';
+import {BaseSparklineChart} from '../parts/chart/BaseSparkline.js?v=0.10.1';
+import {UserTiles} from '../parts/details/UserTiles.js?v=0.10.1';
+import {EventPanel} from '../parts/panel/EventPanel.js?v=0.10.1';
+import {FieldPanel} from '../parts/panel/FieldPanel.js?v=0.10.1';
+import {SingleReviewButton} from '../parts/button/SingleReviewButton.js?v=0.10.1';
+import {ScoreDetails} from '../parts/ScoreDetails.js?v=0.10.1';
+import {PhonesGrid} from '../parts/grid/Phones.js?v=0.10.1';
+import {FieldAuditTrailGrid} from '../parts/grid/FieldAuditTrail.js?v=0.10.1';
+import {IspsGrid} from '../parts/grid/Isps.js?v=0.10.1';
 
-import {EmailPanel} from '../parts/panel/EmailPanel.js?v=0.10.0';
-import {PhonePanel} from '../parts/panel/PhonePanel.js?v=0.10.0';
-import {DevicePanel} from '../parts/panel/DevicePanel.js?v=0.10.0';
-import {ReenrichmentButton} from '../parts/button/ReenrichmentButton.js?v=0.10.0';
+import {EmailPanel} from '../parts/panel/EmailPanel.js?v=0.10.1';
+import {PhonePanel} from '../parts/panel/PhonePanel.js?v=0.10.1';
+import {DevicePanel} from '../parts/panel/DevicePanel.js?v=0.10.1';
+import {ReenrichmentButton} from '../parts/button/ReenrichmentButton.js?v=0.10.1';
 
 export class UserPage extends BasePage {
     constructor() {

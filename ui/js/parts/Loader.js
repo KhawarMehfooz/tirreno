@@ -1,4 +1,4 @@
-import {replaceChildren} from './utils/Functions.js?v=0.10.0';
+import {replaceChildren} from './utils/Functions.js?v=0.10.1';
 
 export class Loader {
     constructor() {

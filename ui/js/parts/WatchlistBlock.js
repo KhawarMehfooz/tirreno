@@ -1,7 +1,7 @@
-import {renderUserActionButtons} from './DataRenderers.js?v=0.10.0';
-import {handleAjaxError} from './utils/ErrorHandler.js?v=0.10.0';
-import {replaceAll} from './utils/String.js?v=0.10.0';
-import {closest} from './utils/Functions.js?v=0.10.0';
+import {renderUserActionButtons} from './DataRenderers.js?v=0.10.1';
+import {handleAjaxError} from './utils/ErrorHandler.js?v=0.10.1';
+import {replaceAll} from './utils/String.js?v=0.10.1';
+import {closest} from './utils/Functions.js?v=0.10.1';
 
 export class WatchlistBlock {
     constructor(userId) {

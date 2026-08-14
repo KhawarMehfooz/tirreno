@@ -19,9 +19,9 @@ namespace Tirreno\Core\Services;
 
 class Helpers {
     public function formatTitle(string $title): string {
-        $title = $title ? $title : tirreno('utils')->constants->UNAUTHORIZED_USERID;
+        $title = $title ? $title : tirreno('constants')->UNAUTHORIZED_USERID;
         $safeTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
-        $title = sprintf('%s %s', $safeTitle, tirreno('utils')->constants->PAGE_TITLE_POSTFIX);
+        $title = sprintf('%s %s', $safeTitle, tirreno('constants')->PAGE_TITLE_POSTFIX);
 
         return $title;
     }

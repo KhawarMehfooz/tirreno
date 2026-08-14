@@ -1,12 +1,12 @@
-import {BasePage} from './Base.js?v=0.10.0';
-import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.0';
-import {Map} from '../parts/Map.js?v=0.10.0';
-import {IpsGrid} from '../parts/grid/Ips.js?v=0.10.0';
-import {UsersGrid} from '../parts/grid/Users.js?v=0.10.0';
-import {EventsGrid} from '../parts/grid/Events.js?v=0.10.0';
-import {BaseBarChart} from '../parts/chart/BaseBar.js?v=0.10.0';
-import {EventPanel} from '../parts/panel/EventPanel.js?v=0.10.0';
-import {IspTiles} from '../parts/details/IspTiles.js?v=0.10.0';
+import {BasePage} from './Base.js?v=0.10.1';
+import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.1';
+import {Map} from '../parts/Map.js?v=0.10.1';
+import {IpsGrid} from '../parts/grid/Ips.js?v=0.10.1';
+import {UsersGrid} from '../parts/grid/Users.js?v=0.10.1';
+import {EventsGrid} from '../parts/grid/Events.js?v=0.10.1';
+import {BaseBarChart} from '../parts/chart/BaseBar.js?v=0.10.1';
+import {EventPanel} from '../parts/panel/EventPanel.js?v=0.10.1';
+import {IspTiles} from '../parts/details/IspTiles.js?v=0.10.1';
 
 export class IspPage extends BasePage {
     constructor() {

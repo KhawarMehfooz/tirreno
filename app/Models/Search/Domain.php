@@ -27,8 +27,8 @@ class Domain extends \Tirreno\Models\Base {
         $query = (
             "SELECT
                 event_domain.id     AS id,
-                'Domain'             AS \"groupName\",
-                'domain'             AS \"entityId\",
+                'Domain'            AS \"groupName\",
+                'domain'            AS \"entityId\",
                 event_domain.domain AS value
 
             FROM

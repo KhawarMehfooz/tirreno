@@ -1,5 +1,5 @@
-import {BaseTiles} from './BaseTiles.js?v=0.10.0';
-import {Constants} from '../utils/Constants.js?v=0.10.0';
+import {BaseTiles} from './BaseTiles.js?v=0.10.1';
+import {Constants} from '../utils/Constants.js?v=0.10.1';
 import {
     renderDateWithTimestampTooltip,
     renderBoolean,
@@ -10,8 +10,8 @@ import {
     renderUserLastname,
     renderUserReviewedStatus,
     renderTotalFrameCmp,
-} from '../DataRenderers.js?v=0.10.0';
-import {replaceChildren} from '../utils/Functions.js?v=0.10.0';
+} from '../DataRenderers.js?v=0.10.1';
+import {replaceChildren} from '../utils/Functions.js?v=0.10.1';
 
 const URL   = `${window.app_base}/loadUserDetails`;
 

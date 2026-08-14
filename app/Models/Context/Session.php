@@ -29,36 +29,36 @@ class Session extends Base {
             return [];
         }
 
-        $groupped = [];
+        $grouped = [];
 
         $userId = 0;
 
         foreach ($records as $record) {
             $userId = $record['id'];
 
-            if (!isset($groupped[$userId])) {
-                $groupped[$userId] = [];
+            if (!isset($grouped[$userId])) {
+                $grouped[$userId] = [];
                 foreach ($keys as $key) {
-                    $groupped[$userId][$key] = [];
+                    $grouped[$userId][$key] = [];
                 }
             }
 
             foreach ($keys as $key) {
-                if (!$unique || !in_array($record[$key], $groupped[$userId][$key])) {
-                    $groupped[$userId][$key][] = $record[$key];
+                if (!$unique || !in_array($record[$key], $grouped[$userId][$key])) {
+                    $grouped[$userId][$key][] = $record[$key];
                 }
             }
         }
 
-        return $groupped;
+        return $grouped;
     }
 
     // one record per account
     protected function getDetails(array $accountIds, int $apiKey, int $timezoneOffset = 0): array {
         [$params, $placeHolders] = $this->getRequestParams($accountIds, $apiKey);
 
-        $params[':night_start'] = gmdate('H:i:s', tirreno('utils')->constants->NIGHT_RANGE_SECONDS_START - $timezoneOffset);
-        $params[':night_end'] = gmdate('H:i:s', tirreno('utils')->constants->NIGHT_RANGE_SECONDS_END - $timezoneOffset);
+        $params[':night_start'] = gmdate('H:i:s', tirreno('constants')->NIGHT_RANGE_SECONDS_START - $timezoneOffset);
+        $params[':night_end'] = gmdate('H:i:s', tirreno('constants')->NIGHT_RANGE_SECONDS_END - $timezoneOffset);
 
         // boolean logic for defining time ranges overlap
         $query = (

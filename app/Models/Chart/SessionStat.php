@@ -37,7 +37,7 @@ class SessionStat extends Base {
         $datesRange = tirreno('utils')->dateRange->getLatestNDatesRangeFromRequest(14, $offset);
         $endTs = strtotime($datesRange['endDate']);
         $startTs = strtotime($datesRange['startDate']);
-        $step = tirreno('utils')->constants->CHART_RESOLUTION[tirreno('utils')->dateRange->getResolutionFromRequest()];
+        $step = tirreno('constants')->CHART_RESOLUTION[tirreno('utils')->dateRange->getResolutionFromRequest()];
 
         $endTs = $endTs - ($endTs % $step);
         $startTs = $startTs - ($startTs % $step);
@@ -101,7 +101,7 @@ class SessionStat extends Base {
             ':end_time'     => $dateRange['endDate'],
             ':start_time'   => $dateRange['startDate'],
             //':resolution'   => tirreno('utils')->dateRange->getResolutionFromRequest(),
-            ':resolution'   => tirreno('utils')->constants->SECONDS_IN_DAY,
+            ':resolution'   => tirreno('constants')->SECONDS_IN_DAY,
             ':id'           => tirreno('utils')->conversion->getIntRequestParam('id'),
             ':offset'       => strval($offset),     // str for postgres
         ];

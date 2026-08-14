@@ -1,8 +1,11 @@
-import {Loader} from '../Loader.js?v=0.10.0';
-import {Tooltip} from '../Tooltip.js?v=0.10.0';
-import {fireEvent, handleEscape} from '../utils/Event.js?v=0.10.0';
-import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.0';
-import {replaceChildren} from '../utils/Functions.js?v=0.10.0';
+import {Loader} from '../Loader.js?v=0.10.1';
+import {Tooltip} from '../Tooltip.js?v=0.10.1';
+import {fireEvent, handleEscape} from '../utils/Event.js?v=0.10.1';
+import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.1';
+import {
+    replaceChildren,
+    hasOwn,
+} from '../utils/Functions.js?v=0.10.1';
 
 export class BasePanel {
     constructor(eventParams) {
@@ -124,7 +127,7 @@ export class BasePanel {
 
         data = this.proceedData(data);
 
-        if (this.enrichment && data.hasOwnProperty('checked') && this.reenrichmentButton) {
+        if (this.enrichment && hasOwn(data, 'checked') && this.reenrichmentButton) {
             if (data.checked === false && data.enrichable) {
                 this.reenrichmentButton.removeAttribute('disabled');
                 this.reenrichmentButton.classList.remove('is-hidden');

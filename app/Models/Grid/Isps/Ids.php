@@ -79,7 +79,7 @@ class Ids extends \Tirreno\Models\Grid\Base\Ids {
             ON (event.ip = event_ip.id)
             INNER JOIN event_field_audit_trail
             ON (event.id = event_field_audit_trail.event_id)
-            WHERE 
+            WHERE
                 event_field_audit_trail.field_id = :field_id AND
                 event_field_audit_trail.key = :api_key'
         );

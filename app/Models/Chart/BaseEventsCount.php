@@ -27,9 +27,9 @@ abstract class BaseEventsCount extends \Tirreno\Models\Base {
     protected string $normalFlatIds;
 
     public function __construct() {
-        [$this->alertTypesParams, $this->alertFlatIds]      = $this->getArrayPlaceholders(tirreno('utils')->constants->ALERT_EVENT_TYPES, 'alert');
-        [$this->editTypesParams, $this->editFlatIds]        = $this->getArrayPlaceholders(tirreno('utils')->constants->EDITING_EVENT_TYPES, 'edit');
-        [$this->normalTypesParams, $this->normalFlatIds]    = $this->getArrayPlaceholders(tirreno('utils')->constants->NORMAL_EVENT_TYPES, 'normal');
+        [$this->alertTypesParams, $this->alertFlatIds]      = $this->getArrayPlaceholders(tirreno('constants')->ALERT_EVENT_TYPES, 'alert');
+        [$this->editTypesParams, $this->editFlatIds]        = $this->getArrayPlaceholders(tirreno('constants')->EDITING_EVENT_TYPES, 'edit');
+        [$this->normalTypesParams, $this->normalFlatIds]    = $this->getArrayPlaceholders(tirreno('constants')->NORMAL_EVENT_TYPES, 'normal');
     }
 
     abstract public function getCounts(int $apiKey): array;
@@ -50,7 +50,7 @@ abstract class BaseEventsCount extends \Tirreno\Models\Base {
         $datesRange = tirreno('utils')->dateRange->getLatestNDatesRangeFromRequest(180, $offset);
         $endTs = strtotime($datesRange['endDate']);
         $startTs = strtotime($datesRange['startDate']);
-        $step = tirreno('utils')->constants->CHART_RESOLUTION[tirreno('utils')->dateRange->getResolutionFromRequest()];
+        $step = tirreno('constants')->CHART_RESOLUTION[tirreno('utils')->dateRange->getResolutionFromRequest()];
 
         $endTs = $endTs - ($endTs % $step);
         $startTs = $startTs - ($startTs % $step);

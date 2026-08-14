@@ -38,6 +38,7 @@ class Query extends \Tirreno\Models\Grid\Base\Query {
                 event_account.id AS accountid,
                 event_account.userid AS accounttitle,
                 event_account.score_updated_at,
+                event_account.added_to_review,
                 event_account.score,
                 event_account.fraud,
 
@@ -130,27 +131,14 @@ class Query extends \Tirreno\Models\Grid\Base\Query {
         $queryParams = $this->getQueryParams();
 
         if ($this->itemId !== null) {
-            switch ($this->itemKey) {
-                case 'userId':
-                    $query = 'SELECT total_visit AS count FROM event_account WHERE key = :api_key AND id = :item_id';
-                    break;
-                case 'ispId':
-                    $query = 'SELECT total_visit AS count FROM event_isp WHERE key = :api_key AND id = :item_id';
-                    break;
-                case 'domainId':
-                    $query = 'SELECT total_visit AS count FROM event_domain WHERE key = :api_key AND id = :item_id';
-                    break;
-                case 'resourceId':
-                    $query = 'SELECT total_visit AS count FROM event_url WHERE key = :api_key AND id = :item_id';
-                    break;
-                case 'countryId':
-                    $query = 'SELECT total_visit AS count FROM event_country WHERE key = :api_key AND country = :item_id';
-                    break;
-                case 'ipId':
-                    $query = 'SELECT total_visit AS count FROM event_ip WHERE key = :api_key AND id = :item_id';
-                    break;
-                case 'deviceId':
-                    $query = (
+            $query = match ($this->itemKey) {
+                'userId'        => 'SELECT total_visit AS count FROM event_account WHERE key = :api_key AND id = :item_id',
+                'ispId'         => 'SELECT total_visit AS count FROM event_isp WHERE key = :api_key AND id = :item_id',
+                'domainId'      => 'SELECT total_visit AS count FROM event_domain WHERE key = :api_key AND id = :item_id',
+                'resourceId'    => 'SELECT total_visit AS count FROM event_url WHERE key = :api_key AND id = :item_id',
+                'countryId'     => 'SELECT total_visit AS count FROM event_country WHERE key = :api_key AND country = :item_id',
+                'ipId'          => 'SELECT total_visit AS count FROM event_ip WHERE key = :api_key AND id = :item_id',
+                'deviceId'      => (
                         'SELECT
                             COUNT(event.id) AS count
                         FROM event
@@ -159,12 +147,10 @@ class Query extends \Tirreno\Models\Grid\Base\Query {
                         WHERE
                             event_device.key = :api_key AND
                             event_device.user_agent = :item_id'
-                    );
-                    break;
-                case 'fieldId':
-                    $query = 'SELECT total_visit AS count FROM event_field_audit WHERE key = :api_key AND id = :item_id';
-                    break;
-            }
+                    ),
+                'fieldId'       => 'SELECT total_visit AS count FROM event_field_audit WHERE key = :api_key AND id = :item_id',
+                default         => null,
+            };
         }
 
         if (!$query) {
@@ -286,32 +272,17 @@ class Query extends \Tirreno\Models\Grid\Base\Query {
         $searchConditions = null;
 
         if ($this->itemId !== null) {
-            switch ($this->itemKey) {
-                case 'userId':
-                    $searchConditions = ' AND event.account = :item_id %s';
-                    break;
-                case 'ispId':
-                    $searchConditions = ' AND event_isp.id = :item_id %s';
-                    break;
-                case 'domainId':
-                    $searchConditions = ' AND event_email.domain = :item_id %s';
-                    break;
-                case 'resourceId':
-                    $searchConditions = ' AND event.url = :item_id %s';
-                    break;
-                case 'countryId':
-                    $searchConditions = ' AND countries.id = :item_id %s';
-                    break;
-                case 'ipId':
-                    $searchConditions = ' AND event_ip.id = :item_id %s';
-                    break;
-                case 'deviceId':
-                    $searchConditions = ' AND event_ua_parsed.id = :item_id %s';
-                    break;
-                case 'fieldId':
-                    $searchConditions = ' AND event_field_audit_trail.field_id = :item_id %s';
-                    break;
-            }
+            $searchConditions = match ($this->itemKey) {
+                'userId'        => ' AND event.account = :item_id %s',
+                'ispId'         => ' AND event_isp.id = :item_id %s',
+                'domainId'      => ' AND event_email.domain = :item_id %s',
+                'resourceId'    => ' AND event.url = :item_id %s',
+                'countryId'     => ' AND countries.id = :item_id %s',
+                'ipId'          => ' AND event_ip.id = :item_id %s',
+                'deviceId'      => ' AND event_ua_parsed.id = :item_id %s',
+                'fieldId'       => ' AND event_field_audit_trail.field_id = :item_id %s',
+                default         => null,
+            };
         }
 
         //Add search and ids into request
@@ -346,7 +317,7 @@ class Query extends \Tirreno\Models\Grid\Base\Query {
             if ($deviceType === 'other') {
                 $placeholders = [];
 
-                foreach (tirreno('utils')->constants->DEVICE_TYPES as $device) {
+                foreach (tirreno('constants')->DEVICE_TYPES as $device) {
                     if ($device !== 'unknown' && $device !== 'other') {
                         $param = ':device_exclude_' . $device;
                         $placeholders[] = $param;

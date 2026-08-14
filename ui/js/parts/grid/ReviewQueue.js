@@ -1,14 +1,14 @@
-import {BaseGrid} from './Base.js?v=0.10.0';
+import {BaseGrid} from './Base.js?v=0.10.1';
 import {
     renderTime,
     renderDate,
     renderUserActionButtons,
     renderClickableImportantUserWithScore,
-} from '../DataRenderers.js?v=0.10.0';
+} from '../DataRenderers.js?v=0.10.1';
 
 export class ReviewQueueGrid extends BaseGrid {
     get orderConfig() {
-        return [[1, 'desc']];
+        return [[5, 'asc']];
     }
 
     onTableRowClick(event) {}
@@ -36,6 +36,10 @@ export class ReviewQueueGrid extends BaseGrid {
             {
                 className: 'review-queue-button-col',
                 targets: 4
+            },
+            {
+                visible: false,
+                targets: 5
             }
         ];
 
@@ -73,6 +77,10 @@ export class ReviewQueueGrid extends BaseGrid {
                     return renderUserActionButtons(record);
                 },
             },
+            {
+                data: 'review_queue_id',
+                name: 'review_queue_id',
+            }
         ];
 
         return columns;

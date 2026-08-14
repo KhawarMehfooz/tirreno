@@ -75,14 +75,7 @@ class Data {
     public function afterroute(): void {
         $timer = tirreno('request')->setTimer();
 
-        $shouldPrintSqlToLog = tirreno('storage')->get('PRINT_SQL_LOG_AFTER_EACH_SCRIPT_CALL');
-
-        if ($shouldPrintSqlToLog) {
-            $log = tirreno('utils')->database->getDb()->log();
-            if ($log) {
-                tirreno('utils')->logger->logSql(tirreno('request')->getPath(), $log);
-            }
-        }
+        tirreno('utils')->logger->logSqlIfPossible();
 
         $response = new \Tirreno\Views\Json();
         $response->data = $this->data;

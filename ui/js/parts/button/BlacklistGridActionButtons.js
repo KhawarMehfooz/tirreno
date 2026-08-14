@@ -1,6 +1,6 @@
-import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.0';
-import {BaseButton} from './BaseButton.js?v=0.10.0';
-import {closest} from '../utils/Functions.js?v=0.10.0';
+import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.1';
+import {BaseButton} from './BaseButton.js?v=0.10.1';
+import {closest} from '../utils/Functions.js?v=0.10.1';
 
 export class BlacklistGridActionButtons extends BaseButton {
     constructor(tableId) {
@@ -27,8 +27,7 @@ export class BlacklistGridActionButtons extends BaseButton {
         const url  = `${window.app_base}/removeBlacklisted`;
 
         const data = {
-            id:    target.dataset.itemId,
-            type:  target.dataset.itemType,
+            id:    target.dataset.userId,
             token: me.csrf
         };
 
@@ -79,6 +78,7 @@ export class BlacklistGridActionButtons extends BaseButton {
         if (tableRow) {
             const dataTable = $(`#${me.tableId}`).DataTable();
             dataTable.row(tableRow).remove().draw(false);
+            me.setBlacklistMenuCount();
         }
     }
 

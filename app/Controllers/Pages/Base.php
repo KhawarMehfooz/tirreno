@@ -88,6 +88,10 @@ abstract class Base {
         $response = new \Tirreno\Views\Frontend();
         $response->data = [];
 
+        if (tirreno('session')->get('REVIEW_QUEUE') && $this->page !== 'user') {
+            tirreno('session')->remove('REVIEW_QUEUE');
+        }
+
         if ($this->page) {
             $response->data = tirreno('utils')->render->applyPageParams($this->getPageParams(), $this->page);
         }
@@ -106,19 +110,19 @@ abstract class Base {
     }
 
     public function assertCanEdit(): void {
-        if (!$this->operator->editable($this->page)) {
+        if (!$this->operator->editable($this->page) || tirreno('request')->validateCsrf()) {
             tirreno('response')->error(403);
         }
     }
 
     public function assertCanDelete(): void {
-        if (!$this->operator->deleteable($this->page)) {
+        if (!$this->operator->deletable($this->page) || tirreno('request')->validateCsrf()) {
             tirreno('response')->error(403);
         }
     }
 
     public function assertCanPublish(): void {
-        if (!$this->operator->publishable($this->page)) {
+        if (!$this->operator->publishable($this->page) || tirreno('request')->validateCsrf()) {
             tirreno('response')->error(403);
         }
     }

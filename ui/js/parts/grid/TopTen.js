@@ -1,7 +1,7 @@
-import {BaseGrid} from './Base.js?v=0.10.0';
-import {fireEvent} from '../utils/Event.js?v=0.10.0';
-import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.0';
-import {renderDefaultIfEmptyElement}  from '../DataRenderers.js?v=0.10.0';
+import {BaseGrid} from './Base.js?v=0.10.1';
+import {fireEvent} from '../utils/Event.js?v=0.10.1';
+import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.1';
+import {renderDefaultIfEmptyElement}  from '../DataRenderers.js?v=0.10.1';
 
 export class TopTenGrid extends BaseGrid {
     get columnDefs() {

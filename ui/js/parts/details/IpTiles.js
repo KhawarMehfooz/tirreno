@@ -1,11 +1,11 @@
-import {BaseTiles} from './BaseTiles.js?v=0.10.0';
-import {Tooltip} from '../Tooltip.js?v=0.10.0';
+import {BaseTiles} from './BaseTiles.js?v=0.10.1';
+import {Tooltip} from '../Tooltip.js?v=0.10.1';
 import {
     renderBoolean,
     renderClickableCountryTruncated,
     renderClickableAsn,
-} from '../DataRenderers.js?v=0.10.0';
-import {replaceChildren} from '../utils/Functions.js?v=0.10.0';
+} from '../DataRenderers.js?v=0.10.1';
+import {replaceChildren} from '../utils/Functions.js?v=0.10.1';
 
 const URL   = `${window.app_base}/loadIpDetails`;
 const ELEMS = ['country', 'asn', 'blocklist', 'blacklist', 'dc', 'vpn', 'tor', 'ar'];

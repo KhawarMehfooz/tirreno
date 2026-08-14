@@ -66,7 +66,7 @@ class Rule {
 
     // not operator rule id -- uid!
     public static function getById(string $uid, int $key): ?self {
-        $rule = tirreno('models')->operatorsRules->getRuleWithOperatorValue($uid, tirreno('utils')->constants->PRIMARY_RULES_SET_ID, $key);
+        $rule = tirreno('models')->operatorsRules->getRuleWithOperatorValue($uid, tirreno('constants')->PRIMARY_RULES_SET_ID, $key);
 
         return self::getFromQuery($rule, $key);
     }

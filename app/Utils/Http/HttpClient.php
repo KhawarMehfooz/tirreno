@@ -63,7 +63,7 @@ class HttpClient {
             $response->error,                               //$errorText,
             $response->body ? json_encode($response->body) : null,  //$raw,
             $apiKey,
-            $response->ok ? tirreno('utils')->constants->LOGBOOK_ERROR_TYPE_SUCCESS : tirreno('utils')->constants->LOGBOOK_ERROR_TYPE_CRITICAL_ERROR,
+            $response->ok ? tirreno('constants')->LOGBOOK_ERROR_TYPE_SUCCESS : tirreno('constants')->LOGBOOK_ERROR_TYPE_CRITICAL_ERROR,
             //$ended,
         );
     }

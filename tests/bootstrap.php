@@ -20,3 +20,7 @@ $f3->set('CACHE', false);
 $f3->set('LOG_FILE', 'phpunit.log');
 $f3->set('LOG_SQL_FILE', 'phpunit-sql.log');
 $f3->set('LOG_DELIMITER', PHP_EOL);
+
+foreach (glob(__DIR__ . '/../assets/rules/core/*.php') as $filename) {
+    require_once $filename;
+}

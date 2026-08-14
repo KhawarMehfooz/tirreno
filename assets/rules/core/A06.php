@@ -9,7 +9,7 @@ class A06 extends \Tirreno\Assets\Rule {
 
     protected function prepareParams(array $params): array {
         $pwdChangeInNewCountry = false;
-        $pwdChange = tirreno('utils')->constants->ACCOUNT_PASSWORD_CHANGE_EVENT_TYPE_ID;
+        $pwdChange = tirreno('constants')->ACCOUNT_PASSWORD_CHANGE_EVENT_TYPE_ID;
 
         if (count(array_unique($params['eip_country_id'])) > 1) {
             foreach ($params['event_type'] as $idx => $event) {

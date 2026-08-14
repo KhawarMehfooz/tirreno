@@ -20,16 +20,16 @@ namespace Tirreno\Crons;
 class Totals extends Base {
     // execute before risk score!
     public function process(): void {
-        $this->addLog('Start totals calculation.');
+        $this->logInfo('Start totals calculation.');
 
         $start = time();
-        $models = tirreno('utils')->constants->REST_TOTALS_MODELS;
+        $models = tirreno('constants')->REST_TOTALS_MODELS;
 
         $batchSize = tirreno('utils')->variables->getAccountOperationQueueBatchSize();
         $bottom = false;
 
         // TODO check multiple batches
-        $keys = tirreno('models')->queue->getNextBatchKeys(tirreno('utils')->constants->RISK_SCORE_QUEUE_ACTION_TYPE, $batchSize);
+        $keys = tirreno('models')->queue->getNextBatchKeys(tirreno('constants')->RISK_SCORE_QUEUE_ACTION_TYPE, $batchSize);
         $res = [];
 
         $processed = [];
@@ -51,13 +51,13 @@ class Totals extends Base {
                 $cnt = $model->updateAllTotals($key);
                 $res[$name]['cnt'] += $cnt;
 
-                tirreno('log')->debug('Updated totals and stats for key %d.', $key);
+                $this->logDebug('Updated totals and stats for key %d.', $key);
 
                 $processed[] = strval($key) . ':' . $name;
 
-                if (time() - $start > tirreno('utils')->constants->ACCOUNT_OPERATION_QUEUE_EXECUTE_TIME_SEC) {
-                    $missed = array_values(array_diff($processed, $awaited));
-                    tirreno('log')->debug('Break totals update due to time limit. Processed model + key pairs -- %s. Missing -- %s.', json_encode($processed), json_encode($missed));
+                if (time() - $start > tirreno('constants')->ACCOUNT_OPERATION_QUEUE_EXECUTE_TIME_SEC) {
+                    $missed = array_values(array_diff($awaited, $processed));
+                    $this->logDebug('Interrupt totals update due to time limit. Processed model + key pairs -- %s. Missing -- %s.', json_encode($processed), json_encode($missed));
 
                     // TODO: any reason to put the rest keys to queue?
                     $res[$name]['s'] = time() - $timeMark;
@@ -67,6 +67,9 @@ class Totals extends Base {
             $res[$name]['s'] = time() - $timeMark;
         }
 
-        $this->addLog(sprintf('Updated %s entities for %s keys and %s models in %s seconds.', array_sum(array_column(array_values($res), 'cnt')), count($keys), count($models), time() - $start));
+        $entitiesCnt = array_sum(array_column(array_values($res), 'cnt'));
+
+        $this->logInfo('Updated %s entities for %s keys and %s models in %s seconds.', $entitiesCnt, count($keys), count($models), time() - $start);
+        $this->summary = sprintf('Updated %s entities for %s keys and %s models in %s seconds.', $entitiesCnt, count($keys), count($models), time() - $start);
     }
 }

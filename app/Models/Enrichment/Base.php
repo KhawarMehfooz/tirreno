@@ -33,7 +33,7 @@ class Base {
             return $value !== null;
         });
 
-        return array_unique($filtered);
+        return array_values(array_unique($filtered));
     }
 
     public function updateStringByPlaceholders(array $placeholders): string {

@@ -1,17 +1,17 @@
-import {padZero} from './utils/Date.js?v=0.10.0';
-import {Constants} from './utils/Constants.js?v=0.10.0';
+import {padZero} from './utils/Date.js?v=0.10.1';
+import {Constants} from './utils/Constants.js?v=0.10.1';
 import {
     //truncateWithHellip,
     formatKiloValue,
     getRuleClass,
     formatTime,
     openJson,
-} from './utils/String.js?v=0.10.0';
+} from './utils/String.js?v=0.10.1';
 import {
     inArray,
     mapKeys,
     defined,
-} from './utils/Functions.js?v=0.10.0';
+} from './utils/Functions.js?v=0.10.1';
 
 const isDashboardPage = () => !!document.getElementById('most-active-users');
 
@@ -878,8 +878,7 @@ const renderBlacklistButtons = record => {
     button.type = 'button';
     button.className = 'button is-small dark-loader';
     button.textContent = 'Remove';
-    button.setAttribute('data-item-id', record.entity_id);
-    button.setAttribute('data-item-type', record.type);
+    button.setAttribute('data-user-id', record.accountid);
     button.setAttribute('data-button-type', 'deleteButton');
 
     return button;
@@ -1365,7 +1364,7 @@ const renderIpType = record => {
 
 //Net
 const renderNetName = (record, length = 'default') => {
-    let name = record.netname || record.description || record.asn || '';
+    let name = record.netname || record.description || record.asn.toString() || '';
     let span = null;
 
     if (name) {
@@ -1782,6 +1781,18 @@ const renderBlacklistType = record => {
     return renderDefaultIfEmptySpan(span);
 };
 
+const renderBlacklistSource = record => {
+    const span = document.createElement('span');
+    let source = record.fraud ? (record.reviewed ? 'Manual' : 'Auto') : null;
+
+    span.textContent = source;
+    if (source) {
+        span.className = 'typestatus';
+    }
+
+    return renderDefaultIfEmptySpan(span);
+};
+
 const renderSensorErrorColumn = record => {
     const obj = openJson(record.error_text);
     const s = (obj !== null) ? obj.join('; ') : null;
@@ -1831,9 +1842,9 @@ const renderJsonTextarea = value => {
     const s = (obj !== null) ? JSON.stringify(obj, null, 2) : null;
     const width = 37;
 
-    const splitted = (s !== null) ? s.split(/\r\n|\r|\n/) : [];
+    const split = (s !== null) ? s.split(/\r\n|\r|\n/) : [];
     let rows = 0;
-    for (const line of splitted) {
+    for (const line of split) {
         rows += Math.ceil(line.length / width);
     }
 
@@ -2102,7 +2113,7 @@ const renderRuleManageButtons = record => {
 
         const playSpan = document.createElement('span');
         playSpan.classList.add('icon');
-        playSpan.classList.add('ruleIcon');
+        playSpan.classList.add('rule-icon');
         const playImg = document.createElement('img');
         playImg.src = `${window.app_base}/ui/images/icons/play.svg`;
 
@@ -2118,7 +2129,7 @@ const renderRuleManageButtons = record => {
         saveButton.type = 'button';
         const saveSpan = document.createElement('span');
         saveSpan.classList.add('icon');
-        saveSpan.classList.add('ruleIcon');
+        saveSpan.classList.add('rule-icon');
         const saveImg = document.createElement('img');
         saveImg.src = `${window.app_base}/ui/images/icons/save.svg`;
 
@@ -2224,10 +2235,10 @@ const formatSearchResult = function(suggestion, currentValue) {
                 accountid:        data.id ? data.id : null,
                 email:            suggestion.value,
                 accounttitle:     suggestion.value,
-                score:            data.score ? data.score : null,
+                score:            defined(data.score) ? data.score : null,
                 score_updated_at: null,
                 fraud:            defined(data.fraud) ? data.fraud : null,
-                added_to_review:  data.added_to_review ? data.added_to_review : null,
+                added_to_review:  defined(data.added_to_review) ? data.added_to_review : null,
                 is_important:     false,
             });
             break;
@@ -2368,6 +2379,7 @@ export {
     //Blacklist item
     renderBlacklistType,
     renderBlacklistItem,
+    renderBlacklistSource,
 
     //Logbook
     renderSensorErrorColumn,

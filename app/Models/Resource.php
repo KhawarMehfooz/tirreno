@@ -119,7 +119,7 @@ class Resource extends \Tirreno\Models\Base implements \Tirreno\Interfaces\ApiKe
 
         $totalIp = $this->execQuery($query, $params);
 
-        $params[':field_edit'] = tirreno('utils')->constants->FIELD_EDIT_EVENT_TYPE_ID;
+        $params[':field_edit'] = tirreno('constants')->FIELD_EDIT_EVENT_TYPE_ID;
         $query = (
             "SELECT
                 event.url   AS id,
@@ -173,7 +173,7 @@ class Resource extends \Tirreno\Models\Base implements \Tirreno\Interfaces\ApiKe
 
         [$params, $flatIds] = $this->getArrayPlaceholders($ids);
         $params[':key'] = $apiKey;
-        $params[':field_edit'] = tirreno('utils')->constants->FIELD_EDIT_EVENT_TYPE_ID;
+        $params[':field_edit'] = tirreno('constants')->FIELD_EDIT_EVENT_TYPE_ID;
         $extraClause = $force ? '' : ' AND event_url.lastseen >= event_url.updated';
 
         $query = (
@@ -216,7 +216,7 @@ class Resource extends \Tirreno\Models\Base implements \Tirreno\Interfaces\ApiKe
     public function updateAllTotals(int $apiKey): int {
         $params = [
             ':key'          => $apiKey,
-            ':field_edit'   => tirreno('utils')->constants->FIELD_EDIT_EVENT_TYPE_ID,
+            ':field_edit'   => tirreno('constants')->FIELD_EDIT_EVENT_TYPE_ID,
         ];
 
         $query = (

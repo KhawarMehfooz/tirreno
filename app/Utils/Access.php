@@ -47,7 +47,7 @@ class Access {
 
         $key = tirreno('models')->apiKeyCoOwner->getCoOwnershipKeyId($operatorId);
 
-        return boolval($key);
+        return $key === $keyId;
     }
 
     public static function checkCurrentOperatorApiKeyAccess(int $keyId): bool {

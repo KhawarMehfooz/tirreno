@@ -1,9 +1,9 @@
-import {BasePage} from './Base.js?v=0.10.0';
-import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.0';
-import {Map} from '../parts/Map.js?v=0.10.0';
-import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.0';
-import {SearchFilter} from '../parts/SearchFilter.js?v=0.10.0';
-import {CountriesGrid} from '../parts/grid/Countries.js?v=0.10.0';
+import {BasePage} from './Base.js?v=0.10.1';
+import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.1';
+import {Map} from '../parts/Map.js?v=0.10.1';
+import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.1';
+import {SearchFilter} from '../parts/SearchFilter.js?v=0.10.1';
+import {CountriesGrid} from '../parts/grid/Countries.js?v=0.10.1';
 
 export class CountriesPage extends BasePage {
     constructor() {

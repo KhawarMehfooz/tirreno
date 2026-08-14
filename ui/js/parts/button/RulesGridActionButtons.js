@@ -1,14 +1,14 @@
-import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.0';
-import {getRuleClass} from '../utils/String.js?v=0.10.0';
-import {Tooltip} from '../Tooltip.js?v=0.10.0';
-import {BaseButton} from './BaseButton.js?v=0.10.0';
-import {replaceChildren} from '../utils/Functions.js?v=0.10.0';
+import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.1';
+import {getRuleClass} from '../utils/String.js?v=0.10.1';
+import {Tooltip} from '../Tooltip.js?v=0.10.1';
+import {BaseButton} from './BaseButton.js?v=0.10.1';
+import {replaceChildren} from '../utils/Functions.js?v=0.10.1';
 import {
     renderClickableUser,
     renderProportion,
     renderRulePlayResult,
-} from '../DataRenderers.js?v=0.10.0';
-import {closest} from '../utils/Functions.js?v=0.10.0';
+} from '../DataRenderers.js?v=0.10.1';
+import {closest} from '../utils/Functions.js?v=0.10.1';
 
 export class RulesGridActionButtons extends BaseButton {
     constructor(tableId) {

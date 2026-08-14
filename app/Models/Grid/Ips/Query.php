@@ -132,39 +132,28 @@ class Query extends \Tirreno\Models\Grid\Base\Query {
             return;
         }
 
+        $queries = [];
+
         foreach ($ipTypeIds as $ipTypeId) {
-            switch ($ipTypeId) {
-                case 0:
-                    $query .= ' AND fraud_detected IS TRUE ';
-                    break;
-                case 1:
-                    $query .= ' AND blocklist IS TRUE ';
-                    break;
-                case 2:
-                    $query .= ' AND countries.id = 0 AND event_ip.checked IS TRUE ';
-                    break;
-                case 3:
-                    $query .= ' AND tor IS TRUE ';
-                    break;
-                case 4:
-                    $query .= ' AND starlink IS TRUE ';
-                    break;
-                case 5:
-                    $query .= ' AND relay IS TRUE ';
-                    break;
-                case 6:
-                    $query .= ' AND vpn IS TRUE ';
-                    break;
-                case 7:
-                    $query .= ' AND data_center IS TRUE ';
-                    break;
-                case 8:
-                    $query .= ' AND (event_ip.checked IS FALSE OR event_ip.checked IS NULL) ';
-                    break;
-                case 9:
-                    $query .= ' AND (tor IS FALSE AND vpn IS FALSE AND relay IS FALSE AND data_center IS FALSE AND event_ip.checked IS TRUE) ';
-                    break;
-            }
+            $queries[] = match (tirreno('utils')->conversion->intVal($ipTypeId)) {
+                0   => 'fraud_detected IS TRUE',
+                1   => 'blocklist IS TRUE',
+                2   => 'countries.id = 0 AND event_ip.checked IS TRUE',
+                3   => 'tor IS TRUE',
+                4   => 'starlink IS TRUE',
+                5   => 'relay IS TRUE',
+                6   => 'vpn IS TRUE',
+                7   => 'data_center IS TRUE',
+                8   => '(event_ip.checked IS FALSE OR event_ip.checked IS NULL)',
+                9   => '(tor IS FALSE AND vpn IS FALSE AND relay IS FALSE AND data_center IS FALSE AND event_ip.checked IS TRUE)',
+                default => null,
+            };
+        }
+
+        $queries = array_filter($queries);
+
+        if ($queries) {
+            $query .= ' AND (' . implode(' OR ', $queries) . ') ';
         }
     }
 }

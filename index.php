@@ -45,6 +45,12 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 
 include './app/tirreno.php';
 
+tirreno('utils')->errorHandler->initHandlers();
+
+//Use custom onError function
+tirreno('utils')->errorHandler->setRouterErrorHandler();
+
+
 //Load configuration file with all project variables
 tirreno('router')->config('config/config.ini');
 
@@ -56,9 +62,6 @@ $localConfigFile = sprintf('config/%s', $localConfigFile);
 if (file_exists($localConfigFile)) {
     tirreno('router')->config($localConfigFile);
 }
-
-//Use custom onError function
-tirreno('storage')->set('ONERROR', tirreno('utils')->errorHandler->getOnErrorHandler());
 
 if (tirreno('utils')->variables->getForceHttps() || (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')) {
     ini_set('session.cookie_secure', '1');

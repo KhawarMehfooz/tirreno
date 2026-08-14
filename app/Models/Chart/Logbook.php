@@ -52,15 +52,15 @@ class Logbook extends Base {
             ':comb_offset'  => strval(tirreno('utils')->timezones->getCurrentOperatorOffset() - $serverOffset),
         ];
 
-        [$failedTypesParams, $failedFlatIds]    = $this->getArrayPlaceholders(tirreno('utils')->constants->FAILED_LOGBOOK_EVENT_TYPES, 'failed');
-        [$issuedTypesParams, $issuedFlatIds]    = $this->getArrayPlaceholders(tirreno('utils')->constants->ISSUED_LOGBOOK_EVENT_TYPES, 'issued');
-        [$normalTypesParams, $normalFlatIds]    = $this->getArrayPlaceholders(tirreno('utils')->constants->NORMAL_LOGBOOK_EVENT_TYPES, 'normal');
+        [$failedTypesParams, $failedFlatIds]    = $this->getArrayPlaceholders(tirreno('constants')->FAILED_LOGBOOK_EVENT_TYPES, 'failed');
+        [$issuedTypesParams, $issuedFlatIds]    = $this->getArrayPlaceholders(tirreno('constants')->ISSUED_LOGBOOK_EVENT_TYPES, 'issued');
+        [$normalTypesParams, $normalFlatIds]    = $this->getArrayPlaceholders(tirreno('constants')->NORMAL_LOGBOOK_EVENT_TYPES, 'normal');
 
         $params = array_merge($params, $failedTypesParams);
         $params = array_merge($params, $issuedTypesParams);
         $params = array_merge($params, $normalTypesParams);
 
-        // use shift as substraction of server offset and addition of operator offset
+        // use shift as subtraction of server offset and addition of operator offset
         $query = (
             "SELECT
                 EXTRACT(EPOCH FROM date_trunc(:resolution, event_logbook.started + :comb_offset))::bigint AS ts,

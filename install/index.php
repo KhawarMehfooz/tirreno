@@ -193,7 +193,7 @@ window.addEventListener('DOMContentLoaded', function() {
     };
 
     // parse db url on db_url input change
-    // parse db url if db_url was substituted and js doesnt contain sessionstorage
+    // parse db url if db_url was substituted and js doesn't contain sessionstorage
     if (dbUrlField) {
         dbUrlField.addEventListener('input', parseUrl);
         if (dbUrlField.value && !sessionStorage.getItem('connectionDetails')) {

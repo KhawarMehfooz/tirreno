@@ -1,15 +1,15 @@
 import {
     renderUserActionButtons,
     renderUserReviewedStatus,
-} from '../DataRenderers.js?v=0.10.0';
-import {Constants} from '../utils/Constants.js?v=0.10.0';
-import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.0';
-import {replaceAll} from '../utils/String.js?v=0.10.0';
+} from '../DataRenderers.js?v=0.10.1';
+import {Constants} from '../utils/Constants.js?v=0.10.1';
+import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.1';
+import {replaceAll} from '../utils/String.js?v=0.10.1';
 import {
     replaceChildren,
     closest,
-} from '../utils/Functions.js?v=0.10.0';
-import {BaseButton} from './BaseButton.js?v=0.10.0';
+} from '../utils/Functions.js?v=0.10.1';
+import {BaseButton} from './BaseButton.js?v=0.10.1';
 
 export class SingleReviewButton extends BaseButton {
     constructor(userId) {
@@ -132,6 +132,12 @@ export class SingleReviewButton extends BaseButton {
             userTitleSpan.textContent = (reviewStatus === 'Blacklisted') ? Constants.MULTIPLICATION_SIGN : 'OK';
             userTitleSpan.classList.remove('high', 'medium', 'low', 'empty');
             userTitleSpan.classList.add((reviewStatus === 'Blacklisted') ? 'low' : 'high');
+
+            const redirectUrl = me.nextInReviewQueueUrl;
+
+            if (redirectUrl) {
+                window.location.href = escape(redirectUrl);
+            }
         }
 
         me.setMenuCount();
@@ -152,5 +158,15 @@ export class SingleReviewButton extends BaseButton {
 
     get addToReviewButton() {
         return document.getElementById('add-to-review-button');
+    }
+
+    get nextInReviewQueueButton() {
+        return document.getElementById('next-user-button');
+    }
+
+    get nextInReviewQueueUrl() {
+        const button = this.nextInReviewQueueButton;
+
+        return button ? button.getAttribute('href') : null;
     }
 }

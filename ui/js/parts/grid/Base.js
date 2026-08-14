@@ -1,18 +1,19 @@
-import {Loader} from '../Loader.js?v=0.10.0';
-import {Tooltip} from '../Tooltip.js?v=0.10.0';
-import {fireEvent} from '../utils/Event.js?v=0.10.0';
-import {getQueryParams} from '../utils/DataSource.js?v=0.10.0';
-import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.0';
-import {formatKiloValue} from '../utils/String.js?v=0.10.0';
-import {TotalTile} from '../TotalTile.js?v=0.10.0';
-import {renderTotalFrame} from '../DataRenderers.js?v=0.10.0';
-import {Constants} from '../utils/Constants.js?v=0.10.0';
+import {Loader} from '../Loader.js?v=0.10.1';
+import {Tooltip} from '../Tooltip.js?v=0.10.1';
+import {fireEvent} from '../utils/Event.js?v=0.10.1';
+import {getQueryParams} from '../utils/DataSource.js?v=0.10.1';
+import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.1';
+import {formatKiloValue} from '../utils/String.js?v=0.10.1';
+import {TotalTile} from '../TotalTile.js?v=0.10.1';
+import {renderTotalFrame} from '../DataRenderers.js?v=0.10.1';
+import {Constants} from '../utils/Constants.js?v=0.10.1';
+import {Clock} from '../Clock.js?v=0.10.1';
 import {
     replaceChildren,
     closest,
     inArray,
     mapKeys,
-} from '../utils/Functions.js?v=0.10.0';
+} from '../utils/Functions.js?v=0.10.1';
 
 export class BaseGrid {
     constructor(gridParams) {
@@ -203,7 +204,7 @@ export class BaseGrid {
         }
 
         if (!dateRange && ids.length) {
-            // actualy making fake response from server
+            // actually making fake response from server
             let data = {totals: {}};
             let preparedBase = {};
             const cols = config.totals.columns;
@@ -426,7 +427,33 @@ export class BaseGrid {
 
     onReloadButtonClick(e) {
         e.preventDefault();
-        this.loadData();
+
+        const clock = new Clock();
+
+        const filterUtc = document.querySelector('input[name="date_to"]');
+        const filterUtcTs = filterUtc ? filterUtc.value : null;
+        const clockTs = clock.datetimeUtcInput.value;
+
+        if (this.config.dateRangeGrid && filterUtcTs === clockTs) {
+            window.addEventListener('clockUpdated', () => {
+                const filterLocal = document.querySelector('input[name="date_to_local"]');
+                const filterUtc = document.querySelector('input[name="date_to"]');
+
+                if (filterLocal) {
+                    filterLocal.value = clock.datetimeInput.value;
+                }
+
+                if (filterUtc) {
+                    filterUtc.value = clock.datetimeUtcInput.value;
+                }
+
+                this.loadData();
+            }, {once: true});
+
+            clock.restoreClock();
+        } else {
+            this.loadData();
+        }
     }
 
     onDateFilterChanged() {

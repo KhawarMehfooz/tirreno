@@ -23,6 +23,7 @@ class Page {
     private ?string $title = null;
     private ?string $template = null;
     private ?string $javascript = null;
+    private ?string $view = null;
     private bool $authenticated = true;
     private array $allowedRoles = [];
     private array $blockedRoles = [];
@@ -65,6 +66,10 @@ class Page {
         $this->blockedRoles = array_values($val) === $val ? $val : ($val[$verb] ?? []);
     }
 
+    public function setView(string $view): void {
+        $this->view = $view;
+    }
+
     /*public function getRoute(): ?string {
         return $this->route;
     }*/
@@ -104,6 +109,10 @@ class Page {
 
     public function getBlockedRoles(): array {
         return $this->blockedRoles;
+    }
+
+    public function getView(): ?string {
+        return $this->view;
     }
 
     public function getParams(): array {

@@ -1,4 +1,4 @@
-import {BasePanel} from './BasePanel.js?v=0.10.0';
+import {BasePanel} from './BasePanel.js?v=0.10.1';
 import {
     renderIp,
     renderTimeMsLogbook,
@@ -7,7 +7,7 @@ import {
     renderSensorError,
     renderJsonTextarea,
     renderMailto,
-} from '../DataRenderers.js?v=0.10.0';
+} from '../DataRenderers.js?v=0.10.1';
 
 export class LogbookPanel extends BasePanel {
     constructor() {

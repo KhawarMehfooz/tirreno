@@ -1,11 +1,12 @@
-import {fireEvent} from './utils/Event.js?v=0.10.0';
+import {fireEvent} from './utils/Event.js?v=0.10.1';
 import {
     formatStringTime,
     addDays,
     addHours,
-} from './utils/Date.js?v=0.10.0';
-import {debounce} from './utils/Functions.js?v=0.10.0';
-import {Constants} from './utils/Constants.js?v=0.10.0';
+} from './utils/Date.js?v=0.10.1';
+import {debounce} from './utils/Functions.js?v=0.10.1';
+import {Constants} from './utils/Constants.js?v=0.10.1';
+import {Clock} from './Clock.js?v=0.10.1';
 
 export class DatesFilter {
     constructor(sequential=false) {
@@ -13,6 +14,7 @@ export class DatesFilter {
         this.offset     = (this.offsetField) ? parseInt(this.offsetField.value, 10) : 0;
         this.ajaxCount  = 0;
         this.sequential = sequential;
+        this.clock      = new Clock();
         if (this.isDateFilterUnavailable) {
             return true;
         }
@@ -78,8 +80,10 @@ export class DatesFilter {
     }
 
     setDefaultLocalDates() {
-        let dateTo = new Date();
-        dateTo = new Date(dateTo.getTime() + (dateTo.getTimezoneOffset() * 60 + this.offset) * 1000); // now time in op tz
+        //let dateTo = new Date();
+        //dateTo = new Date(dateTo.getTime() + (dateTo.getTimezoneOffset() * 60 + this.offset) * 1000); // now time in op tz
+
+        const dateTo = new Date(this.clock.datetimeInput.value);
 
         const dateFrom = addDays(dateTo, -Constants.DAYS_IN_RANGE); // dateFrom in op tz
         dateFrom.setHours(24, 0, 0, 0);
@@ -90,7 +94,7 @@ export class DatesFilter {
 
     onTimestampFieldChange(e) {
         // get value (with offset)
-        // set normal input exluding offset
+        // set normal input excluding offset
         e.preventDefault();
 
         const input = e.target;
@@ -109,7 +113,7 @@ export class DatesFilter {
         }
 
         let dt = new Date(value);
-        dt = new Date(dt.getTime() - this.offset * 1000); // shift fom op tz to utc
+        dt = new Date(dt.getTime() - this.offset * 1000); // shift from op tz to utc
 
         target.value = formatStringTime(dt);
 
@@ -190,8 +194,11 @@ export class DatesFilter {
 
     // with op tz and utc shift for calculation request
     setDateRangeFromNow(hoursDiff) {
-        let dateTo = new Date();
-        dateTo = new Date(dateTo.getTime() + (dateTo.getTimezoneOffset() * 60 + this.offset) * 1000); // now time in op tz
+        //let dateTo = new Date();
+        //dateTo = new Date(dateTo.getTime() + (dateTo.getTimezoneOffset() * 60 + this.offset) * 1000); // now time in op tz
+
+        let dateTo = new Date(this.clock.datetimeInput.value);
+
         let dateFrom = addHours(dateTo, -hoursDiff); // dateFrom in op tz
         // floor to not miss data in group
         if (hoursDiff < 24 && hoursDiff > -24) {

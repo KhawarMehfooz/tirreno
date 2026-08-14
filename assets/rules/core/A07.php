@@ -9,7 +9,7 @@ class A07 extends \Tirreno\Assets\Rule {
 
     protected function prepareParams(array $params): array {
         $passwordChangeInNewCidr = false;
-        $passwordChange = tirreno('utils')->constants->ACCOUNT_PASSWORD_CHANGE_EVENT_TYPE_ID;
+        $passwordChange = tirreno('constants')->ACCOUNT_PASSWORD_CHANGE_EVENT_TYPE_ID;
 
         if ($params['eip_unique_cidrs'] > 1) {
             foreach ($params['event_type'] as $idx => $event) {

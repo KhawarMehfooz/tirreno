@@ -1,6 +1,6 @@
-import {fireEvent} from './Event.js?v=0.10.0';
-import {handleAjaxError} from './ErrorHandler.js?v=0.10.0';
-import {mapKeys} from './Functions.js?v=0.10.0';
+import {fireEvent} from './Event.js?v=0.10.1';
+import {handleAjaxError} from './ErrorHandler.js?v=0.10.1';
+import {mapKeys} from './Functions.js?v=0.10.1';
 
 export class Constants {
     static init(callback) {
@@ -68,7 +68,7 @@ export class Constants {
         Constants.MAX_STRING_DEVICE_OS_LENGTH = 10;
         Constants.MAX_STRING_LENGTH_URL = 32;
         Constants.MAX_STRING_LENGTH_ENDPOINT = 17;
-        Constants.MAX_STRING_LENGTH_RAW_REQUEST = 62;
+        Constants.MAX_STRING_LENGTH_RAW_REQUEST = 60;
         Constants.MAX_TOOLTIP_URL_LENGTH = 50;
         Constants.MAX_TOOLTIP_LENGTH = 121;
         Constants.MAX_STRING_LENGTH_ERROR_TYPE = 10;

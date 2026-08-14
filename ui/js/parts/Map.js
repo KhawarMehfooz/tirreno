@@ -1,8 +1,11 @@
-import {TotalTile} from './TotalTile.js?v=0.10.0';
-import {getQueryParams} from './utils/DataSource.js?v=0.10.0';
-import {handleAjaxError} from './utils/ErrorHandler.js?v=0.10.0';
-import {fireEvent} from './utils/Event.js?v=0.10.0';
-import {mapKeys} from './utils/Functions.js?v=0.10.0';
+import {TotalTile} from './TotalTile.js?v=0.10.1';
+import {getQueryParams} from './utils/DataSource.js?v=0.10.1';
+import {handleAjaxError} from './utils/ErrorHandler.js?v=0.10.1';
+import {fireEvent} from './utils/Event.js?v=0.10.1';
+import {
+    mapKeys,
+    hasOwn,
+} from './utils/Functions.js?v=0.10.1';
 
 export class Map {
     constructor(mapParams) {
@@ -120,7 +123,7 @@ export class Map {
         //Remove countries which does not exist in the vectormap: MU, BH, etc...
         const regionKeys = mapKeys(regions);
         for (let i = 0; i < regionKeys.length; i++) {
-            if (!map.regions.hasOwnProperty(regionKeys[i])) {
+            if (!hasOwn(map.regions, regionKeys[i])) {
                 delete regions[regionKeys[i]];
             }
         }

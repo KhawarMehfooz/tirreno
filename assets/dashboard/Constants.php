@@ -32,7 +32,7 @@ class Constants extends \Tirreno\Assets\Constants {
     public const MAX_STRING_DEVICE_OS_LENGTH = 10;
     public const MAX_STRING_LENGTH_URL = 32;
     public const MAX_STRING_LENGTH_ENDPOINT = 17;
-    public const MAX_STRING_LENGTH_RAW_REQUEST = 62;
+    public const MAX_STRING_LENGTH_RAW_REQUEST = 60;
     public const MAX_TOOLTIP_URL_LENGTH = 50;
     public const MAX_TOOLTIP_LENGTH = 121;
     public const MAX_STRING_LENGTH_ERROR_TYPE = 10;

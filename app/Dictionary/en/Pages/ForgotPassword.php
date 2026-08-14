@@ -24,6 +24,6 @@ return [
     'forgotPassword_form_login_link' => 'Sign in',
     'forgotPassword_form_renew_button' => 'Reset',
 
-    'forgotPassowrd_renew_password_subject' => 'Reset your password',
-    'forgotPassowrd_renew_password_body' => 'Thanks for your request. We have prepared a link where you can reset your password. %s Please ignore this message if you didn\'t reset password.',
+    'forgotPassword_renew_password_subject' => 'Reset your password',
+    'forgotPassword_renew_password_body' => 'Thanks for your request. We have prepared a link where you can reset your password. %s Please ignore this message if you didn\'t reset password.',
 ];

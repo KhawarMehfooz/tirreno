@@ -25,7 +25,7 @@ class UsersByLoginFail extends Base {
         $queryConditions[] = 'event.type = :event_type';
         $queryConditions = join(' AND ', $queryConditions);
 
-        $params[':event_type'] = tirreno('utils')->constants->ACCOUNT_LOGIN_FAIL_EVENT_TYPE_ID;
+        $params[':event_type'] = tirreno('constants')->ACCOUNT_LOGIN_FAIL_EVENT_TYPE_ID;
 
         $query = (
             "SELECT

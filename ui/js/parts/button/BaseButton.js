@@ -1,5 +1,5 @@
-import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.0';
-import {formatKiloValue} from '../utils/String.js?v=0.10.0';
+import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.1';
+import {formatKiloValue} from '../utils/String.js?v=0.10.1';
 
 export class BaseButton {
     onSuccessCount(data) {

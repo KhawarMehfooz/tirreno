@@ -1,6 +1,6 @@
-import {BaseGrid} from './Base.js?v=0.10.0';
-import {fireEvent} from '../utils/Event.js?v=0.10.0';
-import {renderClickableCountry} from '../DataRenderers.js?v=0.10.0';
+import {BaseGrid} from './Base.js?v=0.10.1';
+import {fireEvent} from '../utils/Event.js?v=0.10.1';
+import {renderClickableCountry} from '../DataRenderers.js?v=0.10.1';
 
 export class CountriesGrid extends BaseGrid {
     get orderConfig() {

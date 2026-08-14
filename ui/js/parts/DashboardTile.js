@@ -1,7 +1,7 @@
-import {Loader} from './Loader.js?v=0.10.0';
-import {handleAjaxError} from './utils/ErrorHandler.js?v=0.10.0';
-import {replaceChildren} from './utils/Functions.js?v=0.10.0';
-import {fireEvent} from './utils/Event.js?v=0.10.0';
+import {Loader} from './Loader.js?v=0.10.1';
+import {handleAjaxError} from './utils/ErrorHandler.js?v=0.10.1';
+import {replaceChildren} from './utils/Functions.js?v=0.10.1';
+import {fireEvent} from './utils/Event.js?v=0.10.1';
 
 export class DashboardTile {
     constructor(tilesParams) {

@@ -21,15 +21,12 @@ class ApiKeys extends \Tirreno\Models\Base {
     protected string $tableName = 'dshb_api';
 
     public function insertRecord(string $skipEnrichingAttr, bool $skipBlacklistSync, int $operatorId): int {
-        $quote = tirreno('storage')->get('DEFAULT_API_KEY_QUOTE');
-        $uuid = sprintf('%s%s%s', $operatorId, $quote, time());
-
         $params = [
             ':quote'                => tirreno('storage')->get('DEFAULT_API_KEY_QUOTE'),
             ':operator_id'          => $operatorId,
             ':skip_enriching_attr'  => $skipEnrichingAttr,
             ':skip_blacklist_sync'  => $skipBlacklistSync,
-            ':key'                  => tirreno('utils')->access->saltHash($uuid),
+            ':key'                  => tirreno('utils')->access->pseudoRandString(),
         ];
 
         $query = (
@@ -80,12 +77,10 @@ class ApiKeys extends \Tirreno\Models\Base {
     }
 
     public function resetKey(int $keyId, int $operatorId): void {
-        $uuid = sprintf('%s%s%s', $keyId, $operatorId, time());
-
         $params = [
             ':operator_id'  => $operatorId,
             ':key_id'       => $keyId,
-            ':key'          => tirreno('utils')->access->saltHash($uuid),
+            ':key'          => tirreno('utils')->access->pseudoRandString(),
         ];
 
         $query = (
@@ -224,7 +219,7 @@ class ApiKeys extends \Tirreno\Models\Base {
 
     public function enrichableAttributes(int $keyId): array {
         $skipAttributes = $this->getSkipEnrichingAttributes($keyId);
-        $attributes = tirreno('utils')->constants->ENRICHING_ATTRIBUTES;
+        $attributes = tirreno('constants')->ENRICHING_ATTRIBUTES;
         $attributes = array_diff_key($attributes, array_flip($skipAttributes));
 
         return $attributes;

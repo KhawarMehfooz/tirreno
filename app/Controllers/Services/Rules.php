@@ -379,7 +379,7 @@ class Rules extends \Tirreno\Controllers\Services\Base {
 
         // grab all rules
         $operatorRules = $this->getAllRulesWithOperatorValues($apiKey);
-        $primarySetId = tirreno('utils')->constants->PRIMARY_RULES_SET_ID;
+        $primarySetId = tirreno('constants')->PRIMARY_RULES_SET_ID;
         $firstSet = $operatorRules[$primarySetId];
 
         // execute the first set
@@ -420,7 +420,7 @@ class Rules extends \Tirreno\Controllers\Services\Base {
 
     public function buildEvaluationModels(?string $uid = null): void {
         $this->totalModels = [];
-        foreach (tirreno('utils')->constants->RULES_TOTALS_MODELS as $className) {
+        foreach (tirreno('constants')->RULES_TOTALS_MODELS as $className) {
             $this->totalModels[] = new $className();
         }
 
@@ -453,7 +453,7 @@ class Rules extends \Tirreno\Controllers\Services\Base {
 
     // do not filter by attributes if data is needed only for rendering info
     public function getAllRulesByApiKey(int $apiKey): array {
-        $rules = tirreno('models')->operatorsRules->getAllRulesByOperatorAndSet(tirreno('utils')->constants->PRIMARY_RULES_SET_ID, $apiKey);
+        $rules = tirreno('models')->operatorsRules->getAllRulesByOperatorAndSet(tirreno('constants')->PRIMARY_RULES_SET_ID, $apiKey);
 
         $results = [];
         foreach ($rules as $rule) {
@@ -478,7 +478,7 @@ class Rules extends \Tirreno\Controllers\Services\Base {
     private function filterRulesByAttributesAddTypes(array $rules, array $skipAttributes): array {
         $results = [];
 
-        $setId = tirreno('utils')->constants->PRIMARY_RULES_SET_ID;
+        $setId = tirreno('constants')->PRIMARY_RULES_SET_ID;
         $ruleSet = $rules[$setId] ?? [];
 
         $results[$setId] = [];

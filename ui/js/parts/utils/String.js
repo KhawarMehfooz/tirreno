@@ -1,4 +1,4 @@
-import {Constants} from './Constants.js?v=0.10.0';
+import {Constants} from './Constants.js?v=0.10.1';
 
 const replaceAll = (str, search, replacement) => {
     return str.split(search).join(replacement);

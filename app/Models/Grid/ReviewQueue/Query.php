@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace Tirreno\Models\Grid\ReviewQueue;
 
 class Query extends \Tirreno\Models\Grid\Base\Query {
-    protected ?string $defaultOrder = null;
+    protected ?string $defaultOrder = 'event_review_queue.id ASC';
     protected string $dateRangeField = 'event_account.added_to_review';
 
     protected array $allowedColumns = ['score', 'lastseen', 'created', 'added_to_review'];
@@ -28,6 +28,7 @@ class Query extends \Tirreno\Models\Grid\Base\Query {
 
         $query = (
             'SELECT
+                event_review_queue.id   AS review_queue_id,
                 event_account.id        AS accountid,
                 event_account.userid    AS accounttitle,
                 event_account.created   AS created,
@@ -42,15 +43,16 @@ class Query extends \Tirreno\Models\Grid\Base\Query {
                 event_email.email
 
             FROM
-                event_account
+                event_review_queue
+
+            LEFT JOIN event_account
+            ON (event_account.id = event_review_queue.account)
 
             LEFT JOIN event_email
             ON (event_account.lastemail = event_email.id)
 
             WHERE
-                event_account.key = :api_key AND
-                event_account.fraud IS NULL AND
-                event_account.added_to_review IS NOT NULL
+                event_review_queue.key = :api_key
                 %s'
         );
 
@@ -67,18 +69,19 @@ class Query extends \Tirreno\Models\Grid\Base\Query {
 
         $query = (
             'SELECT
-                COUNT (event_account.id)
+                COUNT (event_review_queue.id)
 
             FROM
-                event_account
+                event_review_queue
+
+            LEFT JOIN event_account
+            ON (event_account.id = event_review_queue.account)
 
             LEFT JOIN event_email
             ON (event_account.lastemail = event_email.id)
 
             WHERE
-                event_account.key = :api_key AND
-                event_account.fraud IS NULL AND
-                event_account.added_to_review IS NOT NULL
+                event_review_queue.key = :api_key
                 %s'
         );
 

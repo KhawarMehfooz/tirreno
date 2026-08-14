@@ -18,19 +18,27 @@ declare(strict_types=1);
 namespace Tirreno\Crons;
 
 abstract class Base {
-    protected array $log = [];
+    public string $summary = '';
 
     abstract public function process(): void;
 
-    public function getLog(): array {
-        return $this->log;
+    protected function logDebug(string $msg, mixed ...$args): void {
+        tirreno('log')->debug('[%s] ' . $msg, $this->getName(), ...$args);
     }
 
-    protected function addLog(string $msg): void {
-        $this->log[] = tirreno('utils')->logger->logCronLine($msg, $this->getName());
+    protected function logInfo(string $msg, mixed ...$args): void {
+        tirreno('log')->info('[%s] ' . $msg, $this->getName(), ...$args);
     }
 
-    protected function getName(): string {
+    protected function logWarning(string $msg, mixed ...$args): void {
+        tirreno('log')->warning('[%s] ' . $msg, $this->getName(), ...$args);
+    }
+
+    protected function logError(string $msg, mixed ...$args): void {
+        tirreno('log')->error('[%s] ' . $msg, $this->getName(), ...$args);
+    }
+
+    public function getName(): string {
         $cronName = get_class($this);
 
         return substr($cronName, strrpos($cronName, '\\') + 1);

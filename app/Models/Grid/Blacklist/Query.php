@@ -18,100 +18,46 @@ declare(strict_types=1);
 namespace Tirreno\Models\Grid\Blacklist;
 
 class Query extends \Tirreno\Models\Grid\Base\Query {
-    protected ?string $defaultOrder = 'created DESC, type ASC, value ASC';
-    protected string $dateRangeField = 'blacklist.created';
+    protected ?string $defaultOrder = null;
+    protected string $dateRangeField = 'event_account.latest_decision';
 
-    protected array $allowedColumns = ['score', 'created', 'type', 'value'];
+    protected array $allowedColumns = ['score', 'lastseen', 'created', 'latest_decision', 'reviewed'];
 
     public function getData(): array {
         $queryParams = $this->getQueryParams();
 
-        $query = ("
-            SELECT DISTINCT
-                blacklist.is_important,
-                blacklist.accountid,
-                blacklist.accounttitle,
-                blacklist.created,
-                blacklist.score_updated_at,
-                blacklist.score,
-                blacklist.account_email AS email,
-                extra.type,
-                TRUE AS fraud,
-                CASE extra.type
-                    WHEN 'ip'    THEN blacklist.ip
-                    WHEN 'email' THEN blacklist.email
-                    WHEN 'phone' THEN blacklist.phone
-                END AS value,
-                CASE extra.type
-                    WHEN 'ip'    THEN blacklist.ip_id
-                    WHEN 'email' THEN blacklist.email_id
-                    WHEN 'phone' THEN blacklist.phone_id
-                END AS entity_id
+        $query = (
+            'SELECT
+                event_account.id        AS accountid,
+                event_account.userid    AS accounttitle,
+                event_account.created   AS created,
+                event_account.is_important,
+                event_account.score_updated_at,
+                event_account.score,
+                event_account.firstname,
+                event_account.lastname,
+                event_account.lastseen,
+                event_account.added_to_review,
+                event_account.latest_decision,
+                event_account.fraud,
+                event_account.reviewed,
+
+                event_email.email
 
             FROM
-                (
-                SELECT
-                    event_account.is_important,
-                    event_account.id                AS accountid,
-                    event_account.userid            AS accounttitle,
-                    event_account.latest_decision   AS created,
-                    event_account.score_updated_at,
-                    event_account.score,
+                event_account
 
-                    account_email.email              AS account_email,
-
-                    CASE WHEN event_ip.fraud_detected THEN split_part(event_ip.ip::text, '/', 1) ELSE NULL END AS ip,
-                    CASE WHEN event_ip.fraud_detected THEN event_ip.id ELSE NULL END AS ip_id,
-                    event_ip.fraud_detected AS ip_fraud,
-
-                    CASE WHEN event_email.fraud_detected THEN event_email.email ELSE NULL END AS email,
-                    CASE WHEN event_email.fraud_detected THEN event_email.id ELSE NULL END AS email_id,
-                    event_email.fraud_detected AS email_fraud,
-
-                    CASE WHEN event_phone.fraud_detected THEN event_phone.phone_number ELSE NULL END AS phone,
-                    CASE WHEN event_phone.fraud_detected THEN event_phone.id ELSE NULL END AS phone_id,
-                    event_phone.fraud_detected AS phone_fraud
-
-                FROM event
-
-                LEFT JOIN event_account
-                ON event_account.id = event.account
-
-                LEFT JOIN event_email AS account_email
-                ON event_account.lastemail = account_email.id
-
-                LEFT JOIN event_ip
-                ON event_ip.id = event.ip
-
-                LEFT JOIN event_email
-                ON event_email.id = event.email
-
-                LEFT JOIN event_phone
-                ON event_phone.id = event.phone
-
-                WHERE
-                    event_account.key = :api_key AND
-                    event_account.fraud IS TRUE AND
-                    (
-                        event_email.fraud_detected IS TRUE OR
-                        event_ip.fraud_detected IS TRUE OR
-                        event_phone.fraud_detected IS TRUE
-                    )
-                ) AS blacklist,
-                LATERAL (
-                    VALUES
-                        (CASE WHEN ip_fraud = true THEN 'ip' END),
-                        (CASE WHEN email_fraud = true THEN 'email' END),
-                        (CASE WHEN phone_fraud = true THEN 'phone' END)
-                ) AS extra(type)
+            LEFT JOIN event_email
+            ON (event_account.lastemail = event_email.id)
 
             WHERE
-                extra.type IS NOT NULL
-                %s
-        ");
+                event_account.key = :api_key AND
+                event_account.fraud IS TRUE
+                %s'
+        );
 
         $this->applySearch($query, $queryParams);
-        $this->applyEntityTypes($query, $queryParams);
+        $this->applyRules($query, $queryParams);
         $this->applyOrder($query);
         $this->applyLimit($query, $queryParams);
 
@@ -121,70 +67,24 @@ class Query extends \Tirreno\Models\Grid\Base\Query {
     public function getTotal(): array {
         $queryParams = $this->getQueryParams();
 
-        $query = ("
-            SELECT COUNT(*)
-            FROM (
-                SELECT DISTINCT
-                    blacklist.accountid,
-                    blacklist.accounttitle,
-                    blacklist.created,
-                    extra.type,
-                    CASE extra.type
-                        WHEN 'ip'    THEN blacklist.ip
-                        WHEN 'email' THEN blacklist.email
-                        WHEN 'phone' THEN blacklist.phone
-                    END AS value
+        $query = (
+            'SELECT
+                COUNT (event_account.id)
 
-                FROM
-                    (
-                    SELECT
-                        event_account.id                AS accountid,
-                        event_account.userid            AS accounttitle,
-                        event_account.latest_decision   AS created,
-                        CASE WHEN event_ip.fraud_detected THEN split_part(event_ip.ip::text, '/', 1) ELSE NULL END AS ip,
-                        event_ip.fraud_detected AS ip_fraud,
-                        CASE WHEN event_email.fraud_detected THEN event_email.email ELSE NULL END AS email,
-                        event_email.fraud_detected AS email_fraud,
-                        CASE WHEN event_phone.fraud_detected THEN event_phone.phone_number ELSE NULL END AS phone,
-                        event_phone.fraud_detected AS phone_fraud
-                    FROM event
+            FROM
+                event_account
 
-                    LEFT JOIN event_account
-                    ON event_account.id = event.account
+            LEFT JOIN event_email
+            ON (event_account.lastemail = event_email.id)
 
-                    LEFT JOIN event_ip
-                    ON event_ip.id = event.ip
-
-                    LEFT JOIN event_email
-                    ON event_email.id = event.email
-
-                    LEFT JOIN event_phone
-                    ON event_phone.id = event.phone
-
-                    WHERE
-                        event_account.key = :api_key AND
-                        event_account.fraud IS TRUE AND
-                        (
-                            event_email.fraud_detected IS TRUE OR
-                            event_ip.fraud_detected IS TRUE OR
-                            event_phone.fraud_detected IS TRUE
-                        )
-                    ) AS blacklist,
-                    LATERAL (
-                        VALUES
-                            (CASE WHEN ip_fraud = true THEN 'ip' END),
-                            (CASE WHEN email_fraud = true THEN 'email' END),
-                            (CASE WHEN phone_fraud = true THEN 'phone' END)
-                    ) AS extra(type)
-
-                WHERE
-                    extra.type IS NOT NULL
-                    %s
-            ) AS tbl
-        ");
+            WHERE
+                event_account.key = :api_key AND
+                event_account.fraud IS TRUE
+                %s'
+        );
 
         $this->applySearch($query, $queryParams);
-        $this->applyEntityTypes($query, $queryParams);
+        $this->applyRules($query, $queryParams);
 
         return [$query, $queryParams];
     }
@@ -201,15 +101,17 @@ class Query extends \Tirreno\Models\Grid\Base\Query {
 
         if (isset($search['value']) && is_string($search['value']) && $search['value'] !== '') {
             $searchConditions .= (
-                " AND (
-                    LOWER(blacklist.accounttitle)           LIKE LOWER(:search_value) OR
-                    LOWER(extra.type)                       LIKE LOWER(:search_value) OR
-                    LOWER(CASE extra.type
-                        WHEN 'ip'    THEN blacklist.ip
-                        WHEN 'email' THEN blacklist.email
-                        WHEN 'phone' THEN blacklist.phone
-                    END)                                    LIKE LOWER(:search_value) OR
-                    TO_CHAR((blacklist.created + :offset)::timestamp without time zone, 'dd/mm/yyyy hh24:mi:ss') LIKE :search_value
+                " AND
+                (
+                    LOWER(REPLACE(
+                            COALESCE(event_account.firstname, '') ||
+                            COALESCE(event_account.lastname, '') ||
+                            COALESCE(event_account.firstname, ''),
+                            ' ', ''))               LIKE LOWER(REPLACE(:search_value, ' ', '')) OR
+                    LOWER(event_email.email)        LIKE LOWER(:search_value) OR
+                    LOWER(event_account.userid)     LIKE LOWER(:search_value) OR
+
+                    TO_CHAR((event_account.latest_decision + :offset)::timestamp without time zone, 'dd/mm/yyyy hh24:mi:ss') LIKE :search_value
                 )"
             );
 
@@ -217,25 +119,22 @@ class Query extends \Tirreno\Models\Grid\Base\Query {
             $queryParams[':offset'] = strval(tirreno('utils')->timezones->getCurrentOperatorOffset());
         }
 
-        //Add search into request
-        $query = sprintf($query, $searchConditions . ' %s');
+        //Add search and ids into request
+        $query = sprintf($query, $searchConditions);
     }
 
-    private function applyEntityTypes(string &$query, array &$queryParams): void {
-        $searchCondition = '';
-
-        $entityTypeIds = tirreno('utils')->conversion->getArrayRequestParam('entityTypeIds');
-        if ($entityTypeIds) {
-            $clauses = [];
-
-            foreach ($entityTypeIds as $key => $entityTypeId) {
-                $clauses[] = 'extra.type = :entity_type_' . $key;
-                $queryParams[':entity_type_' . $key] = strtolower(tirreno('utils')->constants->ENTITY_TYPES[$entityTypeId]);
-            }
-
-            $searchCondition = ' AND (' . implode(' OR ', $clauses) . ')';
+    private function applyRules(string &$query, array &$queryParams): void {
+        $ruleUids = tirreno('utils')->conversion->getArrayRequestParam('ruleUids');
+        if (!$ruleUids) {
+            return;
         }
 
-        $query = sprintf($query, $searchCondition);
+        $uids = [];
+        foreach ($ruleUids as $ruleUid) {
+            $uids[] = ['uid' => $ruleUid];
+        }
+
+        $query .= ' AND score_details @> :rules_uids::jsonb';
+        $queryParams[':rules_uids'] = json_encode($uids);
     }
 }

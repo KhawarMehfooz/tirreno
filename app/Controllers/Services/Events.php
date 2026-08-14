@@ -34,7 +34,7 @@ class Events extends \Tirreno\Controllers\Services\Base {
     }
 
     public function getChart(string $mode, int $apiKey): array {
-        if (!in_array($mode, tirreno('utils')->constants->EVENTS_CHARTS)) {
+        if (!in_array($mode, tirreno('constants')->EVENTS_CHARTS)) {
             $mode = 'events';
         }
 
@@ -55,13 +55,13 @@ class Events extends \Tirreno\Controllers\Services\Base {
     }
 
     public function getAllDeviceTypes(): array {
-        return tirreno('utils')->constants->DEVICE_TYPES;
+        return tirreno('constants')->DEVICE_TYPES;
     }
 
     public function extendPayload(array $data, int $apiKey): array {
         if (isset($data['event_type_id']) && isset($data['id'])) {
-            $payloadTypes = [tirreno('utils')->constants->PAGE_SEARCH_EVENT_TYPE_ID, tirreno('utils')->constants->ACCOUNT_EMAIL_CHANGE_EVENT_TYPE_ID];
-            if ($data['event_type_id'] === tirreno('utils')->constants->FIELD_EDIT_EVENT_TYPE_ID) {
+            $payloadTypes = [tirreno('constants')->PAGE_SEARCH_EVENT_TYPE_ID, tirreno('constants')->ACCOUNT_EMAIL_CHANGE_EVENT_TYPE_ID];
+            if ($data['event_type_id'] === tirreno('constants')->FIELD_EDIT_EVENT_TYPE_ID) {
                 $data['event_payload'] = json_encode(tirreno('models')->fieldAuditTrail->getByEventId($data['id'], $apiKey));
             } elseif (in_array($data['event_type_id'], $payloadTypes)) {
                 $data['event_payload'] = tirreno('models')->payload->getByEventId($data['id'], $apiKey);

@@ -36,18 +36,23 @@ class BatchedNewEvents extends Base {
     }
 
     public function process(): void {
+        $timer = tirreno('request')->setTimer();
+
         if (!$this->readyToProcess()) {
-            $this->addLog('Could not acquire the lock; another cron is probably already working on recently added events.');
+            $this->logInfo('Could not acquire the lock; another cron is probably already working on recently added events.');
 
             return;
         }
+
+        $accounts = [];
 
         try {
             $cursor = tirreno('models')->cursor->getCursor();
             $next = tirreno('models')->cursor->getNextCursor($cursor, tirreno('utils')->variables->getNewEventsBatchSize());
 
             if (!$next) {
-                $this->addLog('No new events.');
+                $this->logInfo('No new events.');
+                $this->summary = sprintf('Skipped fetching accounts.');
                 tirreno('models')->cursor->unlock();
 
                 return;
@@ -57,16 +62,18 @@ class BatchedNewEvents extends Base {
 
             tirreno('utils')->routes->callExtra('BATCHING_NEW_EVENTS', $cursor, $next);
 
-            tirreno('models')->queue->addBatch($accounts, tirreno('utils')->constants->RISK_SCORE_QUEUE_ACTION_TYPE);
+            tirreno('models')->queue->addBatch($accounts, tirreno('constants')->RISK_SCORE_QUEUE_ACTION_TYPE);
 
             tirreno('models')->cursor->updateCursor($next);
 
             // TODO: Log new events cursor to database?
-            $this->addLog('Updated \'last_event_id\' in \'queue_new_events_cursor\' table to ' . strval($next));
-            $this->addLog(sprintf('Added %s accounts to the risk score queue.', count($accounts)));
+            $this->logInfo('Updated \'last_event_id\' in \'queue_new_events_cursor\' table to %d.', $next);
+            $this->logInfo('Added %s accounts to the risk score queue.', count($accounts));
         } catch (\Throwable $e) {
-            $this->addLog(sprintf('Batched new events error %s.', $e->getMessage()));
+            $this->logWarning('Batched new events error %s.', $e->getMessage());
         }
+
+        $this->summary = sprintf('Added %d account in %f.', count($accounts), tirreno('request')->getTimer($timer));
 
         tirreno('models')->cursor->unlock();
     }

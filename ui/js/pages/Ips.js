@@ -1,10 +1,10 @@
-import {BasePage} from './Base.js?v=0.10.0';
-import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.0';
-import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.0';
-import {SearchFilter} from '../parts/SearchFilter.js?v=0.10.0';
-import {IpTypeFilter} from '../parts/choices/IpTypeFilter.js?v=0.10.0';
-import {IpsChart} from '../parts/chart/Ips.js?v=0.10.0';
-import {IpsGrid} from '../parts/grid/Ips.js?v=0.10.0';
+import {BasePage} from './Base.js?v=0.10.1';
+import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.1';
+import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.1';
+import {SearchFilter} from '../parts/SearchFilter.js?v=0.10.1';
+import {IpTypeFilter} from '../parts/choices/IpTypeFilter.js?v=0.10.1';
+import {IpsChart} from '../parts/chart/Ips.js?v=0.10.1';
+import {IpsGrid} from '../parts/grid/Ips.js?v=0.10.1';
 
 export class IpsPage extends BasePage {
     constructor() {

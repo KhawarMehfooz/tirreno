@@ -74,7 +74,7 @@ class Operator {
         $operator = tirreno('models')->operator->getOperatorById($operatorId);
 
         if (!$operator) {
-            $operator = tirreno('models')->operator->getOperatorById(tirreno('utils')->constants->GUEST_OPERATOR_ID);
+            $operator = tirreno('models')->operator->getOperatorById(tirreno('constants')->GUEST_OPERATOR_ID);
         }
 
         $rolesPermissions = tirreno('utils')->operatorAccess->getRolesWithPermissions($operator['id']);
@@ -121,7 +121,7 @@ class Operator {
     }
 
     public function isGuest(): bool {
-        return $this->id === tirreno('utils')->constants->GUEST_OPERATOR_ID;
+        return $this->id === tirreno('constants')->GUEST_OPERATOR_ID;
     }
 
     public function isLoggedIn(): bool {
@@ -136,8 +136,8 @@ class Operator {
         return tirreno('utils')->operatorAccess->editable($pageValue, $this->id);
     }
 
-    public function deleteable(string $pageValue): bool {
-        return tirreno('utils')->operatorAccess->deleteable($pageValue, $this->id);
+    public function deletable(string $pageValue): bool {
+        return tirreno('utils')->operatorAccess->deletable($pageValue, $this->id);
     }
 
     public function publishable(string $pageValue): bool {

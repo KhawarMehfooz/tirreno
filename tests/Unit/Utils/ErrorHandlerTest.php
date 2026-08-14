@@ -17,10 +17,10 @@ use PHPUnit\Framework\TestCase;
  * @todo Cover ErrorHandler::saveErrorInformation() after logger, database,
  *       routes, models, variables and mailer dependencies can be replaced in tests.
  *
- * @todo Cover ErrorHandler::getOnErrorHandler() after output buffers,
+ * @todo Cover ErrorHandler::routerErrorHandler() after output buffers,
  *       redirect/rendering and response dependencies can be isolated.
  *
- * @todo Cover ErrorHandler::getCronErrorHandler() together with
+ * @todo Cover ErrorHandler::cronErrorHandler() together with
  *       saveErrorInformation() after side effects are isolated.
  *
  * @todo Cover ErrorHandler::getAjaxErrorMessage() after it is extracted
@@ -34,9 +34,9 @@ final class ErrorHandlerTest extends TestCase {
 
     /** @var list<string> */
     private array $keys = [
-        'ERROR.trace',
         'ERROR.code',
         'ERROR.text',
+        'LAST_ERROR',
         'POST',
         'GET',
         'IP',
@@ -58,50 +58,48 @@ final class ErrorHandlerTest extends TestCase {
         parent::tearDown();
     }
 
-    public function testGetErrorDetailsNormalizesTraceAndFormatsMessage(): void {
-        $code = 500;
-        $text = 'Something went wrong';
-
-        $line1 = 'short line';
-        $line2 = '<b>keep</b> &gt; &lt; tag';
-        $line3 = '<div>This is the longest line and must be removed from trace output</div>';
-
-        $trace = $line1 . PHP_EOL . $line3 . PHP_EOL . $line2;
+    public function testGetErrorDetailsUsesStoredErrorMessageAndTrace(): void {
+        $trace = [
+            '0# [/app/index.php:10] Tirreno\\Service\\Example->run()',
+            '1# [/app/bootstrap.php:20] require()',
+        ];
 
         $post = ['a' => 'b'];
         $get = ['q' => 'x'];
 
         $this->f3->set('IP', '203.0.113.10');
-        $this->f3->set('ERROR.trace', $trace);
-        $this->f3->set('ERROR.code', $code);
-        $this->f3->set('ERROR.text', $text);
+        $this->f3->set('ERROR.code', 500);
+        $this->f3->set('ERROR.text', 'Framework error');
+        $this->f3->set('LAST_ERROR', [
+            'type' => E_ERROR,
+            'message' => 'Something went wrong',
+            'file' => '/app/index.php',
+            'line' => 10,
+            'trace' => $trace,
+        ]);
         $this->f3->set('POST', $post);
         $this->f3->set('GET', $get);
 
         $result = ErrorHandler::getErrorDetails();
 
         $this->assertSame('203.0.113.10', $result['ip']);
-        $this->assertSame($code, $result['code']);
-        $this->assertSame('ERROR_500, Something went wrong', $result['message']);
+        $this->assertSame(500, $result['code']);
+        $this->assertSame(
+            'ERROR_500, Something went wrong',
+            $result['message']
+        );
+        $this->assertSame($trace, $result['trace']);
         $this->assertSame($post, $result['post']);
         $this->assertSame($get, $result['get']);
 
-        $this->assertIsString($result['trace']);
-        $this->assertStringContainsString('short line', $result['trace']);
-        $this->assertStringContainsString('keep > < tag', $result['trace']);
-        $this->assertStringNotContainsString('must be removed', $result['trace']);
-        $this->assertStringNotContainsString('<b>', $result['trace']);
-        $this->assertStringContainsString('<br>', $result['trace']);
-
         $this->assertIsString($result['date']);
         $this->assertNotSame('', $result['date']);
+
+        $this->assertFalse($this->f3->exists('LAST_ERROR'));
     }
 
-    public function testGetErrorDetailsDoesNotRemoveTraceWhenSingleLine(): void {
-        $line = '<i>one</i> &gt; test';
-
+    public function testGetErrorDetailsUsesFrameworkErrorWhenStoredErrorIsAbsent(): void {
         $this->f3->set('IP', '127.0.0.1');
-        $this->f3->set('ERROR.trace', $line);
         $this->f3->set('ERROR.code', 404);
         $this->f3->set('ERROR.text', 'Not Found');
         $this->f3->set('POST', []);
@@ -110,8 +108,11 @@ final class ErrorHandlerTest extends TestCase {
         $result = ErrorHandler::getErrorDetails();
 
         $this->assertSame('127.0.0.1', $result['ip']);
-        $this->assertSame('one > test', $result['trace']);
+        $this->assertSame(404, $result['code']);
         $this->assertSame('ERROR_404, Not Found', $result['message']);
+        $this->assertSame([], $result['trace']);
+        $this->assertSame([], $result['post']);
+        $this->assertSame([], $result['get']);
     }
 
     public function testExceptionErrorHandlerThrowsWhenSeverityIsReported(): void {
