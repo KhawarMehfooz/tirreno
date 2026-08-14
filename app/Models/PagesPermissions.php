@@ -83,13 +83,13 @@ class PagesPermissions extends \Tirreno\Models\Base {
 
         $query = (
             'SELECT
-                dshb_roles_permissions.id,
-                dshb_roles_permissions.page,
-                dshb_roles_permissions.role_permission
+                dshb_pages_permissions.id,
+                dshb_pages_permissions.page,
+                dshb_pages_permissions.role_permission
             FROM
-                dshb_roles_permissions
+                dshb_pages_permissions
             WHERE
-                dshb_roles_permissions.page = :page_id'
+                dshb_pages_permissions.page = :page_id'
         );
 
         return $this->execQuery($query, $params);

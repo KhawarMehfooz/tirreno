@@ -343,7 +343,7 @@ class Operator extends \Tirreno\Models\Base {
 
     public function getAll(): array {
         $params = [
-            ':reserved_ids_limit'    => tirreno('utils')->constants->RESERVED_OPERATOR_IDS,
+            ':reserved_ids_limit'    => tirreno('constants')->RESERVED_OPERATOR_IDS,
         ];
 
         $query = (

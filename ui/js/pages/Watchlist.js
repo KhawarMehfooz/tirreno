@@ -1,10 +1,10 @@
-import {BasePage} from './Base.js?v=0.10.0';
+import {BasePage} from './Base.js?v=0.10.1';
 
-import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.0';
-import {SearchFilter} from '../parts/SearchFilter.js?v=0.10.0';
-import {EventPanel} from '../parts/panel/EventPanel.js?v=0.10.0';
-import {WatchlistTags} from '../parts/WatchlistTags.js?v=0.10.0';
-import {EventsGrid} from '../parts/grid/Events.js?v=0.10.0';
+import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.1';
+import {SearchFilter} from '../parts/SearchFilter.js?v=0.10.1';
+import {EventPanel} from '../parts/panel/EventPanel.js?v=0.10.1';
+import {WatchlistTags} from '../parts/WatchlistTags.js?v=0.10.1';
+import {EventsGrid} from '../parts/grid/Events.js?v=0.10.1';
 
 export class WatchlistPage extends BasePage {
     constructor() {

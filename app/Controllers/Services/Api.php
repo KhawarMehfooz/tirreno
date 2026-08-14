@@ -23,7 +23,7 @@ class Api extends \Tirreno\Controllers\Services\Base {
     public function __construct() {
         parent::__construct();
 
-        $this->ENRICHED_ATTRIBUTES = array_keys(tirreno('utils')->constants->ENRICHING_ATTRIBUTES);
+        $this->ENRICHED_ATTRIBUTES = array_keys(tirreno('constants')->ENRICHING_ATTRIBUTES);
     }
 
     public function getUsageStats(int $operatorId): array {
@@ -139,7 +139,7 @@ class Api extends \Tirreno\Controllers\Services\Base {
         } else {
             $accountsToEnrich = tirreno('models')->users->notCheckedUsers($apiKey);
 
-            tirreno('models')->queue->addBatchIds($accountsToEnrich, tirreno('utils')->constants->ENRICHMENT_QUEUE_ACTION_TYPE, $apiKey);
+            tirreno('models')->queue->addBatchIds($accountsToEnrich, tirreno('constants')->ENRICHMENT_QUEUE_ACTION_TYPE, $apiKey);
 
             $pageParams['SUCCESS_MESSAGE'] = tirreno('storage')->get('api_manual_enrichment_success_message');
         }
@@ -205,6 +205,6 @@ class Api extends \Tirreno\Controllers\Services\Base {
 
     public function getScheduledForEnrichment(int $apiKey): bool {
         // do not use isInQueue() to prevent true on failed state
-        return tirreno('models')->queue->actionIsInQueueProcessing(tirreno('utils')->constants->ENRICHMENT_QUEUE_ACTION_TYPE, $apiKey);
+        return tirreno('models')->queue->actionIsInQueueProcessing(tirreno('constants')->ENRICHMENT_QUEUE_ACTION_TYPE, $apiKey);
     }
 }

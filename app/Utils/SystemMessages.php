@@ -108,7 +108,7 @@ class SystemMessages {
     }
 
     private static function getInactiveCronMessage(array $lastLogbook, int $apiKey): ?array {
-        if (tirreno('models')->cursor->getCursor() === 0 && count($lastLogbook) && time() - strtotime($lastLogbook['lastseen']) < tirreno('utils')->constants->SECONDS_IN_MINUTE * 10) {
+        if (tirreno('models')->cursor->getCursor() === 0 && count($lastLogbook) && time() - strtotime($lastLogbook['lastseen']) < tirreno('constants')->SECONDS_IN_MINUTE * 10) {
             return ['id' => tirreno('utils')->errorCodes->CRON_JOB_MAY_BE_OFF];
         }
 

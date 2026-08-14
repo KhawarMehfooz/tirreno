@@ -26,7 +26,7 @@ class Sysop extends \Tirreno\Entities\Operator {
         $operator = tirreno('models')->operator->getOperatorById($operatorId);
 
         if (!$operator) {
-            $operator = tirreno('models')->operator->getOperatorById(tirreno('utils')->constants->GUEST_OPERATOR_ID);
+            $operator = tirreno('models')->operator->getOperatorById(tirreno('constants')->GUEST_OPERATOR_ID);
         }
 
         $rolesPermissions = tirreno('utils')->operatorAccess->getRolesWithPermissions($operator['id']);

@@ -27,9 +27,9 @@ class RiskScoreQueueHandler extends BaseQueue {
 
     public function process(): void {
         $batchSize = tirreno('utils')->variables->getAccountOperationQueueBatchSize();
-        $keys = tirreno('models')->queue->getNextBatchKeys(tirreno('utils')->constants->RISK_SCORE_QUEUE_ACTION_TYPE, $batchSize);
+        $keys = tirreno('models')->queue->getNextBatchKeys(tirreno('constants')->RISK_SCORE_QUEUE_ACTION_TYPE, $batchSize);
 
-        parent::baseProcess(tirreno('utils')->constants->RISK_SCORE_QUEUE_ACTION_TYPE);
+        parent::baseProcess(tirreno('constants')->RISK_SCORE_QUEUE_ACTION_TYPE);
 
         foreach ($keys as $key) {
             tirreno('controllers')->blacklist->setBlacklistUsersCount(false, $key);

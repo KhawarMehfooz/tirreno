@@ -23,6 +23,7 @@ $baseErrors = [
         '<p>Error occurred at: %s</p>
         <p>Host: %s</p>
         <p>Message: </p>%s
+        <p>Debug level: %s</p>
         <p>Trace: </p>%s
         '
     ),

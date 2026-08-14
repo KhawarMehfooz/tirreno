@@ -221,4 +221,7 @@ return [
     'Base_table_column_local_timestamp_tooltip' => 'Server time when API request was received.',
     'Base_table_column_raw_request' => 'Raw POST data',
     'Base_table_column_raw_request_tooltip' => 'JSON encoded data from request.',
+
+    'Base_table_error_page_title' => 'A secret place!',
+    'Base_table_error_page_debug_hint' => 'Show full stack: DEBUG = 3 (config/config.ini)',
 ];

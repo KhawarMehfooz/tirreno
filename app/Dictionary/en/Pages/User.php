@@ -47,7 +47,8 @@ return [
     'user_remove_user_button' => 'Delete entity',
     'user_scheduled_for_removal' => 'This entity\'s data is scheduled for removal.',
 
-    'user_review_comment_placeholder' => 'There is no review for this entity.',
+    'user_review_queue_next_user' => 'Get next &rarr;',
+    'user_review_queue_ratio_tooltip' => 'Current entity number out of total entities to review.',
 
     'payload_table_title' => 'Payload',
     'payload_table_title_tooltip' => 'Payload',

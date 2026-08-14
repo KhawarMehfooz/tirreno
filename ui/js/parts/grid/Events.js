@@ -1,4 +1,4 @@
-import {BaseGridWithPanel} from './BaseWithPanel.js?v=0.10.0';
+import {BaseGridWithPanel} from './BaseWithPanel.js?v=0.10.1';
 import {
     renderResourceWithQueryAndEventType,
     renderDeviceWithOs,
@@ -6,10 +6,10 @@ import {
     renderIpWithCountry,
     renderUserForEvent,
     renderTimestampForEvent,
-} from '../DataRenderers.js?v=0.10.0';
+} from '../DataRenderers.js?v=0.10.1';
 
 export class EventsGrid extends BaseGridWithPanel {
-    // 7, 8 - invisible time and id columns to prevent sorting buttons appearence
+    // 7, 8 - invisible time and id columns to prevent sorting buttons appearance
     get orderConfig() {
         return this.config.sessionGroup && !this.config.singleUser
             ? [[6, 'desc'], [7, 'desc'], [8, 'desc']]

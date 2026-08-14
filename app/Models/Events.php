@@ -29,7 +29,7 @@ class Events extends \Tirreno\Models\Base {
 
         $query = (
             'SELECT DISTINCT
-                event.account AS "accountId",
+                event.account,
                 event.key
             FROM
                 event
@@ -52,8 +52,7 @@ class Events extends \Tirreno\Models\Base {
 
         $query = (
             'SELECT DISTINCT
-                event.account AS "accountId",
-                eve
+                event.account,
                 event.key
             FROM
                 event
@@ -129,7 +128,7 @@ class Events extends \Tirreno\Models\Base {
         $params = [
             ':api_key'  => $apiKey,
             ':weeks'    => $weeks,
-            ':week_sec' => tirreno('utils')->constants->SECONDS_IN_WEEK,
+            ':week_sec' => tirreno('constants')->SECONDS_IN_WEEK,
         ];
 
         $query = (

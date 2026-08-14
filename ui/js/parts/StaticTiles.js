@@ -1,4 +1,4 @@
-import {Loader} from './Loader.js?v=0.10.0';
+import {Loader} from './Loader.js?v=0.10.1';
 
 export class StaticTiles {
     constructor(tilesParams) {

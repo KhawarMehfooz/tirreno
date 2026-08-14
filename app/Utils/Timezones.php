@@ -130,7 +130,7 @@ class Timezones {
 
     public static function getLastNDaysRange(int $days = 1, int $offset = 0): array {
         $now = time();
-        $daySeconds = tirreno('utils')->constants->SECONDS_IN_DAY;
+        $daySeconds = tirreno('constants')->SECONDS_IN_DAY;
 
         $date = new \DateTime();
         $date->setTimestamp($now - ($daySeconds * $days) - (($now + $offset) % $daySeconds));
@@ -151,7 +151,7 @@ class Timezones {
         $date->setTimestamp($now + $offset);
         $date->setTime(0, 0, 0);
         $dow = tirreno('utils')->conversion->intValCheckEmpty($date->format('N'), 1);
-        $day = tirreno('utils')->constants->SECONDS_IN_DAY;
+        $day = tirreno('constants')->SECONDS_IN_DAY;
 
         $weekStart = $date->getTimestamp() - $offset - ($dow - 1) * $day;
 
@@ -181,12 +181,12 @@ class Timezones {
         $now = time();
 
         $date = new \DateTime();
-        $date->setTimestamp($now - tirreno('utils')->constants->SECONDS_IN_DAY + $offset);
+        $date->setTimestamp($now - tirreno('constants')->SECONDS_IN_DAY + $offset);
 
         $date->setTime(0, 0, 0);
 
         return [
-            'endDate'   => date(self::FORMAT, $date->getTimestamp() + tirreno('utils')->constants->SECONDS_IN_DAY - $offset),
+            'endDate'   => date(self::FORMAT, $date->getTimestamp() + tirreno('constants')->SECONDS_IN_DAY - $offset),
             'startDate' => date(self::FORMAT, $date->getTimestamp() - $offset),
             'offset'    => $offset,
         ];
@@ -197,7 +197,7 @@ class Timezones {
 
         $dow = intval(date('N', $time));
 
-        $weekStart = strtotime(date('Y-m-d 00:00:00', $time)) - (($dow - 1) * tirreno('utils')->constants->SECONDS_IN_DAY);
+        $weekStart = strtotime(date('Y-m-d 00:00:00', $time)) - (($dow - 1) * tirreno('constants')->SECONDS_IN_DAY);
 
         return $time - $weekStart;
     }
@@ -210,8 +210,8 @@ class Timezones {
 
         $date->setTime(0, 0, 0);
 
-        $week = tirreno('utils')->constants->SECONDS_IN_WEEK;
-        $day = tirreno('utils')->constants->SECONDS_IN_DAY;
+        $week = tirreno('constants')->SECONDS_IN_WEEK;
+        $day = tirreno('constants')->SECONDS_IN_DAY;
 
         return [
             'endDate'   => date(self::FORMAT, $date->getTimestamp() - $offset - $week + $day),
@@ -227,7 +227,7 @@ class Timezones {
         $date->setTimestamp($now + $offset);
         $date->setTime(0, 0, 0);
         $dow = tirreno('utils')->conversion->intValCheckEmpty($date->format('N'), 0);
-        $day = tirreno('utils')->constants->SECONDS_IN_DAY;
+        $day = tirreno('constants')->SECONDS_IN_DAY;
 
         return [
             'endDate'   => date(self::FORMAT, $now),

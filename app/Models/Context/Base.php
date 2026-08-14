@@ -37,27 +37,27 @@ abstract class Base extends \Tirreno\Models\Base {
             return [];
         }
 
-        $groupped = [];
+        $grouped = [];
 
         $userId = 0;
 
         foreach ($records as $record) {
             $userId = $record['id'];
 
-            if (!isset($groupped[$userId])) {
-                $groupped[$userId] = [];
+            if (!isset($grouped[$userId])) {
+                $grouped[$userId] = [];
                 foreach ($keys as $key) {
-                    $groupped[$userId][$key] = [];
+                    $grouped[$userId][$key] = [];
                 }
             }
 
             foreach ($keys as $key) {
-                if (!$unique || !in_array($record[$key], $groupped[$userId][$key])) {
-                    $groupped[$userId][$key][] = $record[$key];
+                if (!$unique || !in_array($record[$key], $grouped[$userId][$key])) {
+                    $grouped[$userId][$key][] = $record[$key];
                 }
             }
         }
 
-        return $groupped;
+        return $grouped;
     }
 }

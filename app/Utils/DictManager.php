@@ -22,20 +22,25 @@ class DictManager {
         $locale = tirreno('storage')->get('LOCALES');
         $language = tirreno('storage')->get('LANGUAGE');
 
-        $file = ucfirst($file);
+        $path = sprintf(
+            '%s%s/Additional/%s.php',
+            $locale,
+            $language,
+            ucfirst($file),
+        );
 
-        $path = sprintf('%s%s/Additional/%s.php', $locale, $language, $file);
+        if (!file_exists($path)) {
+            return;
+        }
 
-        $isFileExists = file_exists($path);
+        $values = include $path;
 
-        if ($isFileExists) {
-            $values = include $path;
+        if ($values === false) {
+            return;
+        }
 
-            if ($values !== false) {
-                foreach ($values as $key => $value) {
-                    tirreno('storage')->set($key, $value);
-                }
-            }
+        foreach ($values as $key => $value) {
+            tirreno('storage')->set($key, $value);
         }
     }
 }

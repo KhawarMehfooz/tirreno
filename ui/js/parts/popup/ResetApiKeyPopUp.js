@@ -1,4 +1,4 @@
-import {BasePopUp} from './BasePopUp.js?v=0.10.0';
+import {BasePopUp} from './BasePopUp.js?v=0.10.1';
 
 export class ResetApiKeyPopUp extends BasePopUp {
     constructor() {

@@ -30,15 +30,15 @@ class Render {
 
         $cls = 'empty';
 
-        if ($score !== null && $score >= tirreno('utils')->constants->USER_LOW_SCORE_INF && $score < tirreno('utils')->constants->USER_LOW_SCORE_SUP) {
+        if ($score !== null && $score >= tirreno('constants')->USER_LOW_SCORE_INF && $score < tirreno('constants')->USER_LOW_SCORE_SUP) {
             $cls = 'low';
         }
 
-        if ($score !== null && $score >= tirreno('utils')->constants->USER_MEDIUM_SCORE_INF && $score < tirreno('utils')->constants->USER_MEDIUM_SCORE_SUP) {
+        if ($score !== null && $score >= tirreno('constants')->USER_MEDIUM_SCORE_INF && $score < tirreno('constants')->USER_MEDIUM_SCORE_SUP) {
             $cls = 'medium';
         }
 
-        if ($score !== null && $score >= tirreno('utils')->constants->USER_HIGH_SCORE_INF) {
+        if ($score !== null && $score >= tirreno('constants')->USER_HIGH_SCORE_INF) {
             $cls = 'high';
         }
 
@@ -65,9 +65,9 @@ class Render {
     }
 
     public static function getInternalPageTitleWithPostfix(string $title): string {
-        $title = $title ? $title : tirreno('utils')->constants->UNAUTHORIZED_USERID;
+        $title = $title ? $title : tirreno('constants')->UNAUTHORIZED_USERID;
         $safeTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
-        $title = sprintf('%s %s', $safeTitle, tirreno('utils')->constants->PAGE_TITLE_POSTFIX);
+        $title = sprintf('%s %s', $safeTitle, tirreno('constants')->PAGE_TITLE_POSTFIX);
 
         return $title;
     }

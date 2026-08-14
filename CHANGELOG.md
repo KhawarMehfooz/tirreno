@@ -1,5 +1,36 @@
 # tirreno changelog
 
+## tirreno v0.10.1
+
+* formatting global search results by @prabhaks (#41)
+* reload buttons for grids by @KhawarMehfooz (#36)
+* blacklisted identities grid -> blacklisted entities grid
+* blacklist chart identities -> manually blacklisted vs. auto-blacklisted
+* review queue details widget for continuous reviewing process
+* `event_review_queue` table for entities ids
+* hasOwn() JS wrapper for elder browsers
+* generate new tracking ID with random_bytes()
+* update error handlers
+* update logger
+* queue unclogging fixes
+* query builder fixes
+* trace at error page only for logged in operators
+* tests for rules, query, grids
+* tirreno('constants') API interface
+* php_codesniffer 3.10.3 -> 3.13.6
+* ignore native F3 logging
+* remove `LOG_TO_STDERR` config var
+* add `LOG_TO_STDOUT` config var
+* add `LOG_TO_DATABASE` config var
+* expand vulnerable user-agent substrings list
+* `Config` file extensions sublist added
+
+### Debug levels
+* DEBUG 0 -- errors file and line, warnings + info
+* DEBUG 1 -- errors file and line, warnings + info + debug
+* DEBUG 2 -- errors trace, warnings + info + debug
+* DEBUG 3 -- errors trace with functions' arguments, warnings + info + debug
+
 ## tirreno v0.10.0
 
 * RBAC

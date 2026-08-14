@@ -34,6 +34,10 @@ class Blacklist extends \Tirreno\Controllers\Services\Base {
         tirreno('models')->$type->updateFraudFlag([$itemId], false, $apiKey);
     }
 
+    public function removeUserFromBlacklist(int $userId, int $apiKey): void {
+        tirreno('controllers')->user->addToBlacklistQueue($userId, false, false, true, $apiKey);
+    }
+
     public function setBlacklistUsersCount(bool $cache, int $apiKey): array {
         $operator = tirreno('utils')->routes->getCurrentRequestOperator();
 

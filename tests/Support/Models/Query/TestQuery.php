@@ -27,18 +27,7 @@ final class TestQuery extends Base {
 
     public ?array $lastParams = null;
 
-    public function get(): object {
-        $lines = [];
-
-        foreach ($this->fields as $field => $alias) {
-            $lines[] = $field . ($alias ? ' AS ' . $alias : '');
-        }
-
-        $query = 'SELECT ' . implode(', ', $lines);
-
-        $query = $this->applyFilters($query);
-        $result = $this->execQuery($query, $this->params);
-
+    protected function buildResult(array|int|null $result): object {
         return TestQueryResult::buildFromArray($result, $this->key);
     }
 
@@ -51,5 +40,13 @@ final class TestQuery extends Base {
         $this->lastParams = $params;
 
         return [];
+    }
+
+    public function exposeKey(): ?int {
+        return $this->key;
+    }
+
+    public function exposeParseSelector(string $selector): void {
+        $this->parseSelector($selector);
     }
 }

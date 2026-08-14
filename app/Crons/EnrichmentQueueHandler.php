@@ -25,7 +25,7 @@ class EnrichmentQueueHandler extends BaseQueue {
     }
 
     public function process(): void {
-        parent::baseProcess(tirreno('utils')->constants->ENRICHMENT_QUEUE_ACTION_TYPE);
+        parent::baseProcess(tirreno('constants')->ENRICHMENT_QUEUE_ACTION_TYPE);
     }
 
     protected function processItem(array $item): void {
@@ -39,7 +39,7 @@ class EnrichmentQueueHandler extends BaseQueue {
         $subscriptionKey = $key['token'];
 
         // TODO: check key ?
-        $this->addLog(sprintf('Items to enrich for account %s: %s.', $userId, json_encode($entities)));
+        $this->logInfo('Items to enrich for account %s: %s.', $userId, json_encode($entities));
 
         $summary = [];
         $success = 0;
@@ -61,6 +61,6 @@ class EnrichmentQueueHandler extends BaseQueue {
 
         // TODO: if failed !== 0 add to queue again?
         // TODO: recalculate score after all?
-        $this->addLog(sprintf('Enrichment for account %s: %s enriched, %s failed in %s s (%s).', $userId, $success, $failed, time() - $start, json_encode($summary)));
+        $this->logInfo('Enrichment for account %s: %s enriched, %s failed in %s s (%s).', $userId, $success, $failed, time() - $start, json_encode($summary));
     }
 }

@@ -45,21 +45,27 @@ class FileBasedPage extends Page {
     }
 
     public function index(): void {
-        if ($this->filePath) {
-            $session    = tirreno('session');
-            $request    = tirreno('request');
-            $response   = tirreno('response');
-            $sysop      = tirreno('sysop');
-            $utils      = tirreno('utils');
-            $page       = tirreno('page');
-            $helpers    = tirreno('helpers');
-            $db         = tirreno('db');
-            $log        = tirreno('log');
-            $user       = tirreno('user');
-            $ip         = tirreno('ip');
-
-            include_once $this->filePath;
+        if (!$this->filePath) {
+            return;
         }
+
+        $session    = tirreno('session');
+        $request    = tirreno('request');
+        $response   = tirreno('response');
+        $sysop      = tirreno('sysop');
+        $utils      = tirreno('utils');
+        $page       = tirreno('page');
+        $helpers    = tirreno('helpers');
+        $constants  = tirreno('constants');
+        $db         = tirreno('db');
+        $log        = tirreno('log');
+        $user       = tirreno('user');
+        $ip         = tirreno('ip');
+
+        include_once $this->filePath;
+
+        // TODO: set object view property after including page file
+        //$this->response = tirreno('page')->getView() === 'json' ? (new \Tirreno\Views\Json()) : $this->response;
     }
 
     protected function init(): void {
@@ -99,7 +105,7 @@ class FileBasedPage extends Page {
         $this->response = tirreno('request')->isAjax() ? (new \Tirreno\Views\Json()) : (new \Tirreno\Views\Frontend());
         $this->response->data = [];
 
-        if (tirreno('session')->getCurrentOperator()) {
+        if (tirreno('session')->getCurrentOperator()->isLoggedIn()) {
             $key = tirreno('session')->getCurrentKey();
 
             if (!$key) {

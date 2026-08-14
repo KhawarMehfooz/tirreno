@@ -27,9 +27,7 @@ class Query extends \Tirreno\Models\Grid\Base\Query {
         $queryParams = $this->getQueryParams();
 
         $query = (
-            "SELECT
-                TEXT(date_trunc('day', event_account.created)::date) AS created_day,
-
+            'SELECT
                 event_account.id,
                 event_account.is_important,
                 event_account.id AS accountid,
@@ -60,7 +58,7 @@ class Query extends \Tirreno\Models\Grid\Base\Query {
 
             WHERE
                 event_account.key = :api_key
-                %s"
+                %s'
         );
 
         $this->applySearch($query, $queryParams);

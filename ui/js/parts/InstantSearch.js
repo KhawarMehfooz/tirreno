@@ -1,7 +1,7 @@
 import {
     closest,
     inArray,
-} from './utils/Functions.js?v=0.10.0';
+} from './utils/Functions.js?v=0.10.1';
 
 export class InstantSearch {
     constructor(tableId, skipCols = []) {

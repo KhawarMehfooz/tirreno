@@ -30,7 +30,7 @@ class Blacklist extends \Tirreno\Controllers\Pages\Base {
             'LOAD_AUTOCOMPLETE'     => true,
             'HTML_FILE'             => 'blacklist.html',
             'JS'                    => 'blacklist.js',
-            'ENTITY_TYPES'          => tirreno('utils')->constants->ENTITY_TYPES,
+            'RULES'                 => tirreno('controllers')->rules->getAllRulesByApiKey($this->apiKey),
             'INTERNAL_PAGE'         => true,
         ];
     }
@@ -60,8 +60,7 @@ class Blacklist extends \Tirreno\Controllers\Pages\Base {
             return [];
         }
 
-        $type   = tirreno('utils')->conversion->getStringRequestParam('type');
-        $this->controller->removeItemFromBlacklist($this->id, $type, $this->apiKey);
+        $this->controller->removeUserFromBlacklist($this->id, $this->apiKey);
         $successCode = tirreno('utils')->errorCodes->ITEM_REMOVED_FROM_BLACKLIST;
 
         return [

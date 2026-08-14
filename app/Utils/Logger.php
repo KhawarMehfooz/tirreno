@@ -18,30 +18,47 @@ declare(strict_types=1);
 namespace Tirreno\Utils;
 
 class Logger {
-    public static function log(?string $title, string|array $message): void {
-        $logFile = tirreno('storage')->get('LOG_FILE');
-        $logger = new \Log($logFile);
+    protected const TIMESTAMP_FORMAT = 'Y-m-d H:i:s';
 
-        if (is_array($message)) {
-            $message = var_export($message, true);
-        }
-
-        if ($title) {
-            $message = sprintf('%s:%s%s', $title, PHP_EOL, $message);
-        }
-
-        $logger->write($message);
+    protected static function logObj(string $logFileVar = 'LOG_FILE'): \Log {
+        return new \Log(tirreno('storage')->get($logFileVar));
     }
 
-    public static function logSql(string $title, string $message): void {
-        $logFile = tirreno('storage')->get('LOG_SQL_FILE');
-        $logDelimiter = tirreno('storage')->get('LOG_DELIMITER');
+    public static function logSqlIfPossible(): void {
+        $printSqlToLog = tirreno('storage')->get('PRINT_SQL_LOG_AFTER_EACH_SCRIPT_CALL');
+        if ($printSqlToLog) {
+            $path = tirreno('request')->getPath();
 
-        $logger = new \Log($logFile);
-        $logger->write($title . ':' . PHP_EOL . $message . $logDelimiter);
+            $log = tirreno('utils')->database->getDb()->log();
+            if ($log) {
+                $logger = static::logObj('LOG_SQL_FILE');
+                $logDelim = tirreno('storage')->get('LOG_DELIMITER');
+                $logger->write(static::logLine($path, $log, $logDelim), static::TIMESTAMP_FORMAT);
+            }
+        }
     }
 
-    public static function logCronLine(string $message, string $cronName): string {
-        return sprintf('[%s] %s%s', $cronName, $message, PHP_EOL);
+    public static function writeLog(string $category, string $msg, mixed ...$args): string {
+        $msg = $args ? sprintf($msg, ...$args) : $msg;
+        $msg = tirreno('utils')->logger->logLine($category, $msg);
+        static::logObj()->write($msg, static::TIMESTAMP_FORMAT);
+
+        return $msg;
+    }
+
+    // TODO: log also current operator id?
+    public static function logLine(string $title, string $message, string $delim = ''): string {
+        return sprintf('[%d] %s: %s%s', getmypid(), $title, $message, $delim);
+    }
+
+    public static function fflush(string $msg, string $flow = 'stdout'): void {
+        $msg .= PHP_EOL;
+        $out = fopen('php://' . $flow, 'w');
+        if ($out === false) {
+            return;
+        }
+
+        fputs($out, $msg);
+        fclose($out);
     }
 }

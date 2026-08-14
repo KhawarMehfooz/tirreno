@@ -44,12 +44,12 @@ class Users extends Base {
             ':start_time'   => $dateRange['startDate'],
             ':resolution'   => tirreno('utils')->dateRange->getResolutionFromRequest(),
             ':offset'       => strval($offset),
-            ':high_inf'     => tirreno('utils')->constants->USER_HIGH_SCORE_INF,
-            //':high_sup'     => tirreno('utils')->constants->USER_HIGH_SCORE_SUP,
-            ':med_inf'      => tirreno('utils')->constants->USER_MEDIUM_SCORE_INF,
-            ':med_sup'      => tirreno('utils')->constants->USER_MEDIUM_SCORE_SUP,
-            ':low_inf'      => tirreno('utils')->constants->USER_LOW_SCORE_INF,
-            ':low_sup'      => tirreno('utils')->constants->USER_LOW_SCORE_SUP,
+            ':high_inf'     => tirreno('constants')->USER_HIGH_SCORE_INF,
+            //':high_sup'     => tirreno('constants')->USER_HIGH_SCORE_SUP,
+            ':med_inf'      => tirreno('constants')->USER_MEDIUM_SCORE_INF,
+            ':med_sup'      => tirreno('constants')->USER_MEDIUM_SCORE_SUP,
+            ':low_inf'      => tirreno('constants')->USER_LOW_SCORE_INF,
+            ':low_sup'      => tirreno('constants')->USER_LOW_SCORE_SUP,
         ];
 
         $query = (

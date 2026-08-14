@@ -23,6 +23,8 @@ class ReviewQueue extends \Tirreno\Controllers\Pages\Base {
     protected function getPageParams(): array {
         $this->assertCanView();
 
+        tirreno('session')->set('REVIEW_QUEUE', true);
+
         return [
             'LOAD_UPLOT'            => true,
             'LOAD_DATATABLE'        => true,

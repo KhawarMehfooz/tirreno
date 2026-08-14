@@ -72,6 +72,20 @@ class User extends \Tirreno\Controllers\Pages\Base {
             'INTERNAL_PAGE'                 => true,
         ];
 
+        $onReview = $user['added_to_review'] && $user['fraud'] === null;
+
+        if (tirreno('session')->get('REVIEW_QUEUE')) {
+            if ($onReview) {
+                $pageParams['ON_REVIEW']        = $onReview;
+                $pageParams['PREVIOUS_USER']    = tirreno('models')->reviewQueue->getPrevAccountByUserId($userId, $this->apiKey);
+                $pageParams['NEXT_USER']        = tirreno('models')->reviewQueue->getNextAccountByUserId($userId, $this->apiKey);
+                $pageParams['QUEUE_SERIAL']     = tirreno('models')->reviewQueue->getSerialByUserId($userId, $this->apiKey);
+                $pageParams['QUEUE_SIZE']       = tirreno('models')->reviewQueue->getCount($this->apiKey);
+            } else {
+                tirreno('session')->remove('REVIEW_QUEUE');
+            }
+        }
+
         [$scheduledForBlacklist, $errorCode] = tirreno('controllers')->user->getScheduledForBlacklist($userId, $this->apiKey);
         if ($scheduledForBlacklist) {
             tirreno('session')->set('extra_message_code', $errorCode ?? tirreno('utils')->errorCodes->USER_BLACKLISTING_QUEUED);

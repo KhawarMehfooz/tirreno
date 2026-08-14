@@ -47,7 +47,7 @@ class Signup extends \Tirreno\Controllers\Pages\Base {
             $operatorId = $this->addUser($params);
 
             $apiKey = $this->addDefaultApiKey($operatorId);
-            tirreno('controllers')->rules->applyRulesPresetById($params['rules-preset'], tirreno('utils')->constants->PRIMARY_RULES_SET_ID, $apiKey);
+            tirreno('controllers')->rules->applyRulesPresetById($params['rules-preset'], tirreno('constants')->PRIMARY_RULES_SET_ID, $apiKey);
             //$this->sendActivationEmail($operatorId);
             $pageParams['SUCCESS_CODE'] = tirreno('utils')->errorCodes->ACCOUNT_CREATED;
         }
@@ -62,7 +62,7 @@ class Signup extends \Tirreno\Controllers\Pages\Base {
             'HTML_FILE'         => 'signup.html',
             'TIMEZONES'         => tirreno('utils')->timezones->timezonesList(),
             'RULES_PRESETS'     => tirreno('assets')->rulesPresets->getPresets(),
-            'BASE_PRESET_ID'    => tirreno('utils')->constants->BASE_RULE_PRESET_ID,
+            'BASE_PRESET_ID'    => tirreno('constants')->BASE_RULE_PRESET_ID,
             'INTERNAL_PAGE'     => false,
         ];
 
@@ -72,15 +72,15 @@ class Signup extends \Tirreno\Controllers\Pages\Base {
     }
 
     private function addDefaultApiKey(int $operatorId): int {
-        $skipEnrichingAttr = json_encode(array_keys(tirreno('utils')->constants->ENRICHING_ATTRIBUTES));
+        $skipEnrichingAttr = json_encode(array_keys(tirreno('constants')->ENRICHING_ATTRIBUTES));
 
         return tirreno('models')->apiKeys->insertRecord($skipEnrichingAttr, true, $operatorId);
     }
 
     protected function addUser(array $data): int {
         $operatorId = tirreno('models')->operator->insertRecord($data['password'], $data['email'], $data['timezone']);
-        tirreno('utils')->operatorAccess->addOperatorRoleById(tirreno('utils')->constants->GUEST_ROLE_ID, $operatorId);
-        tirreno('utils')->operatorAccess->addOperatorRoleById(tirreno('utils')->constants->OPERATOR_ROLE_ID, $operatorId);
+        tirreno('utils')->operatorAccess->addOperatorRoleById(tirreno('constants')->GUEST_ROLE_ID, $operatorId);
+        tirreno('utils')->operatorAccess->addOperatorRoleById(tirreno('constants')->OPERATOR_ROLE_ID, $operatorId);
 
         return $operatorId;
     }

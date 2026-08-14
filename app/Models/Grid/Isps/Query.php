@@ -35,16 +35,7 @@ class Query extends \Tirreno\Models\Grid\Base\Query {
                 event_isp.total_ip,
                 event_isp.total_visit,
                 event_isp.total_account,
-                (
-                    SELECT COUNT(DISTINCT event.account)
-                    FROM event_ip
-                    LEFT JOIN event ON event_ip.id = event.ip
-                    LEFT JOIN event_account ON event.account = event_account.id
-                    WHERE
-                        event_ip.isp = event_isp.id AND
-                        event_account.fraud IS TRUE AND
-                        event_ip.key = :api_key
-                ) AS fraud
+                event_isp.total_fraud_account AS fraud
             FROM
                 event_isp
 

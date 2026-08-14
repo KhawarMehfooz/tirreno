@@ -75,7 +75,7 @@ class UserScore extends \Tirreno\Models\Base {
                 event_account_score.score,
                 event_account_score.rules,
                 event_account_score.lastseen,
-                event_account_score.created,
+                event_account_score.created
             FROM
                 event_account_score
             WHERE

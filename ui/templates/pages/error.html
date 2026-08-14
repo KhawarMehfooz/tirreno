@@ -1,4 +1,6 @@
-<code><span style="background:#8080AA;color:#2b2a39;">&nbsp;A secret place!&nbsp;</span><br>
+<code>
+    <span class="error-title">&nbsp;{{ isset(@Base_table_error_page_title) ? @Base_table_error_page_title : 'A secret place!' }}&nbsp;</span>
+    <br>
     <check if="{{ isset(@ERROR_DATA) }}">
         <true>
             <p>* {{ @ERROR_DATA.message }}</p>
@@ -17,13 +19,16 @@
     </check>
 </code>
 <br>
-<check if="{{ isset(@ERROR_DATA.trace) && @ERROR_DATA.trace }}">
+<check if="{{ tirreno('session')->getCurrentOperator()->isLoggedIn() && isset(@ERROR_DATA.trace) && @ERROR_DATA.trace }}">
     <true>
-        <pre class="subtitle"><small>{{ @ERROR_DATA.trace | raw }}</small></pre>
+        <check if="{{ !is_array(@ERROR_DATA.trace) }}">
+            {~ @ERROR_DATA.trace = [@ERROR_DATA.trace]; ~}
+        </check>
+        <pre class="subtitle"><small><repeat group="{{ @ERROR_DATA.trace }}" value="{{ @FRAME }}">{{ @FRAME }}<br></repeat></small></pre>
     </true>
     <false>
-        <check if="{{ @ERROR_DATA.code == 500 }}">
-            <p class="subtitle"><code><small>Show full stack: DEBUG = 1 (config/config.ini)</small></code></p>
+        <check if="{{ @ERROR_DATA.code === 500 }}">
+            <p class="subtitle"><code><small>{{ isset(@Base_table_error_page_debug_hint) ? @Base_table_error_page_debug_hint : 'Show full stack: DEBUG = 3 (config/config.ini)' }}</small></code></p>
         </check>
     </false>
 </check>

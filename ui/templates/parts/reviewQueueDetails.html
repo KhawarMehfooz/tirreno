@@ -1,0 +1,17 @@
+<check if="{{ @ON_REVIEW }}">
+    <true>
+        <div class="review-queue-details">
+            <div class="review-queue-details-content">
+
+            <span class="tooltip" title="{{ @user_review_queue_ratio_tooltip }}">{{ @QUEUE_SERIAL }}/{{ tirreno('utils')->conversion->formatKiloValue(@QUEUE_SIZE) }}</span>
+
+            <check if="{{ @NEXT_USER !== null }}">
+                <true>
+                    <a href="{{ @BASE }}/id/{{ @NEXT_USER }}" id="next-user-button">{{ @user_review_queue_next_user | raw }}</a>
+                </true>
+            </check>
+            </div>
+        </div>
+    </true>
+</check>
+

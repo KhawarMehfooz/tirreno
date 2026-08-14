@@ -1,11 +1,11 @@
-import {BasePage} from './Base.js?v=0.10.0';
-import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.0';
-import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.0';
-import {SearchFilter} from '../parts/SearchFilter.js?v=0.10.0';
-import {RulesFilter} from '../parts/choices/RulesFilter.js?v=0.10.0';
-import {ScoresRangeFilter} from '../parts/choices/ScoresRangeFilter.js?v=0.10.0';
-import {UsersGrid} from '../parts/grid/Users.js?v=0.10.0';
-import {UsersChart} from '../parts/chart/Users.js?v=0.10.0';
+import {BasePage} from './Base.js?v=0.10.1';
+import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.1';
+import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.1';
+import {SearchFilter} from '../parts/SearchFilter.js?v=0.10.1';
+import {RulesFilter} from '../parts/choices/RulesFilter.js?v=0.10.1';
+import {ScoresRangeFilter} from '../parts/choices/ScoresRangeFilter.js?v=0.10.1';
+import {UsersGrid} from '../parts/grid/Users.js?v=0.10.1';
+import {UsersChart} from '../parts/chart/Users.js?v=0.10.1';
 
 export class UsersPage extends BasePage {
     constructor() {

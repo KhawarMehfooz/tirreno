@@ -38,9 +38,9 @@ class Events extends Base {
             ];
         }
         $offset = tirreno('utils')->timezones->getCurrentOperatorOffset();
-        [$alertTypesParams, $alertFlatIds]      = $this->getArrayPlaceholders(tirreno('utils')->constants->ALERT_EVENT_TYPES, 'alert');
-        [$editTypesParams, $editFlatIds]        = $this->getArrayPlaceholders(tirreno('utils')->constants->EDITING_EVENT_TYPES, 'edit');
-        [$normalTypesParams, $normalFlatIds]    = $this->getArrayPlaceholders(tirreno('utils')->constants->NORMAL_EVENT_TYPES, 'normal');
+        [$alertTypesParams, $alertFlatIds]      = $this->getArrayPlaceholders(tirreno('constants')->ALERT_EVENT_TYPES, 'alert');
+        [$editTypesParams, $editFlatIds]        = $this->getArrayPlaceholders(tirreno('constants')->EDITING_EVENT_TYPES, 'edit');
+        [$normalTypesParams, $normalFlatIds]    = $this->getArrayPlaceholders(tirreno('constants')->NORMAL_EVENT_TYPES, 'normal');
         $params = [
             ':api_key'      => $apiKey,
             ':end_time'     => $dateRange['endDate'],

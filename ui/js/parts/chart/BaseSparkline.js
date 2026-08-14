@@ -1,7 +1,7 @@
-import {Loader} from '../Loader.js?v=0.10.0';
-import {BaseChart}  from './BaseChart.js?v=0.10.0';
-import {Constants} from '../utils/Constants.js?v=0.10.0';
-import {replaceChildren} from '../utils/Functions.js?v=0.10.0';
+import {Loader} from '../Loader.js?v=0.10.1';
+import {BaseChart}  from './BaseChart.js?v=0.10.1';
+import {Constants} from '../utils/Constants.js?v=0.10.1';
+import {replaceChildren} from '../utils/Functions.js?v=0.10.1';
 
 export class BaseSparklineChart extends BaseChart {
     constructor(chartParams) {

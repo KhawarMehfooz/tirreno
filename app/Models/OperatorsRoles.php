@@ -72,7 +72,7 @@ class OperatorsRoles extends \Tirreno\Models\Base {
                 dshb_operators_roles
             WHERE
                 dshb_operators_roles.operator = :operator_id AND
-                dshb_operators_roles.roel = :role_id'
+                dshb_operators_roles.role = :role_id'
         );
 
         return $this->execQuery($query, $params);
@@ -105,8 +105,8 @@ class OperatorsRoles extends \Tirreno\Models\Base {
         $query = (
             'SELECT
                 dshb_operators_roles.id,
-                dshb_operators_roles.page,
-                dshb_operators_roles.role_permission
+                dshb_operators_roles.role,
+                dshb_operators_roles.operator
             FROM
                 dshb_operators_roles
             WHERE

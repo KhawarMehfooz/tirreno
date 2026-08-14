@@ -25,35 +25,22 @@ class Home extends \Tirreno\Controllers\Services\Base {
         ];
 
         // NOTE: removed allTimeTotal key
-        switch ($mode) {
-            case 'totalEvents':
-                $result['total'] = tirreno('models')->dashboard->getTotalEvents($dateRange, $apiKey);
-                break;
-            case 'totalUsers':
-                $result['total'] = tirreno('models')->dashboard->getTotalUsers($dateRange, $apiKey);
-                break;
-            case 'totalIps':
-                $result['total'] = tirreno('models')->dashboard->getTotalIps($dateRange, $apiKey);
-                break;
-            case 'totalCountries':
-                $result['total'] = tirreno('models')->dashboard->getTotalCountries($dateRange, $apiKey);
-                break;
-            case 'totalUrls':
-                $result['total'] = tirreno('models')->dashboard->getTotalResources($dateRange, $apiKey);
-                break;
-            case 'totalUsersForReview':
-                $result['total'] = tirreno('models')->dashboard->getTotalUsersForReview($dateRange, $apiKey);
-                break;
-            case 'totalBlockedUsers':
-                $result['total'] = tirreno('models')->dashboard->getTotalBlockedUsers($dateRange, $apiKey);
-                break;
-        }
+        $result['total'] = match ($mode) {
+            'totalEvents'           => tirreno('models')->dashboard->getTotalEvents($dateRange, $apiKey),
+            'totalUsers'            => tirreno('models')->dashboard->getTotalUsers($dateRange, $apiKey),
+            'totalIps'              => tirreno('models')->dashboard->getTotalIps($dateRange, $apiKey),
+            'totalCountries'        => tirreno('models')->dashboard->getTotalCountries($dateRange, $apiKey),
+            'totalUrls'             => tirreno('models')->dashboard->getTotalResources($dateRange, $apiKey),
+            'totalUsersForReview'   => tirreno('models')->dashboard->getTotalUsersForReview($dateRange, $apiKey),
+            'totalBlockedUsers'     => tirreno('models')->dashboard->getTotalBlockedUsers($dateRange, $apiKey),
+            default => null,
+        };
 
         return $result;
     }
 
     public function getTopTen(string $mode, ?array $dateRange, int $apiKey): array {
-        $modelMap = tirreno('utils')->constants->TOP_TEN_MODELS_MAP;
+        $modelMap = tirreno('constants')->TOP_TEN_MODELS_MAP;
 
         $model = array_key_exists($mode, $modelMap) ? new $modelMap[$mode]() : null;
         $data = $model ? $model->getList($apiKey, $dateRange) : [];

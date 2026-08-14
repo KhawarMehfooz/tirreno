@@ -1,5 +1,5 @@
-import {EventPanel} from './EventPanel.js?v=0.10.0';
-import {renderJsonTextarea} from '../DataRenderers.js?v=0.10.0';
+import {EventPanel} from './EventPanel.js?v=0.10.1';
+import {renderJsonTextarea} from '../DataRenderers.js?v=0.10.1';
 
 export class FieldPanel extends EventPanel {
     constructor() {

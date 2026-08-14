@@ -1,11 +1,11 @@
-import {BaseTiles} from './BaseTiles.js?v=0.10.0';
+import {BaseTiles} from './BaseTiles.js?v=0.10.1';
 import {
     renderBoolean,
     renderDefaultIfEmptyElement,
     renderBrowser,
     renderOs,
-} from '../DataRenderers.js?v=0.10.0';
-import {replaceChildren} from '../utils/Functions.js?v=0.10.0';
+} from '../DataRenderers.js?v=0.10.1';
+import {replaceChildren} from '../utils/Functions.js?v=0.10.1';
 
 const URL   = `${window.app_base}/loadUserAgentDetails`;
 const ELEMS = ['title', 'os', 'browser', 'modified'];

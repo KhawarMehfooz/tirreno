@@ -1,13 +1,13 @@
-import {BasePage} from './Base.js?v=0.10.0';
-import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.0';
-import {EventsChart} from '../parts/chart/Events.js?v=0.10.0';
-import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.0';
-import {SearchFilter} from '../parts/SearchFilter.js?v=0.10.0';
-import {EventTypeFilter} from '../parts/choices/EventTypeFilter.js?v=0.10.0';
-import {DeviceTypeFilter} from '../parts/choices/DeviceTypeFilter.js?v=0.10.0';
-import {RulesFilter} from '../parts/choices/RulesFilter.js?v=0.10.0';
-import {EventPanel} from '../parts/panel/EventPanel.js?v=0.10.0';
-import {EventsGrid} from '../parts/grid/Events.js?v=0.10.0';
+import {BasePage} from './Base.js?v=0.10.1';
+import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.1';
+import {EventsChart} from '../parts/chart/Events.js?v=0.10.1';
+import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.1';
+import {SearchFilter} from '../parts/SearchFilter.js?v=0.10.1';
+import {EventTypeFilter} from '../parts/choices/EventTypeFilter.js?v=0.10.1';
+import {DeviceTypeFilter} from '../parts/choices/DeviceTypeFilter.js?v=0.10.1';
+import {RulesFilter} from '../parts/choices/RulesFilter.js?v=0.10.1';
+import {EventPanel} from '../parts/panel/EventPanel.js?v=0.10.1';
+import {EventsGrid} from '../parts/grid/Events.js?v=0.10.1';
 
 export class EventsPage extends BasePage {
     constructor() {

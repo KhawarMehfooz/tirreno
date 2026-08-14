@@ -41,7 +41,7 @@ class Mailer {
     }
 
     private static function sendByMailgun(string $toAddress, string $toName, string $subj, string $msg, bool $html): array {
-        $fromName = tirreno('utils')->constants->MAIL_FROM_NAME;
+        $fromName = tirreno('constants')->MAIL_FROM_NAME;
         $smtpDebug = tirreno('storage')->get('SMTP_DEBUG');
         $fromAddress = tirreno('utils')->variables->getMailLogin();
         $mailLogin = tirreno('utils')->variables->getMailLogin();
@@ -60,7 +60,7 @@ class Mailer {
             //Server settings
             $mail->SMTPDebug = $smtpDebug;                                              //Enable verbose debug output
             $mail->isSMTP();                                                            //Send using SMTP
-            $mail->Host = tirreno('utils')->constants->MAIL_HOST;                   //Set the SMTP server to send through
+            $mail->Host = tirreno('constants')->MAIL_HOST;                              //Set the SMTP server to send through
             $mail->SMTPAuth = true;                                                     //Enable SMTP authentication
             $mail->Username = $mailLogin;                                               //SMTP username
             $mail->Password = $mailPassword;                                            //SMTP password
@@ -93,7 +93,7 @@ class Mailer {
     }
 
     private static function sendByNativeMail(string $toAddress, string $toName, string $subj, string $msg): array {
-        $sendMailPath = tirreno('utils')->constants->MAIL_SEND_BIN;
+        $sendMailPath = tirreno('constants')->MAIL_SEND_BIN;
 
         if (!file_exists($sendMailPath) || !is_executable($sendMailPath)) {
             return [
@@ -102,7 +102,7 @@ class Mailer {
             ];
         }
 
-        $fromName = tirreno('utils')->constants->MAIL_FROM_NAME;
+        $fromName = tirreno('constants')->MAIL_FROM_NAME;
         $fromAddress = tirreno('utils')->variables->getMailLogin();
 
         if ($fromAddress === null) {

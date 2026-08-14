@@ -20,12 +20,14 @@ namespace Tirreno\Models\Query;
 class Base {
     protected ?array $search;
 
-    protected ?array $where = null;
+    protected array $where = [];
     protected ?array $join  = null;         // TODO: add joinedTables list
     protected ?array $order = null;
     protected ?array $group = null;
     protected ?int $limit   = null;
     protected ?int $offset  = null;
+
+    protected string $baseWhere;
 
     protected ?array $params;
 
@@ -49,7 +51,7 @@ class Base {
         '~',
         '*~',
         '!~',
-        '!*~',
+        '!~*',
         'LIKE',
         'ILIKE',
         'NOT LIKE',
@@ -60,9 +62,8 @@ class Base {
         'NOT BETWEEN',
     ];
 
-    protected array $unaryOperators = [
+    protected array $rightUnaryOperators = [
         'IS NULL',
-        'NOT',
         'IS NOT NULL',
         'IS TRUE',
         'IS FALSE',
@@ -70,6 +71,10 @@ class Base {
         'IS NOT FALSE',
         'IS UNKNOWN',
         'IS NOT UNKNOWN',
+    ];
+
+    protected array $leftUnaryOperators = [
+        'NOT',
     ];
 
     protected string $columnRegex = '/^[a-z][a-z_]+(\.[a-z_]+)?$/';
@@ -96,7 +101,7 @@ class Base {
 
     public function __construct(int $key) {
         $this->key = $key;
-        $this->where = [['AND', $this->table . '.key = :key']];
+        $this->baseWhere = $this->table . '.key = :key';
         $this->params = [':key' => $key];
         $this->fieldsMap = array_flip($this->fields);
     }
@@ -167,9 +172,6 @@ class Base {
     private function collectWhere(string $column, string $operator, array|string|int|float|null $value, string $logical): self {
         $clause = $this->buildWherePart($column, $operator, $value);
 
-        // force first clause to join with AND if default key filter is present
-        $logical = count($this->params) <= 1 ? 'AND' : $logical;
-
         if ($clause) {
             $this->where[] = [$logical, $clause];
         }
@@ -220,10 +222,13 @@ class Base {
 
         if ($column) {
             if ($value === null) {
-                // allow IS NULL / IS NOT NULL
-                if (in_array($operator, $this->unaryOperators)) {
+                // allow IS NULL / IS NOT NULL / NOT
+                if (in_array($operator, $this->rightUnaryOperators)) {
                     // store
                     return $column . ' ' . $operator;
+                } elseif (in_array($operator, $this->leftUnaryOperators)) {
+                    // store
+                    return $operator . ' ' . $column;
                 }
             } elseif (in_array($operator, $this->binaryOperators)) {
                 // store (add type conversion)?? or allow type conversions for column?
@@ -235,7 +240,7 @@ class Base {
                     'double'    => '::numeric',
                     'integer'   => '::int',
                     'string'    => '::text',
-                    default   => '',
+                    default     => '',
                 };
 
                 $isBetween = in_array($operator, ['BETWEEN', 'NOT BETWEEN']);
@@ -365,30 +370,33 @@ class Base {
             // try to split right part by pipe | in csv style
 
             foreach ($operators as $operator) {
-                $pos = strpos($clause, $operator);
-                if ($pos) {
-                    $parts = str_getcsv($clause, $operator, '"', '\\');
-                    if (count($parts) === 2) {
-                        $column = $parts[0];
-                        $value = $parts[1];
+                if (!strpos($clause, $operator)) {
+                    continue;
+                }
 
-                        $valueParts = str_getcsv($value, '|', '"', '\\');
-                        if (count($valueParts) > 1) {
-                            // multiple or
-                            $ors = [];
-                            foreach ($valueParts as $value) {
-                                $orPart = $this->buildWherePart($column, $operator, $value);
-                                if ($orPart) {
-                                    $ors[] = $orPart;
-                                }
-                            }
-                            if ($ors) {
-                                $this->where[] = ['AND', implode(' OR ', $ors)];    // TODO: optimize complex and+or conditions
-                            }
-                        } else {
-                            $this->andWhere($column, $operator, $value);
+                $parts = str_getcsv($clause, $operator, '"', '\\');
+                if (count($parts) !== 2) {
+                    continue;
+                }
+                $column = $parts[0];
+                $value = $parts[1];
+
+                $valueParts = str_getcsv($value, '|', '"', '\\');
+
+                if (count($valueParts) > 1) {
+                    // multiple or
+                    $ors = [];
+                    foreach ($valueParts as $value) {
+                        $orPart = $this->buildWherePart($column, $operator, $value);
+                        if ($orPart) {
+                            $ors[] = $orPart;
                         }
                     }
+                    if ($ors) {
+                        $this->where[] = ['AND', '(' . implode(' OR ', $ors) . ')'];    // TODO: optimize complex and+or conditions
+                    }
+                } else {
+                    $this->andWhere($column, $operator, $value);
                 }
             }
         }
@@ -411,10 +419,13 @@ class Base {
             $query .= ' ' . implode(' ', array_values($this->join));
         }
 
+        $query .= ' WHERE ' . $this->baseWhere;
+
         if ($this->where) {
             $where = array_merge(...$this->where);
             array_shift($where);
-            $query .= ' WHERE ' . implode(' ', $where);
+            $flatWhere = implode(' ', $where);
+            $query .= count($where) === 1 ? (' AND ' . $flatWhere) : (' AND (' . $flatWhere . ')');
         }
 
         if ($this->group) {
@@ -460,6 +471,10 @@ class Base {
         $query = $this->applyFilters($query);
         $result = $this->execQuery($query, $this->params);
 
+        return $this->buildResult($result);
+    }
+
+    protected function buildResult(array|int|null $result): object {
         $model = $this->model;
 
         return tirreno('entities')->$model->buildFromArray($result, $this->key);

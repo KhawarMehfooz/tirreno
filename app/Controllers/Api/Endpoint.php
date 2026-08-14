@@ -42,7 +42,7 @@ abstract class Endpoint {
         tirreno('utils')->database->initConnect(false);
 
         $this->response = new \Tirreno\Views\Json();
-        $this->responseType = tirreno('utils')->constants->SINGLE_RESPONSE_TYPE;
+        $this->responseType = tirreno('constants')->SINGLE_RESPONSE_TYPE;
     }
 
     public function beforeRoute(): void {
@@ -131,7 +131,7 @@ abstract class Endpoint {
             !isset($this->error) ? null : json_encode(['Undefined error']),     //$errorText,
             json_encode($this->body),                                           //$raw,
             $this->apiKeyId,
-            !isset($this->error) ? tirreno('utils')->constants->LOGBOOK_ERROR_TYPE_SUCCESS : tirreno('utils')->constants->LOGBOOK_ERROR_TYPE_CRITICAL_ERROR,
+            !isset($this->error) ? tirreno('constants')->LOGBOOK_ERROR_TYPE_SUCCESS : tirreno('constants')->LOGBOOK_ERROR_TYPE_CRITICAL_ERROR,
             //$ended,
         );
     }
@@ -156,8 +156,7 @@ abstract class Endpoint {
     }
 
     private function handleInternalServerError(): void {
-        $errorData = tirreno('utils')->errorHandler->getErrorDetails();
-        tirreno('utils')->errorHandler->saveErrorInformation($errorData);
+        tirreno('utils')->errorHandler->saveErrorInformation();
 
         $this->setError(500, 500);
     }

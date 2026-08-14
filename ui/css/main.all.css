@@ -248,6 +248,11 @@ html {
     cursor: default;
 }
 
+.error-title {
+    background: #8080aa;
+    color:#2b2a39;
+}
+
 .game {
     font-size: 10px;
     line-height: 1;
@@ -1772,8 +1777,8 @@ article.tile .columns {
     position: relative;
 }
 
-.is-loading .ruleIcon svg,
-.is-loading .ruleIcon img {
+.is-loading .rule-icon svg,
+.is-loading .rule-icon img {
     display: none !important;
 }
 
@@ -1828,7 +1833,8 @@ article.tile .columns {
 
 .headline .subtitle,
 .button-score-details,
-.score-details-content p {
+.score-details-content p,
+.review-queue-details-content p {
     display: inline-block;
     vertical-align: middle;
     border-radius: 3px;
@@ -1857,6 +1863,7 @@ article.tile .columns {
     min-height: 25px;
     position: relative;
     clear: both;
+    display: inline-block;
 }
 
 .score-details-content {
@@ -1870,6 +1877,30 @@ article.tile .columns {
 .score-details-content p:hover,
 .button-score-details:hover {
     background: #3e3c5a;
+}
+
+.review-queue-details {
+    text-align: right;
+}
+
+.review-queue-details-content {
+    border: 1px solid #131220;
+    border-radius: 4px;
+    margin-bottom: 1.112rem;
+    display: inline-block;
+    padding: 5px 1.14rem;
+    background: #575675;
+}
+
+#next-user-button {
+    color: #d7e6e1;
+    padding-left: 1.14rem;
+    border-left: 1px solid #fff;
+    margin-left: 1.14rem;
+}
+
+#next-user-button:active {
+    color:#2b2a39;
 }
 
 .head-button {
@@ -2358,6 +2389,14 @@ input:is([type="button"], [type="submit"], [type="reset"]):disabled {
     margin-left: 1px;
 }
 
+.legitfraud .button:first-child:active {
+    color: #25eab5;
+}
+
+.legitfraud .button:last-child:active {
+    color: #fb6e88;
+}
+
 #reviewed-users-queue-table>tbody>tr:active {
     background-color: #131220;
 }
@@ -2508,6 +2547,12 @@ input:is([type="button"], [type="submit"], [type="reset"]):disabled {
 .tooltip-info {
     display: inline;
     margin-left: 3px;
+}
+
+.reload {
+    position: absolute;
+    right: 0.75em;
+    line-height: 1.9;
 }
 
 .tooltip-info svg {
@@ -3096,7 +3141,7 @@ input::placeholder {
 }
 
 .blacklist-user-col {
-    width: 235px;
+    width: 245px;
 }
 
 .blacklist-timestamp-col {
@@ -3111,8 +3156,16 @@ input::placeholder {
     width: 290px;
 }
 
+.blacklist-date-col {
+    width: 150px;
+}
+
+.blacklist-status-col {
+    width: 110px;
+}
+
 .blacklist-button-col {
-    width: 140px;
+    width: 110px;
 }
 
 .review-queue-user-col {
@@ -3216,7 +3269,7 @@ input::placeholder {
 }
 
 .logbook-timestamp-col {
-    width: 165px;
+    width: 175px;
 }
 
 .logbook-status-col {
@@ -3228,7 +3281,7 @@ input::placeholder {
 }
 
 .logbook-raw-col {
-    width: 450px;
+    width: 440px;
 }
 
 .device-date-col {

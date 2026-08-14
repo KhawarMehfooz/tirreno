@@ -86,14 +86,14 @@ abstract class Base extends \Tirreno\Models\Base {
         $cnt = count($params);
         $data = array_fill(0, $cnt, []);
 
-        $step = tirreno('utils')->constants->CHART_RESOLUTION[tirreno('utils')->dateRange->getResolutionFromRequest()];
+        $step = tirreno('constants')->CHART_RESOLUTION[tirreno('utils')->dateRange->getResolutionFromRequest()];
         // use offset shift because $startTs/$endTs compared with shifted ['ts']
         $offset = tirreno('utils')->timezones->getCurrentOperatorOffset();
         $dateRange = tirreno('utils')->dateRange->getDatesRangeFromRequest($offset);
 
         if (!$dateRange) {
             $now = time() + $offset;
-            $week = tirreno('utils')->constants->SECONDS_IN_WEEK;
+            $week = tirreno('constants')->SECONDS_IN_WEEK;
             if (count($params[0]) === 0) {
                 $dateRange = [
                     'endDate' => date('Y-m-d H:i:s', $now),

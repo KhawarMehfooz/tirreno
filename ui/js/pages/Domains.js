@@ -1,9 +1,9 @@
-import {BasePage} from './Base.js?v=0.10.0';
-import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.0';
-import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.0';
-import {SearchFilter} from '../parts/SearchFilter.js?v=0.10.0';
-import {DomainsChart} from '../parts/chart/Domains.js?v=0.10.0';
-import {DomainsGrid} from '../parts/grid/Domains.js?v=0.10.0';
+import {BasePage} from './Base.js?v=0.10.1';
+import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.1';
+import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.1';
+import {SearchFilter} from '../parts/SearchFilter.js?v=0.10.1';
+import {DomainsChart} from '../parts/chart/Domains.js?v=0.10.1';
+import {DomainsGrid} from '../parts/grid/Domains.js?v=0.10.1';
 
 export class DomainsPage extends BasePage {
     constructor() {

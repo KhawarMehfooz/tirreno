@@ -7,11 +7,11 @@ import {
     renderPhoneType,
     renderPhoneCarrierName,
     renderAsn,
-} from '../parts/DataRenderers.js?v=0.10.0';
+} from '../parts/DataRenderers.js?v=0.10.1';
 import {
     replaceChildren,
     closest,
-} from './utils/Functions.js?v=0.10.0';
+} from './utils/Functions.js?v=0.10.1';
 
 export class ManualCheckItems {
     constructor() {

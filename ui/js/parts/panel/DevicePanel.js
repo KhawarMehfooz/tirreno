@@ -1,4 +1,4 @@
-import {BasePanel} from './BasePanel.js?v=0.10.0';
+import {BasePanel} from './BasePanel.js?v=0.10.1';
 import {
     renderDeviceWithOs,
     renderBrowser,
@@ -6,8 +6,8 @@ import {
     renderDate,
     renderBoolean,
     renderUserAgent,
-} from '../DataRenderers.js?v=0.10.0';
-import {defined} from '../utils/Functions.js?v=0.10.0';
+} from '../DataRenderers.js?v=0.10.1';
+import {defined} from '../utils/Functions.js?v=0.10.1';
 
 export class DevicePanel extends BasePanel {
     constructor() {

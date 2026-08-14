@@ -97,6 +97,7 @@ class Isp extends \Tirreno\Models\Base implements \Tirreno\Interfaces\ApiKeyAcce
                 event_isp.total_ip,
                 event_isp.total_visit,
                 event_isp.total_account,
+                event_isp.total_fraud_account,
                 event_isp.lastseen,
                 (
                     SELECT COUNT(DISTINCT event.account)
@@ -182,10 +183,12 @@ class Isp extends \Tirreno\Models\Base implements \Tirreno\Interfaces\ApiKeyAcce
         $query = (
             "SELECT
                 event_ip.isp AS id,
-                COUNT(DISTINCT(event.account)) AS cnt
+                COUNT(DISTINCT event.account) AS cnt_all,
+                COUNT(DISTINCT CASE WHEN event_account.fraud IS TRUE THEN account END) AS cnt_fraud
+
             FROM event
-            INNER JOIN event_ip
-            ON event.ip = event_ip.id
+            INNER JOIN event_ip ON event.ip = event_ip.id
+            LEFT JOIN event_account ON event.account = event_account.id
             WHERE
                 event_ip.isp IN ({$flatIds}) AND
                 event.key = :key AND
@@ -214,7 +217,16 @@ class Isp extends \Tirreno\Models\Base implements \Tirreno\Interfaces\ApiKeyAcce
         $result = [];
 
         foreach ($ids as $id) {
-            $result[$id] = ['total_visit' => 0, 'total_account' => 0, 'total_ip' => 0];
+            $result[$id] = [
+                'total_ip'              => 0,
+                'total_visit'           => 0,
+                'total_account'         => 0,
+                'total_fraud_account'   => 0,
+            ];
+        }
+
+        foreach ($totalIp as $rec) {
+            $result[$rec['id']]['total_ip'] = $rec['cnt'];
         }
 
         foreach ($totalVisit as $rec) {
@@ -222,11 +234,11 @@ class Isp extends \Tirreno\Models\Base implements \Tirreno\Interfaces\ApiKeyAcce
         }
 
         foreach ($totalAccount as $rec) {
-            $result[$rec['id']]['total_account'] = $rec['cnt'];
+            $result[$rec['id']]['total_account'] = $rec['cnt_all'];
         }
 
-        foreach ($totalIp as $rec) {
-            $result[$rec['id']]['total_ip'] = $rec['cnt'];
+        foreach ($totalAccount as $rec) {
+            $result[$rec['id']]['total_fraud_account'] = $rec['cnt_fraud'];
         }
 
         return $result;
@@ -247,16 +259,18 @@ class Isp extends \Tirreno\Models\Base implements \Tirreno\Interfaces\ApiKeyAcce
                 total_ip = COALESCE(sub.total_ip, 0),
                 total_visit = COALESCE(sub.total_visit, 0),
                 total_account = COALESCE(sub.total_account, 0),
+                total_fraud_account = COALESCE(sub.total_fraud_account, 0),
                 updated = date_trunc('milliseconds', now())
             FROM (
                 SELECT
                     event_ip.isp,
                     COUNT(*) AS total_visit,
                     COUNT(DISTINCT event_ip.id) AS total_ip,
-                    COUNT(DISTINCT account) AS total_account
+                    COUNT(DISTINCT account) AS total_account,
+                    COUNT(DISTINCT CASE WHEN event_account.fraud IS TRUE THEN account END) AS total_fraud_account
                 FROM event
-                LEFT JOIN event_ip
-                ON event.ip = event_ip.id
+                LEFT JOIN event_ip ON event.ip = event_ip.id
+                LEFT JOIN event_account ON event.account = event_account.id
                 WHERE
                     event_ip.isp IN ({$flatIds}) AND
                     event.key = :key
@@ -283,15 +297,18 @@ class Isp extends \Tirreno\Models\Base implements \Tirreno\Interfaces\ApiKeyAcce
                 total_ip = COALESCE(sub.total_ip, 0),
                 total_visit = COALESCE(sub.total_visit, 0),
                 total_account = COALESCE(sub.total_account, 0),
+                total_fraud_account = COALESCE(sub.total_fraud_account, 0),
                 updated = date_trunc(\'milliseconds\', now())
             FROM (
                 SELECT
                     event_ip.isp,
                     COUNT(*) AS total_visit,
                     COUNT(DISTINCT event_ip.id) AS total_ip,
-                    COUNT(DISTINCT account) AS total_account
+                    COUNT(DISTINCT account) AS total_account,
+                    COUNT(DISTINCT CASE WHEN event_account.fraud IS TRUE THEN account END) AS total_fraud_account
                 FROM event
                 LEFT JOIN event_ip ON event.ip = event_ip.id
+                LEFT JOIN event_account ON event.account = event_account.id
                 WHERE
                     event.key = :key
                 GROUP BY event_ip.isp
@@ -314,7 +331,8 @@ class Isp extends \Tirreno\Models\Base implements \Tirreno\Interfaces\ApiKeyAcce
                 id,
                 total_ip,
                 total_visit,
-                total_account
+                total_account,
+                total_fraud_account
             FROM event_isp
             WHERE id IN ({$flatIds}) AND key = :key"
         );
@@ -330,6 +348,7 @@ class Isp extends \Tirreno\Models\Base implements \Tirreno\Interfaces\ApiKeyAcce
             $item['total_ip'] = $indexedResult[$item['id']]['total_ip'];
             $item['total_visit'] = $indexedResult[$item['id']]['total_visit'];
             $item['total_account'] = $indexedResult[$item['id']]['total_account'];
+            $item['total_fraud_account'] = $indexedResult[$item['id']]['total_fraud_account'];
             $res[$idx] = $item;
         }
 

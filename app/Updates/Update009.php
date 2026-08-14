@@ -383,7 +383,7 @@ class Update009 extends Base {
             $database->exec($sql);
         }
 
-        // assing operator role to all operators
+        // assign operator role to all operators
         $sql = ('INSERT INTO dshb_operators_roles (
                 operator,
                 role
@@ -399,7 +399,7 @@ class Update009 extends Base {
 
         $database->exec($sql, $params);
 
-        // assing guest to all operators
+        // assign guest to all operators
         $sql = ('INSERT INTO dshb_operators_roles (
                 operator,
                 role

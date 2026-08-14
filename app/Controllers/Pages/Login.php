@@ -43,7 +43,7 @@ class Login extends \Tirreno\Controllers\Pages\Base {
 
         $operatorId = tirreno('models')->operator->getActivatedByEmail($email);
 
-        if ($operatorId && $operatorId > tirreno('utils')->constants->RESERVED_OPERATOR_IDS && tirreno('models')->operator->verifyPassword($password, $operatorId)) {
+        if ($operatorId && $operatorId > tirreno('constants')->RESERVED_OPERATOR_IDS && tirreno('models')->operator->verifyPassword($password, $operatorId)) {
             $this->proceedSuccessfulLogin($operatorId);
             tirreno('response')->redirect('/');
         } else {

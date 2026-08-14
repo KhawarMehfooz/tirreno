@@ -30,7 +30,7 @@ class Ips extends \Tirreno\Controllers\Pages\Base {
             'LOAD_AUTOCOMPLETE'     => true,
             'HTML_FILE'             => 'ips.html',
             'JS'                    => 'ips.js',
-            'IP_TYPES'              => tirreno('utils')->constants->IP_TYPES,
+            'IP_TYPES'              => tirreno('constants')->IP_TYPES,
             'INTERNAL_PAGE'         => true,
         ];
     }

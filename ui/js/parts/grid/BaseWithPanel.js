@@ -1,6 +1,6 @@
-import {BaseGrid} from './Base.js?v=0.10.0';
-import {fireEvent} from '../utils/Event.js?v=0.10.0';
-import {closest} from '../utils/Functions.js?v=0.10.0';
+import {BaseGrid} from './Base.js?v=0.10.1';
+import {fireEvent} from '../utils/Event.js?v=0.10.1';
+import {closest} from '../utils/Functions.js?v=0.10.1';
 
 export class BaseGridWithPanel extends BaseGrid {
     constructor(gridParams) {

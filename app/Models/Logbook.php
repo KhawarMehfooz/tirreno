@@ -24,8 +24,8 @@ class Logbook extends \Tirreno\Models\Base {
         $params = [
             ':api_key'          => $apiKey,
             ':endpoint'         => '/sensor/',
-            ':success'          => tirreno('utils')->constants->LOGBOOK_ERROR_TYPE_SUCCESS,
-            ':validation_error' => tirreno('utils')->constants->LOGBOOK_ERROR_TYPE_VALIDATION_ERROR,
+            ':success'          => tirreno('constants')->LOGBOOK_ERROR_TYPE_SUCCESS,
+            ':validation_error' => tirreno('constants')->LOGBOOK_ERROR_TYPE_VALIDATION_ERROR,
         ];
 
         $query = (
@@ -56,8 +56,8 @@ class Logbook extends \Tirreno\Models\Base {
         $params = [
             ':api_key'          => $apiKey,
             ':endpoint'         => '/sensor/',
-            ':success'          => tirreno('utils')->constants->LOGBOOK_ERROR_TYPE_SUCCESS,
-            ':validation_error' => tirreno('utils')->constants->LOGBOOK_ERROR_TYPE_VALIDATION_ERROR,
+            ':success'          => tirreno('constants')->LOGBOOK_ERROR_TYPE_SUCCESS,
+            ':validation_error' => tirreno('constants')->LOGBOOK_ERROR_TYPE_VALIDATION_ERROR,
         ];
 
         $query = (

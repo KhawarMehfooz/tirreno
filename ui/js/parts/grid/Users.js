@@ -1,11 +1,11 @@
-import {BaseGrid} from './Base.js?v=0.10.0';
+import {BaseGrid} from './Base.js?v=0.10.1';
 import {
     renderClickableImportantUserWithScore,
     renderDate,
     renderUserId,
     renderUserReviewedStatus,
     renderTime,
-} from '../DataRenderers.js?v=0.10.0';
+} from '../DataRenderers.js?v=0.10.1';
 
 export class UsersGrid extends BaseGrid {
     get orderConfig() {

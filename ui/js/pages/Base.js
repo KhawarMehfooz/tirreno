@@ -1,10 +1,10 @@
-import {SearchLine} from '../parts/SearchLine.js?v=0.10.0';
-import {Tooltip} from '../parts/Tooltip.js?v=0.10.0';
-import {Constants} from '../parts/utils/Constants.js?v=0.10.0';
+import {SearchLine} from '../parts/SearchLine.js?v=0.10.1';
+import {Tooltip} from '../parts/Tooltip.js?v=0.10.1';
+import {Constants} from '../parts/utils/Constants.js?v=0.10.1';
 import {
     closest,
     mapKeys,
-} from '../parts/utils/Functions.js?v=0.10.0';
+} from '../parts/utils/Functions.js?v=0.10.1';
 
 export class BasePage {
     constructor(name, single = false) {

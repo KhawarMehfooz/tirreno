@@ -51,12 +51,21 @@ const inArray = (haystack, needle) => {
     return haystack.indexOf(needle) !== -1;
 };
 
-// base for Object.entires() and Object.values()
+// unify hasOwn and hasOwnProperty
+const hasOwn = (obj, prop, func = false) => {
+    if (!obj) {
+        return;
+    }
+
+    return Object.prototype.hasOwnProperty.call(obj, prop) && (!func || typeof obj[prop] === 'function');
+};
+
+// base for Object.entries() and Object.values()
 const mapKeys = (obj) => {
     let result = [];
 
     for (const key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        if (hasOwn(obj, key)) {
             result.push(key);
         }
     }
@@ -68,4 +77,4 @@ const defined = (val) => {
     return val !== null && val !== undefined;
 };
 
-export {debounce, replaceChildren, closest, inArray, mapKeys, defined};
+export {debounce, replaceChildren, closest, inArray, mapKeys, defined, hasOwn};

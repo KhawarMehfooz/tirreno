@@ -48,8 +48,8 @@ class Event extends \Tirreno\Models\Base {
             ':api_key'      => $apiKey,
             ':user_id'      => $accountId,
             ':week_offset'  => $weekSecondsOffset,
-            ':day'          => tirreno('utils')->constants->SECONDS_IN_DAY,
-            ':week'         => tirreno('utils')->constants->SECONDS_IN_WEEK,
+            ':day'          => tirreno('constants')->SECONDS_IN_DAY,
+            ':week'         => tirreno('constants')->SECONDS_IN_WEEK,
             ':before'       => $before,
         ];
 

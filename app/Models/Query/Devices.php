@@ -44,7 +44,7 @@ class Devices extends \Tirreno\Models\Query\Base {
         ];
 
         $this->join = [
-            'event_ua_parsed' => 'LEFT JOIN event_ua_parsed ON event_ua_parsed.id = event_device.ua',
+            'event_ua_parsed' => 'LEFT JOIN event_ua_parsed ON event_ua_parsed.id = event_device.user_agent',
         ];
 
         parent::__construct($key);

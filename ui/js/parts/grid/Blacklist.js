@@ -1,11 +1,11 @@
-import {BaseGrid} from './Base.js?v=0.10.0';
+import {BaseGrid} from './Base.js?v=0.10.1';
 import {
     renderTime,
+    renderDate,
+    renderBlacklistSource,
     renderBlacklistButtons,
-    renderBlacklistItem,
-    renderBlacklistType,
     renderClickableImportantUserWithScore,
-} from '../DataRenderers.js?v=0.10.0';
+} from '../DataRenderers.js?v=0.10.1';
 
 export class BlacklistGrid extends BaseGrid {
     get orderConfig() {
@@ -25,16 +25,20 @@ export class BlacklistGrid extends BaseGrid {
                 targets: 1
             },
             {
-                className: 'blacklist-type-col',
+                className: 'blacklist-timestamp-col',
                 targets: 2
             },
             {
-                className: 'blacklist-value-col',
+                className: 'blacklist-date-col',
                 targets: 3
             },
             {
-                className: 'blacklist-button-col',
+                className: 'blacklist-status-col',
                 targets: 4
+            },
+            {
+                className: 'blacklist-button-col',
+                targets: 5
             }
         ];
 
@@ -50,25 +54,27 @@ export class BlacklistGrid extends BaseGrid {
                 }
             },
             {
+                data: 'latest_decision',
+                render: renderTime
+            },
+            {
+                data: 'lastseen',
+                render: renderTime
+            },
+            {
                 data: 'created',
                 render: (data, type, record) => {
-                    return renderTime(data);
-                }
+                    return renderDate(data);
+                },
             },
             {
-                data: 'type',
+                data: 'reviewed',
                 render: (data, type, record) => {
-                    return renderBlacklistType(record);
+                    return renderBlacklistSource(record);
                 }
             },
             {
-                data: 'value',
-                render: (data, _ype, record) => {
-                    return renderBlacklistItem(record);
-                }
-            },
-            {
-                data: 'entity_id',
+                data: 'accountid',
                 orderable: false,
                 render: (data, type, record) => {
                     return renderBlacklistButtons(record);

@@ -1,3 +1,3 @@
-import {RulesPage} from '../pages/Rules.js?v=0.10.0';
+import {RulesPage} from '../pages/Rules.js?v=0.10.1';
 
 new RulesPage();

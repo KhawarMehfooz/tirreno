@@ -52,8 +52,8 @@ class Database {
         return false;
     }
 
-    private static function getDbConnect(string $url): \DB\SQL {
-        $parts = parse_url($url);
+    private static function getDbConnect(string $databaseUrl): \DB\SQL {
+        $parts = parse_url($databaseUrl);
 
         if (!is_array($parts)) {
             throw new \InvalidArgumentException('Invalid DSN format');

@@ -143,7 +143,7 @@ class Validators {
         return !isset($params['review-reminder-frequency'])
             || !$params['review-reminder-frequency']
             || (!is_int($params['review-reminder-frequency']) && !is_string($params['review-reminder-frequency']))
-            || !in_array($params['review-reminder-frequency'], tirreno('utils')->constants->NOTIFICATION_REMINDER_TYPES)
+            || !in_array($params['review-reminder-frequency'], tirreno('constants')->NOTIFICATION_REMINDER_TYPES)
             ? tirreno('utils')->errorCodes->INVALID_REMINDER_FREQUENCY
             : false;
     }
@@ -238,7 +238,7 @@ class Validators {
 
     private static function validateCurrentPassword(array $params): int|false {
         $operatorId = tirreno('utils')->access->getCurrentOperatorId();
-        if ($operatorId === tirreno('utils')->constants->GUEST_OPERATOR_ID) {
+        if ($operatorId === tirreno('constants')->GUEST_OPERATOR_ID) {
             return tirreno('utils')->errorCodes->CURRENT_PASSWORD_IS_NOT_CORRECT;
         }
 

@@ -1,8 +1,8 @@
-import {BasePage} from './Base.js?v=0.10.0';
-import {UsageStatsGrid} from '../parts/grid/UsageStats.js?v=0.10.0';
-import {EnrichAllPopUp} from '../parts/popup/EnrichAllPopUp.js?v=0.10.0';
-import {ResetApiKeyPopUp} from '../parts/popup/ResetApiKeyPopUp.js?v=0.10.0';
-import {closest} from '../parts/utils/Functions.js?v=0.10.0';
+import {BasePage} from './Base.js?v=0.10.1';
+import {UsageStatsGrid} from '../parts/grid/UsageStats.js?v=0.10.1';
+import {EnrichAllPopUp} from '../parts/popup/EnrichAllPopUp.js?v=0.10.1';
+import {ResetApiKeyPopUp} from '../parts/popup/ResetApiKeyPopUp.js?v=0.10.1';
+import {closest} from '../parts/utils/Functions.js?v=0.10.1';
 
 export class ApiPage extends BasePage {
     constructor() {

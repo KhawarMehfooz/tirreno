@@ -54,6 +54,6 @@ class Logout extends \Tirreno\Controllers\Pages\Base {
     }
 
     protected function getRequiredPermission(): int {
-        return tirreno('utils')->constants->PAGE_VIEW_PERMISSION_ID;
+        return tirreno('constants')->PAGE_VIEW_PERMISSION_ID;
     }
 }

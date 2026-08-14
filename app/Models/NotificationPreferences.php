@@ -20,9 +20,9 @@ namespace Tirreno\Models;
 class NotificationPreferences extends \Tirreno\Models\Base {
     public function operatorsToNotify(): array {
         $params = [
-            ':daily'    => tirreno('utils')->constants->DAILY_NOTIFICATION_REMINDER,
-            ':weekly'   => tirreno('utils')->constants->WEEKLY_NOTIFICATION_REMINDER,
-            ':off'      => tirreno('utils')->constants->NO_NOTIFICATION_REMINDER,
+            ':daily'    => tirreno('constants')->DAILY_NOTIFICATION_REMINDER,
+            ':weekly'   => tirreno('constants')->WEEKLY_NOTIFICATION_REMINDER,
+            ':off'      => tirreno('constants')->NO_NOTIFICATION_REMINDER,
         ];
 
         $query = (

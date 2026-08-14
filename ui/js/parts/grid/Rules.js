@@ -1,4 +1,4 @@
-import {BaseGrid} from './Base.js?v=0.10.0';
+import {BaseGrid} from './Base.js?v=0.10.1';
 import {
     renderRuleUid,
     renderRuleType,
@@ -6,7 +6,7 @@ import {
     renderRuleProportion,
     renderRuleWeightSelector,
     renderRuleManageButtons,
-} from '../DataRenderers.js?v=0.10.0';
+} from '../DataRenderers.js?v=0.10.1';
 
 export class RulesGrid extends BaseGrid {
     get orderConfig() {

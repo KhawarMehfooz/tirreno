@@ -1,4 +1,4 @@
-import {BasePanel} from './BasePanel.js?v=0.10.0';
+import {BasePanel} from './BasePanel.js?v=0.10.1';
 import {
     renderEmail,
     renderReputation,
@@ -7,7 +7,7 @@ import {
     renderDate,
     renderClickableDomain,
     renderHttpCode,
-} from '../DataRenderers.js?v=0.10.0';
+} from '../DataRenderers.js?v=0.10.1';
 
 export class EmailPanel extends BasePanel {
     constructor() {

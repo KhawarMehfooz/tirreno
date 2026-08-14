@@ -1,10 +1,10 @@
-import {renderUserActionButtons} from '../DataRenderers.js?v=0.10.0';
-import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.0';
+import {renderUserActionButtons} from '../DataRenderers.js?v=0.10.1';
+import {handleAjaxError} from '../utils/ErrorHandler.js?v=0.10.1';
 import {
     replaceChildren,
     closest,
-} from '../utils/Functions.js?v=0.10.0';
-import {BaseButton} from './BaseButton.js?v=0.10.0';
+} from '../utils/Functions.js?v=0.10.1';
+import {BaseButton} from './BaseButton.js?v=0.10.1';
 
 export class ReviewQueueActionButtons extends BaseButton {
     constructor(tableId) {

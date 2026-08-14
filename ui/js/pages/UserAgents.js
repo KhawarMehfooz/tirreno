@@ -1,9 +1,9 @@
-import {BasePage} from './Base.js?v=0.10.0';
-import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.0';
-import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.0';
-import {SearchFilter} from '../parts/SearchFilter.js?v=0.10.0';
-import {UserAgentsChart} from '../parts/chart/UserAgents.js?v=0.10.0';
-import {UserAgentsGrid} from '../parts/grid/UserAgents.js?v=0.10.0';
+import {BasePage} from './Base.js?v=0.10.1';
+import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.1';
+import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.1';
+import {SearchFilter} from '../parts/SearchFilter.js?v=0.10.1';
+import {UserAgentsChart} from '../parts/chart/UserAgents.js?v=0.10.1';
+import {UserAgentsGrid} from '../parts/grid/UserAgents.js?v=0.10.1';
 
 export class UserAgentsPage extends BasePage {
     constructor() {

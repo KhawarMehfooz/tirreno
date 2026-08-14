@@ -19,7 +19,7 @@ namespace Tirreno\Utils;
 
 class DateRange {
     public static function isQueueTimeouted(string $updated): bool {
-        return !self::inIntervalTillNow($updated, tirreno('utils')->constants->ACCOUNT_OPERATION_QUEUE_AUTO_UNCLOG_AFTER_SEC);
+        return !self::inIntervalTillNow($updated, tirreno('constants')->ACCOUNT_OPERATION_QUEUE_AUTO_UNCLOG_AFTER_SEC);
     }
 
     public static function getDatesRangeByGivenDates(string $startDate, string $endDate, int $offset): array {
@@ -57,7 +57,7 @@ class DateRange {
     }
 
     public static function getLatestNDatesRangeFromRequest(int $days, int $offset = 0): array {
-        $day = tirreno('utils')->constants->SECONDS_IN_DAY;
+        $day = tirreno('constants')->SECONDS_IN_DAY;
 
         return [
             'endDate'   => date('Y-m-d 23:59:59', time() + $offset),
@@ -68,7 +68,7 @@ class DateRange {
     public static function getResolutionFromRequest(): string {
         $resolution = tirreno('utils')->conversion->getStringRequestParam('resolution', true) ?? 'day';
 
-        return array_key_exists($resolution, tirreno('utils')->constants->CHART_RESOLUTION) ? $resolution : 'day';
+        return array_key_exists($resolution, tirreno('constants')->CHART_RESOLUTION) ? $resolution : 'day';
     }
 
     public static function inIntervalTillNow(?string $time, int $interval): ?bool {

@@ -46,6 +46,7 @@ class Container {
         'resources'     => \Tirreno\Core\Services\Resources::class,
 
         'router'        => \Tirreno\Core\Services\Router::class,
+        'constants'     => \Tirreno\Core\Services\Constants::class,
 
         'controllers'   => \Tirreno\Core\Services\Controllers::class,
         'pages'         => \Tirreno\Core\Services\Pages::class,
@@ -78,6 +79,8 @@ class Container {
         if (!isset(self::$instances[$name])) {
             if ($name === 'router') {
                 self::$instances[$name] = tirreno('utils')->router->get();
+            } elseif ($name === 'constants') {
+                self::$instances[$name] = tirreno('utils')->constants;
             } else {
                 self::$instances[$name] = new self::$services[$name]();
             }

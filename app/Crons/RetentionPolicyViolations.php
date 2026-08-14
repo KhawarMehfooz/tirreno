@@ -19,7 +19,9 @@ namespace Tirreno\Crons;
 
 class RetentionPolicyViolations extends Base {
     public function process(): void {
-        $this->addLog('Start retention policy violations.');
+        $this->logInfo('Start retention policy violations.');
+
+        $timer = tirreno('request')->setTimer();
 
         $retentionKeys = tirreno('models')->retentionPolicies->getRetentionKeys();
         $cnt = 0;
@@ -33,6 +35,9 @@ class RetentionPolicyViolations extends Base {
             }
         }
 
-        $this->addLog(sprintf('Deleted %s events and %s field audit trails for %s operators due to retention policy violations.', $cnt, $fieldCnt, count($retentionKeys)));
+        $timer = tirreno('request')->getTimer($timer);
+
+        $this->logInfo('Deleted %s events and %s field audit trails for %s operators due to retention policy violations in %f.', $cnt, $fieldCnt, count($retentionKeys), $timer);
+        $this->summary = sprintf('Deleted %s events and %s field audit trails for %s operators due to retention policy violations in %f.', $cnt, $fieldCnt, count($retentionKeys), $timer);
     }
 }

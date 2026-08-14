@@ -1,4 +1,4 @@
-import {Constants} from './utils/Constants.js?v=0.10.0';
+import {Constants} from './utils/Constants.js?v=0.10.1';
 
 export class TotalTile {
     constructor() {

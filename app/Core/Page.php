@@ -100,7 +100,7 @@ abstract class Page {
     }
 
     public function beforeroute(): void {
-        if (tirreno('request')->isAjax()) {
+        if (tirreno('request')->isAjax() || tirreno('page')->getView() === 'json') {
             $this->response = new \Tirreno\Views\Json();
 
             if (!tirreno('db')->initConnection()) {
@@ -116,7 +116,7 @@ abstract class Page {
             $errorCode = tirreno('request')->validateCsrf();
             if ($errorCode) {
                 tirreno('log')->info('exit due to CSRF token mismatch.');
-                tirreno('resonse')->error(403);
+                tirreno('response')->error(403);
             }
 
             if (tirreno('page')->getAuthenticated()) {
@@ -178,14 +178,14 @@ abstract class Page {
     }
 
     public function afterroute(): void {
-        if (!tirreno('request')->isAjax()) {
+        if (!tirreno('request')->isAjax() && tirreno('page')->getView() !== 'json') {
             $this->uploadHelpers();
             $this->updateAndSetParams();
         }
 
         $this->response->data = tirreno('page')->getParams();
 
-        tirreno('log')->logSqlIfPossible();
+        tirreno('utils')->logger->logSqlIfPossible();
 
         echo $this->response->render();
     }
@@ -234,9 +234,9 @@ abstract class Page {
     protected function baseParams(): array {
         $time = tirreno('utils')->nowForCurrentOperator();
 
-        $title = tirreno('storage')->get(tirreno('page')->getName() . '_page_title') ?: tirreno('utils')->constants->UNAUTHORIZED_USERID;
+        $title = tirreno('storage')->get(tirreno('page')->getName() . '_page_title') ?: tirreno('constants')->UNAUTHORIZED_USERID;
         $safeTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
-        $pageTitle = $safeTitle . ' '  . tirreno('utils')->constants->PAGE_TITLE_POSTFIX;
+        $pageTitle = $safeTitle . ' '  . tirreno('constants')->PAGE_TITLE_POSTFIX;
 
         $operator = tirreno('session')->getCurrentOperator();
 

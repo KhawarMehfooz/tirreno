@@ -19,7 +19,7 @@ namespace Tirreno\Utils;
 
 class Routes {
     public static function getCurrentRequestOperator(): \Tirreno\Entities\Operator {
-        return tirreno('storage')->get('CURRENT_USER') ?? tirreno('entities')->operator->getById(tirreno('utils')->constants->GUEST_OPERATOR_ID);
+        return tirreno('storage')->get('CURRENT_USER') ?? tirreno('entities')->operator->getById(tirreno('constants')->GUEST_OPERATOR_ID);
     }
 
     public static function setCurrentRequestOperator(): void {
@@ -28,7 +28,7 @@ class Routes {
 
     public static function getCurrentSessionOperator(): \Tirreno\Entities\Operator {
         $loggedInOperatorId = tirreno('utils')->conversion->intValCheckEmpty(tirreno('session')->get('active_user_id'));
-        $loggedInOperatorId = $loggedInOperatorId ? $loggedInOperatorId : tirreno('utils')->constants->GUEST_OPERATOR_ID;
+        $loggedInOperatorId = $loggedInOperatorId ? $loggedInOperatorId : tirreno('constants')->GUEST_OPERATOR_ID;
 
         if (!tirreno('models')->operatorsRoles->tableExists()) {
             tirreno('utils')->updates->syncUpdates();

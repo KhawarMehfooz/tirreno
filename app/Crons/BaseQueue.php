@@ -32,50 +32,43 @@ abstract class BaseQueue extends Base {
         }
 
         $culprit = $result['event_account'];
-        $allStuckIds = tirreno('models')->queue->getAllExecuting($action);
+
+        $allStuckAccounts = tirreno('models')->queue->getAllExecuting($action);
 
         // set failed for all stuck accounts
         tirreno('models')->queue->setFailedForStuckAction($action);
 
-        $culpritIdx = array_search($culprit, $allStuckIds);
+        $culpritIdx = array_search($culprit, array_column($allStuckAccounts, 'account'), true);
         if ($culpritIdx !== false) {
-            unset($allStuckIds[$culpritIdx]);
-            $allStuckIds = array_values($allStuckIds);
+            unset($allStuckAccounts[$culpritIdx]);
+            $allStuckAccounts = array_values($allStuckAccounts);
         }
 
         // add back to queue all accounts excluding culprit
-        tirreno('models')->queue->addBatchIds($allStuckIds, $action);
+        tirreno('models')->queue->addBatchAccounts($allStuckAccounts, $action);
 
-        $this->addLog(sprintf('Uncloging stuck queue (now - updated > 30 minutes) on account %d. Added %d accounts back to queue.', $result['event_account'], count($allStuckIds)));
+        $this->logInfo('Uncloging stuck queue (now - updated > 30 minutes) on account %d. Added %d accounts back to queue.', $result['event_account'], count($allStuckAccounts));
 
         return true; // set failed on stuck, can continue
     }
 
     protected function baseProcess(string $action): void {
-        $prefix = '';
-
-        switch ($action) {
-            case tirreno('utils')->constants->DELETE_USER_QUEUE_ACTION_TYPE:
-                $prefix = 'Deletion';
-                break;
-            case tirreno('utils')->constants->BLACKLIST_QUEUE_ACTION_TYPE:
-                $prefix = 'Blacklist';
-                break;
-            case tirreno('utils')->constants->ENRICHMENT_QUEUE_ACTION_TYPE:
-                $prefix = 'Enrichment';
-                break;
-            case tirreno('utils')->constants->RISK_SCORE_QUEUE_ACTION_TYPE:
-                $prefix = 'Risk score';
-                break;
-        }
+        $prefix = match ($action) {
+            tirreno('constants')->DELETE_USER_QUEUE_ACTION_TYPE  => 'Deletion',
+            tirreno('constants')->BLACKLIST_QUEUE_ACTION_TYPE    => 'Blacklist',
+            tirreno('constants')->ENRICHMENT_QUEUE_ACTION_TYPE   => 'Enrichment',
+            tirreno('constants')->RISK_SCORE_QUEUE_ACTION_TYPE   => 'Risk score',
+            default => null,
+        };
 
         if (!$prefix || !$this->readyToProcess($action)) {
-            $this->addLog($prefix . ' queue is already being executed by another cron job.');
+            $this->logInfo('%s queue is already being executed by another cron job.', ($prefix ?? 'Unknown'));
+            $this->summary = 'Queue s already being executed or type is unknown.';
 
             return;
         }
 
-        $this->addLog('Start processing queue.');
+        $this->logInfo('Start processing queue.');
 
         $start = time();
         $success = [];
@@ -90,7 +83,7 @@ abstract class BaseQueue extends Base {
             // status waiting action deletion, older first
             $batch = tirreno('models')->queue->getNextBatchInQueue($action, $batchSize);
 
-            $this->addLog(sprintf('Fetching next batch (%s/%s) in queue.', count($batch), $batchSize));
+            $this->logInfo('Fetching next batch (%s/%s) in queue.', count($batch), $batchSize);
 
             if (!$batch) {
                 break;
@@ -107,20 +100,20 @@ abstract class BaseQueue extends Base {
                     $success[] = $item['id'];
                 } catch (\Throwable $e) {
                     $failed[] = $item['id'];
-                    $this->addLog(sprintf('Queue error %s.', $e->getMessage()));
+                    $this->logError('Queue error %s.', $e->getMessage());
                     if (!$errors) {
                         $errors[] = sprintf('Error on %s: %s. Trace: %s', json_encode($item), $e->getMessage(), $e->getTraceAsString());
                     }
                 }
 
                 // exit if took too long
-                $batchTimeout = (time() - $start) > tirreno('utils')->constants->ACCOUNT_OPERATION_QUEUE_EXECUTE_TIME_SEC;
+                $batchTimeout = (time() - $start) > tirreno('constants')->ACCOUNT_OPERATION_QUEUE_EXECUTE_TIME_SEC;
                 if ($batchTimeout) {
                     break;
                 }
             }
             // exit if took too long
-            $bottom = (time() - $start) > tirreno('utils')->constants->ACCOUNT_OPERATION_QUEUE_EXECUTE_TIME_SEC;
+            $bottom = (time() - $start) > tirreno('constants')->ACCOUNT_OPERATION_QUEUE_EXECUTE_TIME_SEC;
         }
 
         tirreno('models')->queue->setCompleted($success);
@@ -132,17 +125,24 @@ abstract class BaseQueue extends Base {
                 'code'      => 500,
                 'message'   => sprintf('Cron %s err', get_class($this)),
                 'trace'     => $errors[0],
-                'sql_log'   => '',
             ];
             tirreno('utils')->errorHandler->saveErrorInformation($errObj);
         }
 
-        $this->addLog(sprintf(
+        $this->summary = sprintf(
             'Processed %s items in %s seconds. %s items failed. %s items put back in queue.',
             count($success),
             time() - $start,
             count($failed),
             count($batch),
-        ));
+        );
+
+        $this->logInfo(
+            'Processed %s items in %s seconds. %s items failed. %s items put back in queue.',
+            count($success),
+            time() - $start,
+            count($failed),
+            count($batch),
+        );
     }
 }

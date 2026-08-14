@@ -1,4 +1,4 @@
-import {fireEvent} from '../utils/Event.js?v=0.10.0';
+import {fireEvent} from '../utils/Event.js?v=0.10.1';
 
 export class BaseFilter {
     constructor(selectorId, renderItemFn, renderChoiceFn, eventType) {

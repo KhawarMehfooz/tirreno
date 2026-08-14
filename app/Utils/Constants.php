@@ -208,6 +208,11 @@ class Constants {
 
     protected string $BASE_RULE_PRESET_ID = 'default';
 
+    protected int $DEBUG_LVL_NONE = 0;
+    protected int $DEBUG_LVL_BASIC = 1;
+    protected int $DEBUG_LVL_TRACE = 2;
+    protected int $DEBUG_LVL_FULL = 3;
+
     protected array $EVENTS_CHARTS = [
         'resource',
         'user',
@@ -339,6 +344,7 @@ class Constants {
         '<p>Error occurred at: %s</p>
         <p>Host: %s</p>
         <p>Message: </p>%s
+        <p>Debug level: %s</p>
         <p>Trace: </p>%s
         '
     );

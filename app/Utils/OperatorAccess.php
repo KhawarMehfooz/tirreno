@@ -19,7 +19,7 @@ namespace Tirreno\Utils;
 
 class OperatorAccess {
     public static function addOperatorRole(string $role, int $operatorId): void {
-        $roleId = tirreno('models')->roles->getRoleByValues($role)['id'] ?? null;
+        $roleId = tirreno('models')->roles->getRoleByValue($role)['id'] ?? null;
         if (!$roleId) {
             return;
         }
@@ -28,7 +28,7 @@ class OperatorAccess {
     }
 
     public static function removeOperatorRole(string $role, int $operatorId): void {
-        $roleId = tirreno('models')->roles->getRoleByValues($role)['id'] ?? null;
+        $roleId = tirreno('models')->roles->getRoleByValue($role)['id'] ?? null;
         if (!$roleId) {
             return;
         }
@@ -45,7 +45,7 @@ class OperatorAccess {
     }
 
     public static function operatorHasRole(string $role, int $operatorId): bool {
-        $roleId = tirreno('models')->roles->getRoleByValues($role)['id'] ?? null;
+        $roleId = tirreno('models')->roles->getRoleByValue($role)['id'] ?? null;
 
         return $roleId ? boolval(count(self::rolesModel()->getOperatorRole($roleId, $operatorId))) : false;
     }
@@ -134,7 +134,7 @@ class OperatorAccess {
         return self::rolesModel()->checkPagePermission('page_edit', $page, $operatorId);
     }
 
-    public static function deleteable(string $page, int $operatorId): bool {
+    public static function deletable(string $page, int $operatorId): bool {
         return self::rolesModel()->checkPagePermission('page_delete', $page, $operatorId);
     }
 

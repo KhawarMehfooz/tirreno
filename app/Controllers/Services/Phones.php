@@ -56,9 +56,7 @@ class Phones extends \Tirreno\Controllers\Services\Base {
         if ($enrichmentKey === null) {
             return ['ERROR_CODE' => tirreno('utils')->errorCodes->ENRICHMENT_API_KEY_NOT_EXISTS];
         }
-        set_error_handler([\Tirreno\Utils\ErrorHandler::class, 'exceptionErrorHandler']);
-        $result = tirreno('controlles')->enrichment->enrichEntityProcess('phone', null, $entityId, $apiKey, $enrichmentKey);
-        restore_error_handler();
+        $result = tirreno('controlles')->enrichment->enrichEntity('phone', null, $entityId, $apiKey, $enrichmentKey);
 
         return $result;
     }

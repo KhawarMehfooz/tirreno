@@ -1,7 +1,7 @@
-import {renderScoreDetails} from './DataRenderers.js?v=0.10.0';
-import {handleAjaxError} from './utils/ErrorHandler.js?v=0.10.0';
-import {Tooltip} from './Tooltip.js?v=0.10.0';
-import {replaceChildren} from './utils/Functions.js?v=0.10.0';
+import {renderScoreDetails} from './DataRenderers.js?v=0.10.1';
+import {handleAjaxError} from './utils/ErrorHandler.js?v=0.10.1';
+import {Tooltip} from './Tooltip.js?v=0.10.1';
+import {replaceChildren} from './utils/Functions.js?v=0.10.1';
 
 export class ScoreDetails {
     constructor(scoreParams) {

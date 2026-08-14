@@ -1,8 +1,8 @@
 import {
     fireEvent,
     handleEscape,
-} from '../utils/Event.js?v=0.10.0';
-import {mapKeys} from '../utils/Functions.js?v=0.10.0';
+} from '../utils/Event.js?v=0.10.1';
+import {mapKeys} from '../utils/Functions.js?v=0.10.1';
 
 export class BasePopUp {
     constructor(formParams) {

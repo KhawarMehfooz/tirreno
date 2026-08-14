@@ -112,7 +112,7 @@ class FieldAuditTrail extends \Tirreno\Models\Base {
         $params = [
             ':api_key'  => $apiKey,
             ':weeks'    => $weeks,
-            ':week_sec' => tirreno('utils')->constants->SECONDS_IN_WEEK,
+            ':week_sec' => tirreno('constants')->SECONDS_IN_WEEK,
         ];
 
         $query = (

@@ -1,11 +1,11 @@
-import {BasePage} from './Base.js?v=0.10.0';
-import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.0';
-import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.0';
-import {SearchFilter} from '../parts/SearchFilter.js?v=0.10.0';
-import {EntityTypeFilter} from '../parts/choices/EntityTypeFilter.js?v=0.10.0';
-import {BlacklistGridActionButtons} from '../parts/button/BlacklistGridActionButtons.js?v=0.10.0';
-import {BlacklistChart} from '../parts/chart/Blacklist.js?v=0.10.0';
-import {BlacklistGrid} from '../parts/grid/Blacklist.js?v=0.10.0';
+import {BasePage} from './Base.js?v=0.10.1';
+import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.1';
+import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.1';
+import {SearchFilter} from '../parts/SearchFilter.js?v=0.10.1';
+import {RulesFilter} from '../parts/choices/RulesFilter.js?v=0.10.1';
+import {BlacklistGridActionButtons} from '../parts/button/BlacklistGridActionButtons.js?v=0.10.1';
+import {BlacklistChart} from '../parts/chart/Blacklist.js?v=0.10.1';
+import {BlacklistGrid} from '../parts/grid/Blacklist.js?v=0.10.1';
 
 export class BlacklistPage extends BasePage {
     constructor() {
@@ -15,10 +15,15 @@ export class BlacklistPage extends BasePage {
     initUi() {
         this.tableId = 'blacklist-table';
 
-        const datesFilter       = new DatesFilter();
-        const searchFilter      = new SearchFilter();
+        const datesFilter   = new DatesFilter();
+        const searchFilter  = new SearchFilter();
+        const rulesFilter   = new RulesFilter();
 
-        this.setBaseFilters(datesFilter, searchFilter);
+        this.filters = {
+            dateRange:      datesFilter,
+            searchValue:    searchFilter,
+            ruleUids:       rulesFilter,
+        };
 
         const gridParams = {
             url:            `${window.app_base}/loadBlacklist`,
@@ -27,16 +32,10 @@ export class BlacklistPage extends BasePage {
 
             dateRangeGrid:  true,
 
+            choicesFilterEvents: [rulesFilter.getEventType()],
+
             getParams: this.getParamsSection,
         };
-
-        if (document.getElementById('entity-type-selectors')) {
-            const entityTypeFilter  = new EntityTypeFilter();
-
-            gridParams.choicesFilterEvents = [entityTypeFilter.getEventType()];
-
-            this.filters.entityTypeIds = entityTypeFilter;
-        }
 
         const chartParams = {
             url:        `${window.app_base}/loadBlacklistChart`,

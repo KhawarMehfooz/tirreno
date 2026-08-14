@@ -8,6 +8,8 @@
     </div>
 
     <input type="hidden" id="offset" value="{{ @clock_offset }}">
+    <input type="hidden" id="clock-datetime" value="{{ @clock_time_ts }}">
+    <input type="hidden" id="clock-datetime-utc" value="{{ @clock_time_ts_utc }}">
 
     <form onsubmit="document.getElementById('auto-complete').focus(); return false;">
         <input type="hidden" name="token" value="{{ @CSRF }}">

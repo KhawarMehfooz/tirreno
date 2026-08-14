@@ -207,8 +207,8 @@ class Context extends \Tirreno\Controllers\Services\Base {
         $record['le_email_has_vowels']              = preg_match('/[aeoui]/i', $record['le_local_part']) > 0;
         $record['le_email_has_consonants']          = preg_match('/[bcdfghjklmnpqrstvwxyz]/i', $record['le_local_part']) > 0;
 
-        $record['le_with_long_local_part_length']   = $localPartLen > tirreno('utils')->constants->RULE_EMAIL_MAXIMUM_LOCAL_PART_LENGTH;
-        $record['le_with_long_domain_length']       = $domainPartLen > tirreno('utils')->constants->RULE_EMAIL_MAXIMUM_DOMAIN_LENGTH;
+        $record['le_with_long_local_part_length']   = $localPartLen > tirreno('constants')->RULE_EMAIL_MAXIMUM_LOCAL_PART_LENGTH;
+        $record['le_with_long_domain_length']       = $domainPartLen > tirreno('constants')->RULE_EMAIL_MAXIMUM_DOMAIN_LENGTH;
         $record['le_email_in_blockemails']          = $record['le_blockemails'] ?? false;
         $record['le_is_invalid']                    = $record['le_exists'] && !tirreno('utils')->conversion->filterEmail($record['le_email']);
 
@@ -247,8 +247,8 @@ class Context extends \Tirreno\Controllers\Services\Base {
         $record['lp_fraud_detected']    = $record['lp_fraud_detected'] ?? false;
         $record['le_fraud_detected']    = $record['le_fraud_detected'] ?? false;
 
-        $record['eup_has_rare_browser'] = (bool) count(array_diff($record['eup_browser_name'], array_keys(tirreno('utils')->constants->RULE_REGULAR_BROWSER_NAMES)));
-        $record['eup_has_rare_os']      = (bool) count(array_diff($record['eup_os_name'], tirreno('utils')->constants->RULE_REGULAR_OS_NAMES));
+        $record['eup_has_rare_browser'] = (bool) count(array_diff($record['eup_browser_name'], array_keys(tirreno('constants')->RULE_REGULAR_BROWSER_NAMES)));
+        $record['eup_has_rare_os']      = (bool) count(array_diff($record['eup_os_name'], tirreno('constants')->RULE_REGULAR_OS_NAMES));
         $record['eup_device_count']     = count($record['eup_device']);
 
         $record['eup_vulnerable_ua']    = false;
@@ -281,15 +281,15 @@ class Context extends \Tirreno\Controllers\Services\Base {
 
         $eventTypeCount                     = array_count_values($eventTypeFiltered);
 
-        //$accountLoginFailId = tirreno('utils')->constants->ACCOUNT_LOGIN_FAIL_EVENT_TYPE_ID;
-        $accountEmailChangeId               = tirreno('utils')->constants->ACCOUNT_EMAIL_CHANGE_EVENT_TYPE_ID;
-        $accountPwdChangeId                 = tirreno('utils')->constants->ACCOUNT_PASSWORD_CHANGE_EVENT_TYPE_ID;
+        //$accountLoginFailId = tirreno('constants')->ACCOUNT_LOGIN_FAIL_EVENT_TYPE_ID;
+        $accountEmailChangeId               = tirreno('constants')->ACCOUNT_EMAIL_CHANGE_EVENT_TYPE_ID;
+        $accountPwdChangeId                 = tirreno('constants')->ACCOUNT_PASSWORD_CHANGE_EVENT_TYPE_ID;
 
         //$record['event_failed_login_attempts'] = $eventTypeCount[$accountLoginFailId] ?? 0;
         $record['event_email_changed']      = array_key_exists($accountEmailChangeId, $eventTypeCount);
         $record['event_password_changed']   = array_key_exists($accountPwdChangeId, $eventTypeCount);
 
-        $record['event_http_method_head']   = in_array(tirreno('utils')->constants->EVENT_REQUEST_TYPE_HEAD, $record['event_http_method']);
+        $record['event_http_method_head']   = in_array(tirreno('constants')->EVENT_REQUEST_TYPE_HEAD, $record['event_http_method']);
 
         $record['event_empty_referer']      = in_array(true, $record['event_empty_referer'], true);
 

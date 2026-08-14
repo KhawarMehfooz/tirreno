@@ -33,7 +33,7 @@ class LocalhostIp extends \Tirreno\Models\Enrichment\Base {
     public function init(array $data): void {
         $this->ip = $data['value'];
 
-        if (!tirreno('utils')->conversion->filterIp($this->ip) || $data['error'] !== tirreno('utils')->constants->ENRICHMENT_IP_IS_BOGON) {
+        if (!tirreno('utils')->conversion->filterIp($this->ip) || $data['error'] !== tirreno('constants')->ENRICHMENT_IP_IS_BOGON) {
             throw new \Exception('Validation failed');
         }
     }

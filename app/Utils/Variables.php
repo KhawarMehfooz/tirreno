@@ -82,11 +82,20 @@ class Variables {
     }
 
     public static function getDebugLevel(): int {
-        return tirreno('utils')->conversion->intValCheckEmpty(static::get('DEBUG'), 0) ?? 0;
+        return tirreno('utils')->conversion->intValCheckEmpty(static::get('DEBUG'))
+            ?? (
+                static::getDebug()
+                ? tirreno('utils')->constants->DEBUG_LVL_FULL
+                : tirreno('utils')->constants->DEBUG_LVL_NONE
+        );
     }
 
-    public static function getLogToStderr(): bool {
-        return static::getBool('LOG_TO_STDERR', false);
+    public static function getLogToStdout(): bool {
+        return static::getBool('LOG_TO_STDOUT', false);
+    }
+
+    public static function getLogToDatabase(): bool {
+        return static::getBool('LOG_TO_DATABASE', false);
     }
 
     public static function getForceHttps(): bool {
@@ -136,11 +145,11 @@ class Variables {
     }
 
     protected static function get(string $var, bool $useConstant = false): mixed {
-        return getenv($var) ?: tirreno('storage')->get($var) ?: ($useConstant ? tirreno('utils')->constants->$var : null);
+        return getenv($var) ?: tirreno('storage')->get($var) ?: ($useConstant ? tirreno('constants')->$var : null);
     }
 
     protected static function getInt(string $var): int {
-        return tirreno('utils')->conversion->intValCheckEmpty(static::get($var, true), tirreno('utils')->constants->$var);
+        return tirreno('utils')->conversion->intValCheckEmpty(static::get($var, true), tirreno('constants')->$var);
     }
 
     protected static function getBool(string $var, bool $default = false): bool {

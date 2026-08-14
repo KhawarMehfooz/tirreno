@@ -1,14 +1,14 @@
-import {BasePage} from './Base.js?v=0.10.0';
-import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.0';
-import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.0';
-import {DashboardTile} from '../parts/DashboardTile.js?v=0.10.0';
-import {TopTenGrid} from '../parts/grid/TopTen.js?v=0.10.0';
+import {BasePage} from './Base.js?v=0.10.1';
+import {SequentialLoad} from '../parts/SequentialLoad.js?v=0.10.1';
+import {DatesFilter} from '../parts/DatesFilter.js?v=0.10.1';
+import {DashboardTile} from '../parts/DashboardTile.js?v=0.10.1';
+import {TopTenGrid} from '../parts/grid/TopTen.js?v=0.10.1';
 import {
     renderClickableImportantUserWithScoreTile,
     renderClickableCountry,
     renderClickableResourceWithoutQuery,
     renderClickableIpWithCountry,
-} from '../parts/DataRenderers.js?v=0.10.0';
+} from '../parts/DataRenderers.js?v=0.10.1';
 
 export class DashboardPage extends BasePage {
     constructor() {

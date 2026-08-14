@@ -21,13 +21,15 @@ class QueuesClearer extends Base {
     public const DATETIME_FORMAT = 'Y-m-d H:i:s.u';
 
     public function process(): void {
-        $days = tirreno('utils')->constants->ACCOUNT_OPERATION_QUEUE_CLEAR_COMPLETED_AFTER_DAYS;
+        $timer = tirreno('request')->setTimer();
+
+        $days = tirreno('constants')->ACCOUNT_OPERATION_QUEUE_CLEAR_COMPLETED_AFTER_DAYS;
         $before = (new \DateTime(strval($days) . ' days ago'))->format(self::DATETIME_FORMAT);
 
         $queues = [
-            tirreno('utils')->constants->BLACKLIST_QUEUE_ACTION_TYPE,
-            tirreno('utils')->constants->DELETE_USER_QUEUE_ACTION_TYPE,
-            tirreno('utils')->constants->RISK_SCORE_QUEUE_ACTION_TYPE,
+            tirreno('constants')->BLACKLIST_QUEUE_ACTION_TYPE,
+            tirreno('constants')->DELETE_USER_QUEUE_ACTION_TYPE,
+            tirreno('constants')->RISK_SCORE_QUEUE_ACTION_TYPE,
         ];
 
         $cnt = 0;
@@ -37,6 +39,9 @@ class QueuesClearer extends Base {
             $cnt += tirreno('models')->queue->clearQueue($queue, $before);
         }
 
-        $this->addLog(sprintf('Cleared %s completed items.', $cnt));
+        $timer = tirreno('request')->getTimer($timer);
+
+        $this->logInfo('Cleared %s completed items in %f.', $cnt, $timer);
+        $this->summary = sprintf('Cleared %s completed items in %f.', $cnt, $timer);
     }
 }

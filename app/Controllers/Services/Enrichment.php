@@ -32,10 +32,10 @@ class Enrichment extends \Tirreno\Controllers\Services\Base {
         if ($enrichmentKey === null) {
             return ['ERROR_CODE' => tirreno('utils')->errorCodes->ENRICHMENT_API_KEY_NOT_EXISTS];
         }
-        set_error_handler([\Tirreno\Utils\ErrorHandler::class, 'exceptionErrorHandler']);
+        tirreno('utils')->errorHandler->setErrorToExceptionHandler();
         $search = $search !== null ? ['value' => $search] : null;
         $result = $this->enrichEntityProcess($type, $search, $entityId, $apiKey, $enrichmentKey);
-        restore_error_handler();
+        tirreno('utils')->errorHandler->setBaseErrorHandler();
 
         return $result;
     }
@@ -118,9 +118,9 @@ class Enrichment extends \Tirreno\Controllers\Services\Base {
 
         if ($type === 'ip') {
             // do not raise on bogon ip
-            if ($apiError === tirreno('utils')->constants->ENRICHMENT_IP_IS_NOT_FOUND) {
+            if ($apiError === tirreno('constants')->ENRICHMENT_IP_IS_NOT_FOUND) {
                 return ['ERROR_CODE' => tirreno('utils')->errorCodes->ENRICHMENT_API_IP_NOT_FOUND];
-            } elseif ($apiError !== null && $apiError !== tirreno('utils')->constants->ENRICHMENT_IP_IS_BOGON || $statusCode !== 200 || $response[$type] === null) {
+            } elseif ($apiError !== null && $apiError !== tirreno('constants')->ENRICHMENT_IP_IS_BOGON || $statusCode !== 200 || $response[$type] === null) {
                 return $processErrorMessage;
             }
         } elseif ($apiError !== null || $statusCode !== 200 || $response[$type] === null) {
@@ -180,7 +180,7 @@ class Enrichment extends \Tirreno\Controllers\Services\Base {
         }
 
         if (strlen($errorMessage) > 0) {
-            tirreno('utils')->logger->log('Enrichment API web error', $errorMessage);
+            tirreno('log')->warning('Enrichment API call failed with error: ' . $errorMessage);
         }
 
         if (!isset($messages) || strlen($messages) < 1) {

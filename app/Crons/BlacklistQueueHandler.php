@@ -19,7 +19,7 @@ namespace Tirreno\Crons;
 
 class BlacklistQueueHandler extends BaseQueue {
     public function process(): void {
-        parent::baseProcess(tirreno('utils')->constants->BLACKLIST_QUEUE_ACTION_TYPE);
+        parent::baseProcess(tirreno('constants')->BLACKLIST_QUEUE_ACTION_TYPE);
     }
 
     protected function processItem(array $item): void {
@@ -46,8 +46,7 @@ class BlacklistQueueHandler extends BaseQueue {
                 $errorMessage = tirreno('utils')->cron->sendBlacklistReportPostRequest($hashes, $key->token, $key->id);
                 if (strlen($errorMessage) > 0) {
                     // TODO: log error into database?
-                    $this->addLog('Enrichment API cURL ' . $errorMessage);
-                    $this->addLog('Enrichment API cURL logged to database.');
+                    $this->logWarning('Enrichment API cURL failed: %s.', $errorMessage);
                 }
             }
         }

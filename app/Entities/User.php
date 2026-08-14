@@ -171,15 +171,15 @@ class User extends \Tirreno\Entities\Single {
     }
 
     public function isScheduledForDeletion(): array {
-        [$scheduled, $status] = tirreno('models')->queue->isInQueueStatus($this->id, tirreno('utils')->constants->DELETE_USER_QUEUE_ACTION_TYPE, $this->key);
+        [$scheduled, $status] = tirreno('models')->queue->isInQueueStatus($this->id, tirreno('constants')->DELETE_USER_QUEUE_ACTION_TYPE, $this->key);
 
-        return [$scheduled, ($status === tirreno('utils')->constants->FAILED_QUEUE_STATUS_TYPE) ? tirreno('utils')->errorCodes->USER_DELETION_FAILED : null];
+        return [$scheduled, ($status === tirreno('constants')->FAILED_QUEUE_STATUS_TYPE) ? tirreno('utils')->errorCodes->USER_DELETION_FAILED : null];
     }
 
     public function isScheduledForBlacklist(): array {
-        [$scheduled, $status] = tirreno('models')->queue->isInQueueStatus($this->id, tirreno('utils')->constants->BLACKLIST_QUEUE_ACTION_TYPE, $this->key);
+        [$scheduled, $status] = tirreno('models')->queue->isInQueueStatus($this->id, tirreno('constants')->BLACKLIST_QUEUE_ACTION_TYPE, $this->key);
 
-        return [$scheduled, ($status === tirreno('utils')->constants->FAILED_QUEUE_STATUS_TYPE) ? tirreno('utils')->errorCodes->USER_BLACKLISTING_FAILED : null];
+        return [$scheduled, ($status === tirreno('constants')->FAILED_QUEUE_STATUS_TYPE) ? tirreno('utils')->errorCodes->USER_BLACKLISTING_FAILED : null];
     }
 
     public function extendScoreDetails(): void {

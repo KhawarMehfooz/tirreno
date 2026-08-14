@@ -78,8 +78,8 @@ class ForgotPassword extends \Tirreno\Controllers\Pages\Base {
         $toName = $operator->firstname;
         $toAddress = $operator->email;
 
-        $subject = tirreno('storage')->get('ForgotPassowrd_renew_password_subject');
-        $message = tirreno('storage')->get('ForgotPassowrd_renew_password_body');
+        $subject = tirreno('storage')->get('forgotPassword_renew_password_subject');
+        $message = tirreno('storage')->get('forgotPassword_renew_password_body');
 
         $renewUrl = sprintf('%s/password-recovering/%s', $url, $renewKey);
         $message = sprintf($message, $renewUrl);
